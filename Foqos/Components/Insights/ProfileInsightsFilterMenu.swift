@@ -76,29 +76,14 @@ struct ProfileInsightsFilterMenu: View {
         Label("Delete All Sessions", systemImage: "trash")
       }
     } label: {
-      HStack(spacing: 4) {
-        Image(systemName: filterMenuIcon)
+      HStack(spacing: 6) {
         Text(filterMenuTitle)
-          .font(.subheadline.weight(.medium))
+          .foqosText(.mark)
+        Text("↓")
+          .foqosText(.mark)
+          .accessibilityHidden(true)
       }
-      .foregroundStyle(.primary)
-    }
-  }
-
-  private var filterMenuIcon: String {
-    switch selectedFilter {
-    case .thisWeek:
-      return "calendar.day.timeline.left"
-    case .lastWeek:
-      return "calendar.day.timeline.right"
-    case .thisMonth:
-      return "calendar"
-    case .lastMonth:
-      return "arrow.left"
-    case .specificWeek, .specificMonth:
-      return "calendar.view.day"
-    case .allSessions:
-      return "list.bullet"
+      .foregroundStyle(FoqosColors.forest)
     }
   }
 

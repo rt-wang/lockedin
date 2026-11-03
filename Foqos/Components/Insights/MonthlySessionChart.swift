@@ -14,7 +14,7 @@ struct MonthlySessionChart: View {
   private func colorForHours(_ hours: Double) -> Color {
     switch hours {
     case 0:
-      return Color.gray.opacity(0.15)
+      return palette.line.opacity(0.6)
     case 0..<1:
       return palette.foreground.opacity(0.3)
     case 1..<3:
@@ -99,11 +99,10 @@ struct MonthlySessionChart: View {
           Rectangle()
             .fill(palette.foreground.opacity(opacity))
             .frame(width: 10, height: 10)
-            .cornerRadius(2)
 
           Text(label)
-            .font(.caption2)
-            .foregroundColor(.secondary)
+            .foqosText(.mark)
+            .foregroundStyle(palette.mute)
         }
       }
     }
@@ -119,19 +118,18 @@ struct MonthlySessionChart: View {
     return Rectangle()
       .fill(isPlaceholder ? Color.clear : colorForHours(hours))
       .aspectRatio(1, contentMode: .fit)
-      .cornerRadius(4)
       .overlay(
         Group {
           if !isPlaceholder {
             Text("\(day.dayOfMonth)")
               .font(.system(size: 10, weight: .medium))
-              .foregroundColor(hours > 3 ? .white : .primary)
+              .foregroundStyle(hours > 3 ? palette.background : palette.foreground)
           }
         }
       )
       .overlay(
-        RoundedRectangle(cornerRadius: 4)
-          .stroke(isSelected ? Color.primary : Color.clear, lineWidth: 2)
+        Rectangle()
+          .stroke(isSelected ? palette.foreground : Color.clear, lineWidth: 2)
       )
       .opacity(isPlaceholder ? 0 : 1)
       .contentShape(Rectangle())
@@ -163,57 +161,23 @@ struct MonthlySessionChart: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
       // Header
-      if let selectedDay = selectedDay {
-        HStack {
-          VStack(alignment: .leading, spacing: 2) {
-            Text(DateFormatters.formatSelectedDayHeader(selectedDay.date))
-              .font(.subheadline)
-              .fontWeight(.semibold)
-              .foregroundStyle(.secondary)
-
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-              Text(DateFormatters.formatDurationHoursMinutes(selectedDay.totalSessionTime))
-                .font(.system(size: 48, weight: .bold, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
-                .contentTransition(.numericText())
-
-              Text("total")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-            }
-
-          }
-
-          Spacer()
-
-          Button {
-            clearSelection()
-          } label: {
-            Image(systemName: "arrow.counterclockwise")
-              .font(.title3)
-              .foregroundStyle(.secondary)
-          }
-          .buttonStyle(.plain)
-          .padding(.trailing, 8)
+      Group {
+        if let selectedDay = selectedDay {
+          InsightsChartHeader(
+            label: DateFormatters.formatSelectedDayHeader(selectedDay.date),
+            value: DateFormatters.formatDurationHoursMinutes(selectedDay.totalSessionTime),
+            showsTotalSuffix: true,
+            onReset: clearSelection
+          )
+        } else {
+          InsightsChartHeader(
+            label: "Average focus session",
+            value: DateFormatters.formatDurationHoursMinutes(
+              monthlySummary.averageSessionDuration)
+          )
         }
-        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
-      } else {
-        VStack(alignment: .leading, spacing: 2) {
-          Text("Avg Focus Session")
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .foregroundStyle(.secondary)
-
-          Text(DateFormatters.formatDurationHoursMinutes(monthlySummary.averageSessionDuration))
-            .font(.system(size: 48, weight: .bold, design: .rounded))
-            .fontWeight(.bold)
-            .foregroundStyle(.primary)
-            .contentTransition(.numericText())
-        }
-        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
       }
+      .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
 
       // Grid
       VStack(spacing: 4) {

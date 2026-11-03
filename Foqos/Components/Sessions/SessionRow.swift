@@ -2,24 +2,31 @@ import Foundation
 import SwiftUI
 
 struct SessionRow: View {
+  @Environment(\.foqosPalette) private var palette
+
   var session: BlockedProfileSession
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       Text(DateFormatters.formatSessionDate(session.startTime))
-        .font(.body)
-        .fontWeight(.semibold)
-        .foregroundStyle(.secondary)
+        .foqosText(.mark)
+        .foregroundStyle(palette.mute)
 
       HStack(alignment: .firstTextBaseline, spacing: 8) {
         Text(DateFormatters.formatDurationHoursMinutes(session.duration))
-          .font(.system(size: 24, weight: .bold, design: .rounded))
-          .foregroundStyle(.primary)
+          .foqosDisplay(size: 28)
+          .foregroundStyle(palette.foreground)
 
         Text("total")
-          .font(.title3)
-          .fontWeight(.semibold)
-          .foregroundStyle(.secondary)
+          .foqosDisplay(size: 20, italic: true)
+          .foregroundStyle(palette.mute)
+
+        Spacer()
+
+        Text("→")
+          .foqosText(.cta)
+          .foregroundStyle(palette.mute)
+          .accessibilityHidden(true)
       }
 
       if session.totalBreakDuration > 0 {
@@ -29,8 +36,8 @@ struct SessionRow: View {
           Text("\(Int(session.totalBreakDuration / 60))m")
             .monospacedDigit()
         }
-        .font(.caption)
-        .foregroundStyle(.secondary)
+        .foqosText(.caption)
+        .foregroundStyle(palette.mute)
       }
     }
     .padding(.vertical, 6)

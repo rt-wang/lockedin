@@ -9,6 +9,24 @@ struct SessionDetailsView: View {
   var body: some View {
     NavigationStack {
       Form {
+        Section {
+          VStack(alignment: .leading, spacing: 6) {
+            Text("Session")
+              .foqosText(.eyebrow)
+              .foregroundStyle(FoqosPalette.cream.mute)
+            Text(session.blockedProfile.name)
+              .foqosDisplay(size: 40)
+              .fixedSize(horizontal: false, vertical: true)
+              .accessibilityAddTraits(.isHeader)
+            Text(DateFormatters.formatDurationHoursMinutes(session.duration))
+              .foqosDisplay(size: 28, italic: true)
+              .foregroundStyle(FoqosPalette.cream.mute)
+          }
+          .padding(.vertical, 4)
+        }
+        .foqosFormRows()
+        .listRowSeparator(.hidden)
+
         SessionInfoSection(session: session)
         TimingSection(session: session)
 
@@ -20,7 +38,10 @@ struct SessionDetailsView: View {
           PauseSection(session: session)
         }
       }
-      .navigationTitle("Session Details")
+      .foqosForm(.cream)
+      .navigationTitle("Session details")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(FoqosColors.cream, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { dismiss() }) {
@@ -39,11 +60,14 @@ private struct SessionInfoSection: View {
   let session: BlockedProfileSession
 
   var body: some View {
-    Section("Session Info") {
+    Section {
       InfoRow(label: "Tag", value: session.tag)
       InfoRow(label: "Profile", value: session.blockedProfile.name)
       InfoRow(label: "Force Started", value: session.forceStarted ? "Yes" : "No")
+    } header: {
+      FoqosSectionHeader("Session info")
     }
+    .foqosFormRows()
   }
 }
 
@@ -53,7 +77,7 @@ private struct TimingSection: View {
   let session: BlockedProfileSession
 
   var body: some View {
-    Section("Timing") {
+    Section {
       InfoRow(
         label: "Started",
         value: DateFormatters.formatDate(session.startTime)
@@ -65,15 +89,17 @@ private struct TimingSection: View {
           value: DateFormatters.formatDate(endTime)
         )
       } else {
-        InfoRow(label: "Ended", value: "In Progress")
-          .foregroundStyle(.secondary)
+        InfoRow(label: "Ended", value: "In progress")
       }
 
       InfoRow(
         label: "Duration",
         value: DateFormatters.formatDurationHoursMinutes(session.duration)
       )
+    } header: {
+      FoqosSectionHeader("Timing")
     }
+    .foqosFormRows()
   }
 }
 
@@ -83,7 +109,7 @@ private struct BreakSection: View {
   let session: BlockedProfileSession
 
   var body: some View {
-    Section("Break") {
+    Section {
       if let breakStartTime = session.breakStartTime {
         InfoRow(
           label: "Started",
@@ -104,7 +130,10 @@ private struct BreakSection: View {
           value: "\(Int(session.totalBreakDuration / 60))m"
         )
       }
+    } header: {
+      FoqosSectionHeader("Break")
     }
+    .foqosFormRows()
   }
 }
 
@@ -123,7 +152,7 @@ private struct PauseSection: View {
   }
 
   var body: some View {
-    Section("Pause") {
+    Section {
       if let pauseStartTime = session.pauseStartTime {
         InfoRow(
           label: "Started",
@@ -144,23 +173,31 @@ private struct PauseSection: View {
           value: DateFormatters.formatDurationShort(pauseDuration)
         )
       }
+    } header: {
+      FoqosSectionHeader("Pause")
     }
+    .foqosFormRows()
   }
 }
 
 // MARK: - Info Row Component
 
 private struct InfoRow: View {
+  @Environment(\.foqosPalette) private var palette
+
   let label: String
   let value: String
 
   var body: some View {
-    HStack {
+    HStack(alignment: .firstTextBaseline) {
       Text(label)
-        .foregroundStyle(.primary)
+        .foqosText(.body)
+        .foregroundStyle(palette.foreground)
       Spacer()
       Text(value)
-        .foregroundStyle(.secondary)
+        .foqosText(.caption)
+        .foregroundStyle(palette.mute)
+        .multilineTextAlignment(.trailing)
     }
   }
 }

@@ -18,6 +18,9 @@ struct InsightsWeekPickerView: View {
           .datePickerStyle(.graphical)
           .labelsHidden()
       }
+      .padding(.horizontal, 16)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+      .foqosTheme(.cream)
       .onChange(of: draftDate) { _, newValue in
         onApply(newValue)
         dismiss()

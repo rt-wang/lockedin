@@ -39,47 +39,57 @@ struct SoftUnblockConfigurationView: View {
     NavigationStack {
       VStack(spacing: 0) {
         ScrollView {
-          VStack(alignment: .leading, spacing: 28) {
-            VStack(alignment: .leading, spacing: 8) {
-              Text("Temporary Access")
-                .font(.title2.bold())
-
-              Text("Choose how many times blocked apps can open, and for how long.")
-                .font(.callout)
-                .foregroundColor(.secondary)
-            }
+          VStack(alignment: .leading, spacing: 32) {
+            StrategySheetHeader(
+              eyebrow: "Temporary access",
+              title: "A few short opens",
+              message: "Choose how many times blocked apps can open, and for how long."
+            )
 
             VStack(alignment: .leading, spacing: 12) {
-              Text("Allowed Opens")
-                .font(.headline)
+              StrategySectionLabel(
+                title: "Allowed opens",
+                detail: "Each time you open a blocked app or category, it uses one."
+              )
 
-              Text("Each time you open a blocked app or category, it uses one.")
-                .font(.caption)
-                .foregroundColor(.secondary)
-
-              Stepper(
-                value: $maximumUnblockCount,
-                in: SoftUnblockStrategyData.unblockCountRange
-              ) {
-                HStack(alignment: .firstTextBaseline) {
-                  Text("\(maximumUnblockCount)")
-                    .font(.system(size: 40, weight: .bold, design: .rounded))
-                    .contentTransition(.numericText())
-
+              HStack(alignment: .center) {
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                  StrategyValueDisplay(
+                    value: "\(maximumUnblockCount)", size: 44, alignment: .leading)
                   Text(maximumUnblockCount == 1 ? "open" : "opens")
-                    .foregroundColor(.secondary)
+                    .foqosText(.mark)
+                    .foregroundStyle(palette.mute)
+                }
+
+                Spacer()
+
+                StrategyStepButton(
+                  symbol: "−",
+                  accessibilityLabel: "Fewer opens",
+                  isEnabled: maximumUnblockCount
+                    > SoftUnblockStrategyData.unblockCountRange.lowerBound
+                ) {
+                  maximumUnblockCount -= 1
+                }
+
+                StrategyStepButton(
+                  symbol: "+",
+                  accessibilityLabel: "More opens",
+                  isEnabled: maximumUnblockCount
+                    < SoftUnblockStrategyData.unblockCountRange.upperBound
+                ) {
+                  maximumUnblockCount += 1
                 }
               }
               .sensoryFeedback(.selection, trigger: maximumUnblockCount)
+              .accessibilityElement(children: .contain)
+              .accessibilityValue("\(maximumUnblockCount)")
             }
 
             VStack(alignment: .leading, spacing: 12) {
-              Text("Open Time")
-                .font(.headline)
+              StrategySectionLabel(title: "Open time")
 
-              Text(formattedDuration)
-                .font(.system(size: 40, weight: .bold, design: .rounded))
-                .contentTransition(.numericText())
+              StrategyValueDisplay(value: formattedDuration, size: 44, alignment: .leading)
 
               Slider(
                 value: durationBinding,
@@ -91,35 +101,23 @@ struct SoftUnblockConfigurationView: View {
               .tint(palette.foreground)
               .sensoryFeedback(.selection, trigger: accessDurationInMinutes)
 
-              HStack {
-                Text("5m")
-                Spacer()
-                Text("1h")
-              }
-              .font(.caption2)
-              .foregroundColor(.secondary)
+              StrategyRangeLabels(lower: "5m", upper: "1h")
             }
 
             VStack(alignment: .leading, spacing: 12) {
-              HStack {
-                Text("Reset Opens")
-                  .font(.headline)
-
-                Spacer()
-
-                Toggle("Reset Opens", isOn: resetEnabledBinding)
-                  .labelsHidden()
-                  .tint(palette.foreground)
+              VStack(alignment: .leading, spacing: 0) {
+                FoqosHairline()
+                Toggle("Reset opens", isOn: resetEnabledBinding)
               }
 
               Text(resetDescription)
-                .font(.caption)
-                .foregroundColor(.secondary)
+                .foqosText(.caption)
+                .foregroundStyle(palette.mute)
+                .fixedSize(horizontal: false, vertical: true)
 
               if allowanceResetIntervalInHours != nil {
-                Text(formattedResetInterval)
-                  .font(.system(size: 40, weight: .bold, design: .rounded))
-                  .contentTransition(.numericText())
+                StrategyValueDisplay(
+                  value: formattedResetInterval, size: 44, alignment: .leading)
 
                 Slider(
                   value: resetIntervalBinding,
@@ -130,13 +128,7 @@ struct SoftUnblockConfigurationView: View {
                 .sensoryFeedback(.selection, trigger: allowanceResetIntervalInHours)
                 .accessibilityValue(formattedResetInterval)
 
-                HStack {
-                  Text("1h")
-                  Spacer()
-                  Text("24h")
-                }
-                .font(.caption2)
-                .foregroundColor(.secondary)
+                StrategyRangeLabels(lower: "1h", upper: "24h")
               }
             }
           }
@@ -151,6 +143,7 @@ struct SoftUnblockConfigurationView: View {
           .padding(.bottom, 16)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .toolbarBackground(palette.background, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { dismiss() }) {
@@ -159,6 +152,7 @@ struct SoftUnblockConfigurationView: View {
           .accessibilityLabel("Cancel")
         }
       }
+      .strategySheetTheme()
     }
   }
 

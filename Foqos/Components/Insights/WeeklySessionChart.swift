@@ -17,19 +17,19 @@ struct WeeklySessionChart: View {
         )
         .foregroundStyle(
           selectedDay?.displayLabel == day.displayLabel
-            ? palette.foreground.opacity(0.7)
-            : palette.foreground
+            ? palette.foreground
+            : palette.foreground.opacity(selectedDay == nil ? 0.85 : 0.35)
         )
-        .cornerRadius(6)
       }
     }
     .chartYAxis {
       AxisMarks(position: .trailing) { value in
+        AxisGridLine().foregroundStyle(palette.line)
         AxisValueLabel {
           if let duration = value.as(TimeInterval.self) {
             Text(DateFormatters.formatDurationShort(duration))
-              .font(.caption2)
-              .foregroundStyle(.secondary)
+              .foqosText(.mark)
+              .foregroundStyle(palette.mute)
           }
         }
       }
@@ -39,9 +39,8 @@ struct WeeklySessionChart: View {
         AxisValueLabel {
           if let label = value.as(String.self) {
             Text(label)
-              .font(.caption)
-              .fontWeight(.medium)
-              .foregroundStyle(.secondary)
+              .foqosText(.mark)
+              .foregroundStyle(palette.mute)
           }
         }
       }
@@ -67,59 +66,23 @@ struct WeeklySessionChart: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
-      if let selectedDay = selectedDay {
-        HStack {
-          VStack(alignment: .leading, spacing: 2) {
-            Text(DateFormatters.formatSelectedDayHeader(selectedDay.date))
-              .font(.subheadline)
-              .fontWeight(.semibold)
-              .foregroundStyle(.secondary)
-
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-              Text(DateFormatters.formatDurationHoursMinutes(selectedDay.totalSessionTime))
-                .font(.system(size: 48, weight: .bold, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
-                .contentTransition(.numericText())
-
-              Text("total")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
-            }
-          }
-
-          Spacer()
-
-          Button {
-            clearSelection()
-          } label: {
-            Image(systemName: "arrow.counterclockwise")
-              .font(.title3)
-              .foregroundStyle(.secondary)
-          }
-          .buttonStyle(.plain)
-          .padding(.trailing, 8)
-        }
-        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
-      } else {
-        VStack(alignment: .leading, spacing: 2) {
-          Text("Avg Focus Session")
-            .font(.subheadline)
-            .fontWeight(.semibold)
-            .foregroundStyle(.secondary)
-
-          Text(
-            DateFormatters.formatDurationHoursMinutes(
+      Group {
+        if let selectedDay = selectedDay {
+          InsightsChartHeader(
+            label: DateFormatters.formatSelectedDayHeader(selectedDay.date),
+            value: DateFormatters.formatDurationHoursMinutes(selectedDay.totalSessionTime),
+            showsTotalSuffix: true,
+            onReset: clearSelection
+          )
+        } else {
+          InsightsChartHeader(
+            label: "Average focus session",
+            value: DateFormatters.formatDurationHoursMinutes(
               viewModel.weeklySummary.averageSessionDuration)
           )
-          .font(.system(size: 48, weight: .bold, design: .rounded))
-          .fontWeight(.bold)
-          .foregroundStyle(.primary)
-          .contentTransition(.numericText())
         }
-        .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
       }
+      .animation(.spring(response: 0.25, dampingFraction: 0.85), value: selectedDay)
 
       chartView
         .chartGesture { proxy in
