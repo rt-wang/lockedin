@@ -7,7 +7,6 @@ struct HomeDashboardView: View {
   let profiles: [BlockedProfiles]
   let sessions: [BlockedProfileSession]
   let alerts: [HomeAlert]
-  let onSupportTapped: () -> Void
   let onSettingsTapped: () -> Void
   let onAlertTapped: (HomeAlert) -> Void
   let onGuidedCreationTapped: () -> Void
@@ -41,10 +40,7 @@ struct HomeDashboardView: View {
   private func dashboardContent(showsProfileInsights: Bool) -> some View {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 0) {
-        HomeHeaderView(
-          onSupportTapped: onSupportTapped,
-          onSettingsTapped: onSettingsTapped
-        )
+        HomeHeaderView(onSettingsTapped: onSettingsTapped)
         .padding(.bottom, 22)
 
         hero(isCompact: showsProfileInsights)
@@ -226,7 +222,6 @@ private struct HomeDashboardPreview: View {
       profiles: hasProfiles ? [profile] : [],
       sessions: hasProfiles ? [session] : [],
       alerts: [],
-      onSupportTapped: {},
       onSettingsTapped: {},
       onAlertTapped: { _ in },
       onGuidedCreationTapped: {},

@@ -29,7 +29,6 @@ struct foqosApp: App {
   @UIApplicationDelegateAdaptor(FoqosAppDelegate.self) private var appDelegate
 
   @StateObject private var requestAuthorizer = RequestAuthorizer()
-  @StateObject private var donationManager = TipManager()
   @StateObject private var navigationManager = NavigationManager()
   @StateObject private var nfcWriter = NFCWriter()
   @StateObject private var ratingManager = RatingManager()
@@ -79,7 +78,6 @@ struct foqosApp: App {
 
         }
         .environmentObject(requestAuthorizer)
-        .environmentObject(donationManager)
         .environmentObject(alertsManager)
         .environmentObject(startegyManager)
         .environmentObject(navigationManager)

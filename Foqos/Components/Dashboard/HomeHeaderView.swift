@@ -3,7 +3,6 @@ import SwiftUI
 struct HomeHeaderView: View {
   @Environment(\.foqosPalette) private var palette
 
-  let onSupportTapped: () -> Void
   let onSettingsTapped: () -> Void
 
   var body: some View {
@@ -20,7 +19,6 @@ struct HomeHeaderView: View {
 
       Spacer(minLength: 12)
 
-      FoqosTextLink("Support", action: onSupportTapped)
       FoqosTextLink("Settings", action: onSettingsTapped)
     }
     .padding(.top, 8)
@@ -28,13 +26,13 @@ struct HomeHeaderView: View {
 }
 
 #Preview {
-  HomeHeaderView(onSupportTapped: {}, onSettingsTapped: {})
+  HomeHeaderView(onSettingsTapped: {})
     .padding(.horizontal, 24)
     .foqosTheme(.cream)
 }
 
 #Preview("Sidebar") {
-  HomeHeaderView(onSupportTapped: {}, onSettingsTapped: {})
+  HomeHeaderView(onSettingsTapped: {})
     .padding(.horizontal, 24)
     .frame(width: 280)
     .foqosTheme(.cream)

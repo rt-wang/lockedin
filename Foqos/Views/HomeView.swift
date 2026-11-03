@@ -47,7 +47,6 @@ struct HomeView: View {
       profiles: profiles,
       sessions: recentCompletedSessions,
       alerts: alertsManager.alerts,
-      onSupportTapped: { presentation.showDonationView = true },
       onSettingsTapped: { presentation.showSettingsView = true },
       onAlertTapped: presentAlert,
       onGuidedCreationTapped: { presentation.showGuidedProfileCreationView = true },
@@ -176,10 +175,9 @@ struct HomeView: View {
     strategyManager.loadActiveSession(context: context)
     strategyManager.cleanUpGhostSchedules(context: context)
     refreshAlerts()
-    // Debug-only screenshot helpers (simctl launch … --open-settings / --open-support / --open-guided)
+    // Debug-only screenshot helpers (simctl launch … --open-settings / --open-guided)
     let args = ProcessInfo.processInfo.arguments
     if args.contains("--open-settings") { presentation.showSettingsView = true }
-    if args.contains("--open-support") { presentation.showDonationView = true }
     if args.contains("--open-guided") { presentation.showGuidedProfileCreationView = true }
   }
 
@@ -234,7 +232,6 @@ struct HomeView: View {
 #Preview {
   HomeView()
     .environmentObject(RequestAuthorizer())
-    .environmentObject(TipManager())
     .environmentObject(AlertsManager())
     .environmentObject(NavigationManager())
     .environmentObject(StrategyManager())
