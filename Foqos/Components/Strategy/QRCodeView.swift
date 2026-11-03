@@ -4,7 +4,7 @@ import SwiftUI
 import UIKit
 
 struct QRCodeView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let url: String
@@ -56,7 +56,7 @@ struct QRCodeView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(themeManager.themeColor)
+            .background(palette.foreground)
             .foregroundColor(.white)
             .clipShape(RoundedRectangle(cornerRadius: 10))
           }

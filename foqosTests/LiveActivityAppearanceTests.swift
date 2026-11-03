@@ -19,10 +19,9 @@ final class LiveActivityAppearanceTests: XCTestCase {
 
     let state = try JSONDecoder().decode(FoqosWidgetAttributes.ContentState.self, from: data)
 
-    XCTAssertNil(state.themeColorName)
     XCTAssertNil(state.appIconName)
     XCTAssertEqual(state.appIcon, .defaultIcon)
-    XCTAssertEqual(state.themeColor, Color(hex: "#894fa3"))
+    XCTAssertEqual(state.accentColor, BrandColors.cream)
     XCTAssertEqual(state.startTime, Date(timeIntervalSinceReferenceDate: 1000))
     XCTAssertEqual(state.usedBreakDurationInSeconds, 300)
   }

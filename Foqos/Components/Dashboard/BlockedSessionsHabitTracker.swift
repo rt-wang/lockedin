@@ -31,7 +31,7 @@ enum HabitChartType: String, CaseIterable {
 }
 
 struct BlockedSessionsHabitTracker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let sessions: [BlockedProfileSession]
   let profiles: [BlockedProfiles]
@@ -227,7 +227,6 @@ struct BlockedSessionsHabitTracker: View {
     profiles: exampleProfiles,
     onInsightsTapped: { _ in }
   )
-  .environmentObject(ThemeManager.shared)
   .padding(.horizontal, 24)
   .foqosTheme(.cream)
 }

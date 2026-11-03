@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SchedulePicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Binding var schedule: BlockedProfileSchedule
   @Binding var isPresented: Bool
@@ -122,11 +122,11 @@ struct SchedulePicker: View {
                   .font(.subheadline)
                   .fontWeight(.semibold)
                   .frame(width: 40, height: 40)
-                  .background(isSelected ? themeManager.themeColor : Color.clear)
+                  .background(isSelected ? palette.foreground : Color.clear)
                   .foregroundStyle(isSelected ? Color.white : Color.primary)
                   .overlay(
                     Circle()
-                      .stroke(isSelected ? themeManager.themeColor : Color.secondary, lineWidth: 1)
+                      .stroke(isSelected ? palette.foreground : Color.secondary, lineWidth: 1)
                   )
                   .clipShape(Circle())
                   .accessibilityLabel(day.name)
@@ -204,7 +204,7 @@ struct SchedulePicker: View {
         } footer: {
           VStack(alignment: .center, spacing: 4) {
             Text(
-              "If you're looking for more granularity, you can use Shortcuts. \(Text("[Here is a quick video](https://youtube.com/shorts/1xZeO9lg5f8)").foregroundStyle(themeManager.themeColor))"
+              "If you're looking for more granularity, you can use Shortcuts. \(Text("[Here is a quick video](https://youtube.com/shorts/1xZeO9lg5f8)").foregroundStyle(palette.foreground))"
             )
             .font(.caption)
             .foregroundStyle(.secondary)

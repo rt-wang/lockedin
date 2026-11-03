@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MonthlySessionChart: View {
   @ObservedObject var viewModel: MonthlyInsightsUtil
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Binding var selectedDay: MonthlyDayAggregate?
   let onDateSelected: ((Date?) -> Void)?
   @State private var selectionFeedbackTrigger = 0
@@ -16,13 +16,13 @@ struct MonthlySessionChart: View {
     case 0:
       return Color.gray.opacity(0.15)
     case 0..<1:
-      return themeManager.themeColor.opacity(0.3)
+      return palette.foreground.opacity(0.3)
     case 1..<3:
-      return themeManager.themeColor.opacity(0.5)
+      return palette.foreground.opacity(0.5)
     case 3..<5:
-      return themeManager.themeColor.opacity(0.7)
+      return palette.foreground.opacity(0.7)
     default:
-      return themeManager.themeColor.opacity(0.9)
+      return palette.foreground.opacity(0.9)
     }
   }
 
@@ -97,7 +97,7 @@ struct MonthlySessionChart: View {
       ForEach(legendData, id: \.0) { label, opacity in
         HStack(spacing: 4) {
           Rectangle()
-            .fill(themeManager.themeColor.opacity(opacity))
+            .fill(palette.foreground.opacity(opacity))
             .frame(width: 10, height: 10)
             .cornerRadius(2)
 
@@ -290,7 +290,6 @@ struct DayFramePreferenceKey: PreferenceKey {
         selectedDay: $selectedDay,
         onDateSelected: nil
       )
-      .environmentObject(ThemeManager.shared)
       .padding()
     }
   }

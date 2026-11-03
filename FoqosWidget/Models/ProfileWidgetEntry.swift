@@ -14,7 +14,8 @@ struct ProfileWidgetEntry: TimelineEntry {
   var isDataUnavailable = false
   var activity: WidgetActivitySummary = .make(sessions: [], at: .now)
   var activityPeriod: WidgetActivityPeriod = .week
-  var themeColor: Color = Color(red: 0.537, green: 0.310, blue: 0.639)
+
+  var accentColor: Color { BrandColors.forest }
 
   var isSessionActive: Bool {
     activeSession?.endTime == nil && activeSession != nil
@@ -48,7 +49,7 @@ struct ProfileWidgetEntry: TimelineEntry {
   }
 
   var statusLabel: String {
-    if isDataUnavailable { return "Open Foqos to refresh" }
+    if isDataUnavailable { return "Open LockedIn to refresh" }
     if isPauseActive { return "Paused" }
     if isBreakActive { return "On a break" }
     if isSessionActive { return "Focusing" }

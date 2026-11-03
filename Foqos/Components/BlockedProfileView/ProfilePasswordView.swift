@@ -29,7 +29,7 @@ struct ProfilePasswordView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @EnvironmentObject private var strategyManager: StrategyManager
 
   let profile: BlockedProfiles
@@ -98,7 +98,7 @@ struct ProfilePasswordView: View {
         Section {
           ActionButton(
             title: mode.buttonTitle,
-            backgroundColor: themeManager.themeColor,
+            backgroundColor: palette.foreground,
             iconName: isUnlocking ? "lock.open" : "lock",
             isLoading: isWorking,
             isDisabled: !canSubmit,
@@ -253,14 +253,12 @@ struct ProfilePasswordView: View {
 
 #Preview("Protect Profile") {
   ProfilePasswordView(profile: BlockedProfiles(name: "Deep Work"), mode: .setup)
-    .environmentObject(ThemeManager())
     .environmentObject(StrategyManager())
     .modelContainer(for: BlockedProfiles.self, inMemory: true)
 }
 
 #Preview("Unlock Profile") {
   ProfilePasswordView(profile: BlockedProfiles(name: "Deep Work"), mode: .unlock)
-    .environmentObject(ThemeManager())
     .environmentObject(StrategyManager())
     .modelContainer(for: BlockedProfiles.self, inMemory: true)
 }

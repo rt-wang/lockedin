@@ -15,12 +15,10 @@ struct FoqosWidgetAttributes: ActivityAttributes {
     var pauseEndTime: Date?
 
     // Optional so activities started before appearance customization still decode.
-    var themeColorName: String?
     var appIconName: String?
 
-    var themeColor: Color {
-      ThemeManager.color(named: themeColorName)
-    }
+    /// Fixed LockedIn accent; reads on the forest lock-screen tint and the black Dynamic Island.
+    var accentColor: Color { BrandColors.cream }
 
     var appIcon: AppIconOption {
       AppIconOption.allCases.first { $0.alternateIconName == appIconName } ?? .defaultIcon
@@ -105,7 +103,7 @@ struct FoqosWidgetLiveActivity: Widget {
         activityIcon(for: context.state, size: minimalLogoSize)
       }
       .widgetURL(URL(string: "http://www.foqos.app"))
-      .keylineTint(context.state.themeColor)
+      .keylineTint(context.state.accentColor)
     }
     .supplementalActivityFamilies([.medium])
   }
@@ -117,7 +115,7 @@ struct FoqosWidgetLiveActivity: Widget {
       .resizable()
       .scaledToFit()
       .frame(width: size, height: size)
-      .accessibilityLabel("Foqos")
+      .accessibilityLabel("LockedIn")
   }
 
   private func expandedIslandTitle(name: String, state: FoqosWidgetAttributes.ContentState)
@@ -127,9 +125,9 @@ struct FoqosWidgetLiveActivity: Widget {
       activityIcon(for: state, size: expandedLogoSize)
 
       VStack(alignment: .leading, spacing: 1) {
-        Text("Foqos")
-          .font(.system(size: 18, weight: .bold, design: .rounded))
-          .foregroundColor(.primary)
+        Text("LockedIn")
+          .font(.system(size: 18, weight: .regular, design: .serif))
+          .foregroundColor(BrandColors.cream)
           .lineLimit(1)
 
         Text(name)
@@ -171,7 +169,7 @@ struct FoqosWidgetLiveActivity: Widget {
     } else if isWidthLimited {
       Image(systemName: "timer")
         .font(.system(size: 18, weight: .semibold))
-        .foregroundStyle(state.themeColor)
+        .foregroundStyle(state.accentColor)
         .frame(width: 20, height: 20)
         .accessibilityLabel("Focus session active")
         .accessibilityValue(
@@ -201,7 +199,7 @@ struct FoqosWidgetLiveActivity: Widget {
     .lineLimit(1)
     .minimumScaleFactor(0.76)
     .allowsTightening(true)
-    .foregroundColor(state.themeColor)
+    .foregroundColor(state.accentColor)
     .frame(width: expandedTimerWidth, alignment: .center)
     .contentTransition(.numericText())
   }
@@ -216,7 +214,7 @@ struct FoqosWidgetLiveActivity: Widget {
     .lineLimit(1)
     .minimumScaleFactor(0.68)
     .allowsTightening(true)
-    .foregroundColor(state.themeColor)
+    .foregroundColor(state.accentColor)
     .frame(width: compactTimerWidth, alignment: .center)
     .contentTransition(.numericText())
   }
@@ -238,17 +236,19 @@ private struct FoqosLiveActivityContentView: View {
         lockScreenContent
       }
     }
-    .activityBackgroundTint(isFullscreen ? .black : nil)
+    .activityBackgroundTint(isFullscreen ? .black : BrandColors.forest)
+    .activitySystemActionForegroundColor(BrandColors.cream)
   }
 
   private var lockScreenContent: some View {
     HStack(alignment: .center, spacing: 16) {
       VStack(alignment: .leading, spacing: 8) {
         HStack(spacing: 4) {
-          Text("Foqos")
-            .font(.headline)
-            .fontWeight(.bold)
-            .foregroundColor(.primary)
+          Text("LockedIn")
+            .font(.caption.weight(.bold))
+            .tracking(1.8)
+            .textCase(.uppercase)
+            .foregroundColor(BrandColors.cream.opacity(0.7))
           Image(state.appIcon.liveActivityAssetName)
             .resizable()
             .scaledToFit()
@@ -257,12 +257,12 @@ private struct FoqosLiveActivityContentView: View {
         }
 
         Text(attributes.name)
-          .font(.subheadline)
-          .foregroundColor(.primary)
+          .font(.system(.title3, design: .serif))
+          .foregroundColor(BrandColors.cream)
 
         Text(attributes.message)
           .font(.caption)
-          .foregroundColor(.secondary)
+          .foregroundColor(BrandColors.cream.opacity(0.6))
       }
 
       Spacer()
@@ -273,7 +273,7 @@ private struct FoqosLiveActivityContentView: View {
             label: "Paused",
             assetName: "PauseStickerIcon",
             countdownRange: state.countdownRange,
-            tint: state.themeColor,
+            tint: state.accentColor,
             timerFont: .title,
             alignment: .trailing
           )
@@ -282,7 +282,7 @@ private struct FoqosLiveActivityContentView: View {
             label: "On a Break",
             assetName: "CoffeeStickerIcon",
             countdownRange: state.countdownRange,
-            tint: state.themeColor,
+            tint: state.accentColor,
             timerFont: .title,
             alignment: .trailing
           )
@@ -305,7 +305,7 @@ private struct FoqosLiveActivityContentView: View {
       Text(timerInterval: countdownRange, countsDown: true)
         .font(font)
         .fontWeight(.semibold)
-        .foregroundColor(state.themeColor)
+        .foregroundColor(state.accentColor)
         .multilineTextAlignment(alignment)
     } else {
       Text(
@@ -314,7 +314,7 @@ private struct FoqosLiveActivityContentView: View {
       )
       .font(font)
       .fontWeight(.semibold)
-      .foregroundColor(state.themeColor)
+      .foregroundColor(state.accentColor)
       .multilineTextAlignment(alignment)
     }
   }
@@ -335,9 +335,10 @@ private struct FoqosLiveActivityContentView: View {
           .scaledToFit()
           .frame(width: 28, height: 28)
         Text(label)
-          .font(.subheadline)
-          .fontWeight(.semibold)
-          .foregroundColor(.primary)
+          .font(.caption.weight(.bold))
+          .tracking(1.4)
+          .textCase(.uppercase)
+          .foregroundColor(BrandColors.cream)
       }
 
       if let countdownRange {
@@ -381,7 +382,7 @@ private struct FoqosStandByActivityView: View {
   private var timerPresentation: some View {
     ZStack {
       // Use the active screen's resting artwork; Live Activities don't run its breathing timer.
-      ActiveSessionPetalView(color: state.themeColor, settings: .defaultValue)
+      ActiveSessionPetalView(color: BrandColors.sage, settings: .defaultValue)
         .frame(width: 360, height: 300)
         .scaleEffect(0.4)
         .frame(width: 144, height: 120)
@@ -455,9 +456,8 @@ extension FoqosWidgetAttributes {
 }
 
 extension FoqosWidgetAttributes.ContentState {
-  fileprivate static var mintCat: FoqosWidgetAttributes.ContentState {
+  fileprivate static var catIcon: FoqosWidgetAttributes.ContentState {
     var state = shortTime
-    state.themeColorName = "Mint Fresh"
     state.appIconName = AppIconOption.cat.alternateIconName
     return state
   }
@@ -524,7 +524,7 @@ extension FoqosWidgetAttributes.ContentState {
 #Preview("Notification", as: .content, using: FoqosWidgetAttributes.preview) {
   FoqosWidgetLiveActivity()
 } contentStates: {
-  FoqosWidgetAttributes.ContentState.mintCat
+  FoqosWidgetAttributes.ContentState.catIcon
   FoqosWidgetAttributes.ContentState.shortTime
   FoqosWidgetAttributes.ContentState.longTime
   FoqosWidgetAttributes.ContentState.breakActive
@@ -532,18 +532,18 @@ extension FoqosWidgetAttributes.ContentState {
 }
 
 @available(iOS 18.0, *)
-#Preview("Mint Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview)
+#Preview("Cat Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview)
 {
   FoqosWidgetLiveActivity()
 } contentStates: {
-  FoqosWidgetAttributes.ContentState.mintCat
+  FoqosWidgetAttributes.ContentState.catIcon
 }
 
 #Preview("StandBy · Focus", traits: .fixedLayout(width: 390, height: 180)) {
   FoqosStandByActivityView(
     profileName: "💪 Work",
     message: FoqosWidgetAttributes.preview.message,
-    state: FoqosWidgetAttributes.ContentState.mintCat
+    state: FoqosWidgetAttributes.ContentState.catIcon
   )
   .background(.black)
 }

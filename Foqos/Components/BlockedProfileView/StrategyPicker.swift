@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrategyPicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let strategies: [BlockingStrategy]
   @Binding var selectedStrategy: BlockingStrategy?
@@ -90,5 +90,4 @@ struct StrategyPicker: View {
     selectedStrategy: $selectedStrategy,
     isPresented: $isPresented
   )
-  .environmentObject(ThemeManager())
 }

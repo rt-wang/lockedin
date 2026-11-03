@@ -36,11 +36,13 @@ struct foqosApp: App {
   // Singletons for shared functionality
   @StateObject private var startegyManager = StrategyManager.shared
   @StateObject private var liveActivityManager = LiveActivityManager.shared
-  @StateObject private var themeManager = ThemeManager.shared
   @StateObject private var alertsManager = AlertsManager.shared
 
   init() {
     TimersUtil.registerBackgroundTasks()
+    // The user-selectable theme color was removed; drop the stale preference from older installs.
+    UserDefaults(suiteName: "group.dev.ambitionsoftware.foqos")?
+      .removeObject(forKey: "foqosThemeColorName")
 
     let asyncDependency: @Sendable () async -> (ModelContainer) = {
       @MainActor in
@@ -56,9 +58,6 @@ struct foqosApp: App {
   var body: some Scene {
     WindowGroup {
       HomeView()
-        .onChange(of: themeManager.selectedColorName) { _, _ in
-          updateLiveActivityAppearance()
-        }
         .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave)) {
           notification in
           guard let context = notification.object as? ModelContext,
@@ -84,17 +83,11 @@ struct foqosApp: App {
         .environmentObject(nfcWriter)
         .environmentObject(ratingManager)
         .environmentObject(liveActivityManager)
-        .environmentObject(themeManager)
     }
     .modelContainer(container)
   }
 
   private func handleUniversalLink(_ url: URL) {
     navigationManager.handleLink(url)
-  }
-
-  private func updateLiveActivityAppearance() {
-    guard let session = startegyManager.activeSession else { return }
-    liveActivityManager.updateSessionActivity(session: session)
   }
 }

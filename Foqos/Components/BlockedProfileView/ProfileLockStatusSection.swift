@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct ProfileLockStatusSection: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   let isLocked: Bool
   let isBlocking: Bool
@@ -32,7 +31,7 @@ struct ProfileLockStatusSection: View {
       .padding(.vertical, 4)
 
       Button(isLocked ? "Unlock Profile" : "Lock Now", action: isLocked ? onUnlock : onLock)
-        .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+        .foregroundStyle(palette.foreground)
         .disabled(isBlocking)
         .accessibilityIdentifier("profileLockAction")
     }
@@ -45,5 +44,4 @@ struct ProfileLockStatusSection: View {
     ProfileLockStatusSection(isLocked: true, isBlocking: false, onUnlock: {}, onLock: {})
     ProfileLockStatusSection(isLocked: false, isBlocking: false, onUnlock: {}, onLock: {})
   }
-  .environmentObject(ThemeManager())
 }

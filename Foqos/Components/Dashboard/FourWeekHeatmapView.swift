@@ -138,7 +138,6 @@ struct FourWeekHeatmapView: View {
         selectedDate: nil,
         onDateSelected: { _ in }
       )
-      .environmentObject(ThemeManager.shared)
       .padding()
       .foqosTheme(.cream)
     }

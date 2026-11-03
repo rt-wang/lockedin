@@ -76,7 +76,6 @@ struct ProfileActivityView: View {
     viewMode: .week,
     onInsightsTapped: { _ in }
   )
-  .environmentObject(ThemeManager.shared)
   .padding()
   .foqosTheme(.cream)
 }

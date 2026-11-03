@@ -200,7 +200,7 @@
 				StrategyAssets.xcassets,
 				Utils/AppBlockerUtil.swift,
 				Utils/SoftUnblockGrantStore.swift,
-				Utils/ThemeManager.swift,
+				Utils/BrandColors.swift,
 			);
 			target = 80FF388C2D80DB540032BC5E /* FoqosWidgetExtension */;
 		};
@@ -213,7 +213,7 @@
 				Models/SoftUnblockGrant.swift,
 				Models/Strategies/Data/SoftUnblockStrategyData.swift,
 				Utils/SoftUnblockGrantStore.swift,
-				Utils/ThemeManager.swift,
+				Utils/BrandColors.swift,
 			);
 			target = 808A3C492E4ACD18002A7812 /* FoqosShieldConfig */;
 		};

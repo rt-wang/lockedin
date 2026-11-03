@@ -2,8 +2,7 @@ import FamilyControls
 import SwiftUI
 
 struct BlockedProfileAppSelector: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   var selection: FamilyActivitySelection
   var buttonAction: () -> Void
@@ -38,7 +37,7 @@ struct BlockedProfileAppSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)

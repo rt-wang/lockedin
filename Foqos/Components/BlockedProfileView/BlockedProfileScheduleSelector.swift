@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfileScheduleSelector: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   var schedule: BlockedProfileSchedule
   var buttonAction: () -> Void
@@ -17,7 +16,7 @@ struct BlockedProfileScheduleSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrictNFCWriteWarningView: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let profileName: String
   let onCancel: () -> Void
@@ -38,7 +38,7 @@ struct StrictNFCWriteWarningView: View {
         VStack(spacing: 12) {
           ActionButton(
             title: "Never mind",
-            backgroundColor: themeManager.themeColor,
+            backgroundColor: palette.foreground,
             iconName: "xmark"
           ) {
             onCancel()
@@ -84,5 +84,4 @@ struct StrictNFCWriteWarningView: View {
     onCancel: {},
     onContinue: {}
   )
-  .environmentObject(ThemeManager())
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrategyDetailsSheet: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let strategy: BlockingStrategy
   let isSelected: Bool
@@ -36,7 +36,7 @@ struct StrategyDetailsSheet: View {
 
         ActionButton(
           title: isSelected ? "Selected" : "Use this strategy",
-          backgroundColor: themeManager.themeColor,
+          backgroundColor: palette.foreground,
           isDisabled: isSelected,
           action: onSelect
         )

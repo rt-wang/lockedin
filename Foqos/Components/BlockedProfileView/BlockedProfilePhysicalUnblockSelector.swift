@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfilePhysicalUnblockSelector: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   @ScaledMetric(relativeTo: .body) private var columnHeaderMinHeight: CGFloat = 40
   @ScaledMetric(relativeTo: .caption2) private var columnDescriptionMinHeight: CGFloat = 50
@@ -128,7 +127,7 @@ struct BlockedProfilePhysicalUnblockSelector: View {
 
           if !items.isEmpty {
             Image(systemName: "checkmark.circle.fill")
-              .foregroundColor(foqosAccent ?? themeManager.themeColor)
+              .foregroundColor(palette.foreground)
               .font(.caption)
           }
         }
@@ -196,7 +195,7 @@ struct BlockedProfilePhysicalUnblockSelector: View {
       } label: {
         Image(systemName: "ellipsis.circle")
           .font(.title3)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
       }
       .disabled(disabled)
     }
@@ -210,7 +209,7 @@ struct BlockedProfilePhysicalUnblockSelector: View {
   }
 
   private var ruleColor: Color {
-    foqosAccent?.opacity(0.22) ?? Color.primary.opacity(0.2)
+    palette.line
   }
 
   @ViewBuilder
@@ -317,5 +316,4 @@ struct BlockedProfilePhysicalUnblockSelector: View {
       )
     }
   }
-  .environmentObject(ThemeManager())
 }

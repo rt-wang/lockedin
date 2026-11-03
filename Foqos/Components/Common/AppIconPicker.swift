@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AppIconPicker: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @State private var selectedIconName = UIApplication.shared.alternateIconName
   @State private var isChangingIcon = false
@@ -9,13 +9,13 @@ struct AppIconPicker: View {
   @State private var errorMessage = ""
 
   var body: some View {
-    Section("App Icon") {
-      HStack(spacing: 6) {
+    Section {
+      HStack(alignment: .top, spacing: 6) {
         ForEach(AppIconOption.allCases) { icon in
           Button {
             select(icon)
           } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 8) {
               Image(icon.previewAssetName)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -23,42 +23,40 @@ struct AppIconPicker: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .overlay {
                   RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(
-                      isSelected(icon) ? themeManager.themeColor : .clear,
-                      lineWidth: 2
-                    )
+                    .stroke(palette.line, lineWidth: 1)
                 }
-                .overlay(alignment: .topTrailing) {
-                  if isSelected(icon) {
-                    Image(systemName: "checkmark.circle.fill")
-                      .symbolRenderingMode(.palette)
-                      .foregroundStyle(.white, themeManager.themeColor)
-                      .background(Circle().fill(.background))
-                      .offset(x: 6, y: -6)
-                  }
-                }
+                .opacity(isSelected(icon) ? 1 : 0.7)
 
               Text(icon.displayName)
-                .font(.caption)
-                .foregroundStyle(.primary)
+                .foqosText(.mark)
+                .foregroundStyle(isSelected(icon) ? palette.foreground : palette.mute)
                 .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .padding(.bottom, 4)
+                .overlay(alignment: .bottom) {
+                  Rectangle()
+                    .fill(isSelected(icon) ? palette.foreground : .clear)
+                    .frame(height: 1)
+                }
             }
             .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
           }
-          .buttonStyle(.plain)
+          .buttonStyle(FoqosPressStyle())
           .disabled(isChangingIcon || isSelected(icon))
           .accessibilityLabel("Use the \(icon.displayName) app icon")
           .accessibilityAddTraits(isSelected(icon) ? .isSelected : [])
         }
       }
-      .padding(.vertical, 4)
+      .padding(.vertical, 8)
 
       if !UIApplication.shared.supportsAlternateIcons {
         Text("Alternate app icons are not available on this device.")
-          .font(.caption)
-          .foregroundStyle(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
       }
+    } header: {
+      FoqosSectionHeader("App Icon")
     }
     .alert("Unable to Change App Icon", isPresented: $showError) {
       Button("OK") {}
@@ -106,6 +104,7 @@ struct AppIconPicker: View {
 #Preview {
   Form {
     AppIconPicker()
+      .foqosFormRows()
   }
-  .environmentObject(ThemeManager.shared)
+  .foqosForm(.cream)
 }

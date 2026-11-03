@@ -42,8 +42,7 @@ struct BlockedProfileNameSection: View {
 }
 
 struct BlockedProfileStrategyFields: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   @ObservedObject var draft: BlockedProfileDraft
   @Binding var showingStrategyPicker: Bool
@@ -54,7 +53,7 @@ struct BlockedProfileStrategyFields: View {
     Button(action: { showingStrategyPicker = true }) {
       HStack {
         Text("Choose Strategy")
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)
@@ -77,8 +76,7 @@ struct BlockedProfileStrategyFields: View {
 }
 
 struct BlockedProfileStrategySection: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   @ObservedObject var draft: BlockedProfileDraft
   @Binding var showingStrategyPicker: Bool
@@ -102,7 +100,7 @@ struct BlockedProfileStrategySection: View {
         } label: {
           HStack {
             Text("Update Start Settings")
-              .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+              .foregroundStyle(palette.foreground)
             Spacer()
             Image(systemName: "chevron.right")
               .foregroundStyle(.secondary)
@@ -328,8 +326,7 @@ struct BlockedProfileScheduleSection: View {
 }
 
 struct BlockedProfileBreaksFields: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   @ObservedObject var draft: BlockedProfileDraft
   var disabled: Bool
@@ -390,7 +387,7 @@ struct BlockedProfileBreaksFields: View {
         in: Double(minimumBreakDurationInMinutes)...Double(maximumBreakDurationInMinutes),
         step: 5
       )
-      .tint(foqosAccent ?? themeManager.themeColor)
+      .tint(palette.foreground)
       .accessibilityValue(DateFormatters.formatMinutes(draft.breakTimeInMinutes))
 
       HStack {
@@ -562,8 +559,7 @@ struct BlockedProfileSessionSafeguardsSection: View {
 
 struct BlockedProfileNotificationsFields: View {
   @EnvironmentObject private var strategyManager: StrategyManager
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
   @FocusState private var isReminderTimeFocused: Bool
 
   @ObservedObject var draft: BlockedProfileDraft
@@ -617,7 +613,7 @@ struct BlockedProfileNotificationsFields: View {
           RoundedRectangle(cornerRadius: 8, style: .continuous)
             .stroke(
               isReminderTimeFocused
-                ? (foqosAccent ?? themeManager.themeColor) : Color.secondary.opacity(0.4),
+                ? palette.foreground : Color.secondary.opacity(0.4),
               lineWidth: isReminderTimeFocused ? 2 : 1
             )
         }
@@ -661,7 +657,7 @@ struct BlockedProfileNotificationsFields: View {
         }
       } label: {
         Text("Manage notification settings")
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
           .font(.caption)
       }
     }

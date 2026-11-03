@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TimerDurationView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let profileName: String
@@ -64,7 +64,7 @@ struct TimerDurationView: View {
       // Confirm button
       ActionButton(
         title: actionTitle,
-        backgroundColor: themeManager.themeColor,
+        backgroundColor: palette.foreground,
         iconName: "checkmark.circle.fill"
       ) {
         handleConfirm()
@@ -94,7 +94,7 @@ struct TimerDurationView: View {
         } label: {
           Image(systemName: "minus.circle.fill")
             .font(.system(size: 32))
-            .foregroundColor(durationMinutes > minMinutes ? themeManager.themeColor : .gray)
+            .foregroundColor(durationMinutes > minMinutes ? palette.foreground : .gray)
         }
         .disabled(durationMinutes <= minMinutes)
         .scaleEffect(durationMinutes <= minMinutes ? 0.9 : 1.0)
@@ -113,7 +113,7 @@ struct TimerDurationView: View {
               }
             }
           )
-          .tint(themeManager.themeColor)
+          .tint(palette.foreground)
           .sensoryFeedback(.selection, trigger: durationMinutes)
 
           // Min/Max labels
@@ -134,7 +134,7 @@ struct TimerDurationView: View {
         } label: {
           Image(systemName: "plus.circle.fill")
             .font(.system(size: 32))
-            .foregroundColor(durationMinutes < maxMinutes ? themeManager.themeColor : .gray)
+            .foregroundColor(durationMinutes < maxMinutes ? palette.foreground : .gray)
         }
         .disabled(durationMinutes >= maxMinutes)
         .scaleEffect(durationMinutes >= maxMinutes ? 0.9 : 1.0)
@@ -216,7 +216,7 @@ struct TimerDurationView: View {
 
       Toggle("", isOn: $hideStopButton)
         .labelsHidden()
-        .tint(themeManager.themeColor)
+        .tint(palette.foreground)
     }
   }
 

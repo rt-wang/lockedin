@@ -236,6 +236,5 @@ struct HomeView: View {
     .environmentObject(NavigationManager())
     .environmentObject(StrategyManager())
     .environmentObject(RatingManager())
-    .environmentObject(ThemeManager())
     .defaultAppStorage(UserDefaults(suiteName: "preview")!)
 }

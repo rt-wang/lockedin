@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfileHardModeFields: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
   @ObservedObject var draft: BlockedProfileDraft
   var disabled: Bool
 
@@ -35,7 +34,7 @@ struct BlockedProfileHardModeFields: View {
           in: 30...720,
           step: 30
         )
-        .tint(foqosAccent ?? themeManager.themeColor)
+        .tint(palette.foreground)
         .accessibilityLabel("Hard Mode lock duration")
         .accessibilityValue(DateFormatters.formatMinutes(draft.hardModeDurationInMinutes))
 
@@ -61,5 +60,4 @@ struct BlockedProfileHardModeFields: View {
       disabled: false
     )
   }
-  .environmentObject(ThemeManager())
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrategyPickerCard: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let strategy: BlockingStrategy
   let isSelected: Bool
@@ -19,7 +19,7 @@ struct StrategyPickerCard: View {
           if isSelected {
             Image(systemName: "checkmark.circle.fill")
               .font(.system(size: 17))
-              .foregroundStyle(themeManager.themeColor)
+              .foregroundStyle(palette.foreground)
               .background(Circle().fill(Color(.systemBackground)))
               .offset(x: 4, y: -4)
           }
@@ -41,7 +41,7 @@ struct StrategyPickerCard: View {
       .overlay {
         RoundedRectangle(cornerRadius: 14, style: .continuous)
           .strokeBorder(
-            isSelected ? themeManager.themeColor : Color(.separator).opacity(0.45),
+            isSelected ? palette.foreground : Color(.separator).opacity(0.45),
             lineWidth: isSelected ? 2 : 1
           )
       }

@@ -3,7 +3,7 @@ import SwiftUI
 
 struct WeeklySessionChart: View {
   @ObservedObject var viewModel: WeeklyInsightsUtil
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Binding var selectedDay: WeeklyDayAggregate?
   let onDateSelected: ((Date?) -> Void)?
   @State private var selectionFeedbackTrigger = 0
@@ -17,8 +17,8 @@ struct WeeklySessionChart: View {
         )
         .foregroundStyle(
           selectedDay?.displayLabel == day.displayLabel
-            ? themeManager.themeColor.opacity(0.7)
-            : themeManager.themeColor
+            ? palette.foreground.opacity(0.7)
+            : palette.foreground
         )
         .cornerRadius(6)
       }
@@ -177,7 +177,6 @@ struct WeeklySessionChart: View {
         selectedDay: $selectedDay,
         onDateSelected: nil
       )
-      .environmentObject(ThemeManager.shared)
       .padding()
     }
   }

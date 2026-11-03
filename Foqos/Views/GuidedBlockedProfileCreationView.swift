@@ -110,7 +110,7 @@ private enum GuidedProfileStep: Int, CaseIterable, Identifiable {
 struct GuidedBlockedProfileCreationView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let onBackFromFirst: (() -> Void)?
 

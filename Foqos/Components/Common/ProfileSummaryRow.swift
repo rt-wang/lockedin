@@ -79,7 +79,7 @@ struct ProfileSummaryRow<Accessory: View>: View {
 }
 
 struct ProfileSummaryContent: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let profile: BlockedProfiles
   let isActive: Bool
@@ -184,7 +184,7 @@ struct ProfileSummaryContent: View {
 }
 
 struct ProfileUsageMiniBarChart: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let profile: BlockedProfiles
 
@@ -231,7 +231,7 @@ struct ProfileUsageMiniBarChart: View {
           let normalizedValue = CGFloat(value / maxValue)
 
           RoundedRectangle(cornerRadius: 2, style: .continuous)
-            .fill(themeManager.themeColor)
+            .fill(palette.foreground)
             .opacity(value > 0 ? 0.36 + (normalizedValue * 0.64) : 0.14)
             .frame(maxWidth: .infinity)
             .frame(height: value > 0 ? max(5, normalizedValue * 25) : 3)

@@ -30,8 +30,7 @@ enum WidgetPreviewData {
         strategyID: "NFCBlockingStrategy"),
       deepLinkURL: URL(string: "foqos://"), focusMessage: "Make room for what matters.",
       useProfileURL: false,
-      activity: .make(sessions: sessions, at: date), activityPeriod: period,
-      themeColor: ThemeManager().themeColor
+      activity: .make(sessions: sessions, at: date), activityPeriod: period
     )
   }
 

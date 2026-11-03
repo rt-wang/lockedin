@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PauseDurationView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let profileName: String
@@ -64,7 +64,7 @@ struct PauseDurationView: View {
       // Confirm button
       ActionButton(
         title: actionTitle,
-        backgroundColor: themeManager.themeColor,
+        backgroundColor: palette.foreground,
         iconName: "checkmark.circle.fill"
       ) {
         handleConfirm()
@@ -98,7 +98,7 @@ struct PauseDurationView: View {
         } label: {
           Image(systemName: "minus.circle.fill")
             .font(.system(size: 32))
-            .foregroundColor(durationMinutes > minMinutes ? themeManager.themeColor : .gray)
+            .foregroundColor(durationMinutes > minMinutes ? palette.foreground : .gray)
         }
         .disabled(durationMinutes <= minMinutes)
         .scaleEffect(durationMinutes <= minMinutes ? 0.9 : 1.0)
@@ -117,7 +117,7 @@ struct PauseDurationView: View {
               }
             }
           )
-          .tint(themeManager.themeColor)
+          .tint(palette.foreground)
           .sensoryFeedback(.selection, trigger: durationMinutes)
 
           // Min/Max labels
@@ -138,7 +138,7 @@ struct PauseDurationView: View {
         } label: {
           Image(systemName: "plus.circle.fill")
             .font(.system(size: 32))
-            .foregroundColor(durationMinutes < maxMinutes ? themeManager.themeColor : .gray)
+            .foregroundColor(durationMinutes < maxMinutes ? palette.foreground : .gray)
         }
         .disabled(durationMinutes >= maxMinutes)
         .scaleEffect(durationMinutes >= maxMinutes ? 0.9 : 1.0)

@@ -151,6 +151,5 @@ struct HomeAlertDetailView: View {
     onAlertTapped: { _ in }
   )
   .padding()
-  .environmentObject(ThemeManager.shared)
   .foqosTheme(.cream)
 }

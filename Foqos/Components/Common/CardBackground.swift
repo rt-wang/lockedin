@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CardBackground: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   var isActive: Bool
   var customColor: Color?
@@ -47,7 +47,7 @@ struct CardBackground: View {
     }
 
     if isActive {
-      return themeManager.themeColor.opacity(0.5)
+      return palette.foreground.opacity(0.5)
     }
 
     return .blue
@@ -361,5 +361,4 @@ struct CardBackground: View {
         .padding(.horizontal)
     }
   }
-  .environmentObject(ThemeManager.shared)
 }

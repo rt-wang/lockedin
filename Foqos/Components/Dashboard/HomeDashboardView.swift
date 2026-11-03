@@ -237,7 +237,6 @@ private struct HomeDashboardPreview: View {
     )
     .modelContainer(container)
     .environmentObject(StrategyManager())
-    .environmentObject(ThemeManager())
     .defaultAppStorage(UserDefaults(suiteName: "home-dashboard-preview")!)
   }
 }

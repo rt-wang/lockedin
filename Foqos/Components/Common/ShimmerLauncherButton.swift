@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ShimmerLauncherButton: View {
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let title: String
   let iconName: String
@@ -48,7 +48,7 @@ struct ShimmerLauncherButton: View {
       .frame(height: height)
       .background(buttonBackground)
       .shadow(
-        color: themeManager.themeColor.opacity(isEnabled ? 0.24 : 0),
+        color: palette.foreground.opacity(isEnabled ? 0.24 : 0),
         radius: 12,
         x: 0,
         y: 6
@@ -67,7 +67,7 @@ struct ShimmerLauncherButton: View {
 
   private var buttonBackground: some View {
     Capsule()
-      .fill(themeManager.themeColor.opacity(isEnabled ? 0.72 : 0.34))
+      .fill(palette.foreground.opacity(isEnabled ? 0.72 : 0.34))
       .background(
         Capsule()
           .fill(.ultraThinMaterial)

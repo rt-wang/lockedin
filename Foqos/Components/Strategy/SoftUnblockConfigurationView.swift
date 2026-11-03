@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SoftUnblockConfigurationView: View {
   @Environment(\.dismiss) private var dismiss
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let profileName: String
   let actionTitle: String
@@ -88,7 +88,7 @@ struct SoftUnblockConfigurationView: View {
                     SoftUnblockStrategyData.durationRange.upperBound),
                 step: 5
               )
-              .tint(themeManager.themeColor)
+              .tint(palette.foreground)
               .sensoryFeedback(.selection, trigger: accessDurationInMinutes)
 
               HStack {
@@ -109,7 +109,7 @@ struct SoftUnblockConfigurationView: View {
 
                 Toggle("Reset Opens", isOn: resetEnabledBinding)
                   .labelsHidden()
-                  .tint(themeManager.themeColor)
+                  .tint(palette.foreground)
               }
 
               Text(resetDescription)
@@ -126,7 +126,7 @@ struct SoftUnblockConfigurationView: View {
                   in: resetIntervalRange,
                   step: 1
                 )
-                .tint(themeManager.themeColor)
+                .tint(palette.foreground)
                 .sensoryFeedback(.selection, trigger: allowanceResetIntervalInHours)
                 .accessibilityValue(formattedResetInterval)
 
@@ -165,7 +165,7 @@ struct SoftUnblockConfigurationView: View {
   private var startButton: some View {
     ActionButton(
       title: actionTitle,
-      backgroundColor: themeManager.themeColor,
+      backgroundColor: palette.foreground,
       iconName: "checkmark.circle.fill"
     ) {
       onStart(
@@ -243,5 +243,4 @@ struct SoftUnblockConfigurationView: View {
     ),
     onStart: { _ in }
   )
-  .environmentObject(ThemeManager.shared)
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DomainPicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Binding var domains: [String]
   @Binding var isPresented: Bool
@@ -35,7 +35,7 @@ struct DomainPicker: View {
 
             Button(action: addDomain) {
               Image(systemName: "plus.circle.fill")
-                .foregroundStyle(themeManager.themeColor)
+                .foregroundStyle(palette.foreground)
                 .font(.title2)
             }
             .disabled(newDomain.isEmpty || domains.count >= maxDomains)

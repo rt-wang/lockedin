@@ -196,7 +196,6 @@ class LiveActivityManager: ObservableObject {
       isPauseActive: session.isPauseActive,
       pauseStartTime: session.pauseStartTime,
       pauseEndTime: session.pauseEndTime,
-      themeColorName: ThemeManager.shared.selectedColorName,
       appIconName: UIApplication.shared.alternateIconName
     )
   }

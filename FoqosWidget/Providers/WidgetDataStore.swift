@@ -91,8 +91,7 @@ enum WidgetDataStore {
       focusMessage: profile?.customReminderMessage ?? "Make room for what matters.",
       useProfileURL: configuration.useProfileURL,
       activity: .make(sessions: intervals, at: date),
-      activityPeriod: configuration.activityPeriod,
-      themeColor: ThemeManager().themeColor
+      activityPeriod: configuration.activityPeriod
     )
   }
 

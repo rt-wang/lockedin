@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct StrategyRow: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   enum AccessoryStyle {
     case selection
@@ -44,14 +43,14 @@ struct StrategyRow: View {
             .font(.headline)
             .foregroundStyle(
               accessoryStyle == .selection && isSelected
-                ? (foqosAccent ?? themeManager.themeColor) : .primary
+                ? palette.foreground : .primary
             )
 
           Spacer(minLength: 8)
 
           if accessoryStyle == .selection {
             Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-              .foregroundStyle(isSelected ? (foqosAccent ?? themeManager.themeColor) : .secondary)
+              .foregroundStyle(isSelected ? palette.foreground : .secondary)
               .font(.system(size: 20))
           } else if accessoryStyle == .chevron {
             Image(systemName: "chevron.right")

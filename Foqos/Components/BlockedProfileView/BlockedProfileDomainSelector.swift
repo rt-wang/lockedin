@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfileDomainSelector: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   var domains: [String]
   var buttonAction: () -> Void
@@ -28,7 +27,7 @@ struct BlockedProfileDomainSelector: View {
     Button(action: buttonAction) {
       HStack {
         Text(buttonText)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+          .foregroundStyle(palette.foreground)
         Spacer()
         Image(systemName: "chevron.right")
           .foregroundStyle(.gray)

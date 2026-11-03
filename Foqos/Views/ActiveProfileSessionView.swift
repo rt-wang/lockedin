@@ -564,7 +564,6 @@ private struct ActiveSessionActionButton: View {
     onExpiredCountdownReset: {}
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }
 
 #Preview("Temporary Access · One App") {
@@ -601,7 +600,6 @@ private struct ActiveSessionActionButton: View {
     ])
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }
 
 #Preview("Temporary Access · Multiple") {
@@ -659,5 +657,4 @@ private struct ActiveSessionActionButton: View {
     ])
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }

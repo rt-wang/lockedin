@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct BlockedProfileDataExportView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Environment(\.modelContext) private var context
 
@@ -79,7 +79,7 @@ struct BlockedProfileDataExportView: View {
 
         ActionButton(
           title: "Export as CSV",
-          backgroundColor: themeManager.themeColor,
+          backgroundColor: palette.foreground,
           isLoading: isGenerating,
           isDisabled: isExportDisabled
         ) {

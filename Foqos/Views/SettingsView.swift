@@ -10,7 +10,7 @@ let ALIEXPRESS_STORE_LINK = "https://www.aliexpress.com/item/1005010075431327.ht
 struct SettingsView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var context
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @EnvironmentObject var requestAuthorizer: RequestAuthorizer
   @EnvironmentObject var strategyManager: StrategyManager
 
@@ -33,38 +33,6 @@ struct SettingsView: View {
         .foqosFormRows()
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 0, trailing: 20))
-
-        Section {
-          VStack(alignment: .leading, spacing: 4) {
-            Text("Appearance")
-              .foqosText(.toggle)
-            Text("Customize the look of your app")
-              .foqosText(.caption)
-              .foregroundStyle(FoqosPalette.cream.mute)
-          }
-          .padding(.vertical, 6)
-
-          Picker(selection: $themeManager.selectedColorName) {
-            ForEach(ThemeManager.availableColors, id: \.name) { colorOption in
-              HStack {
-                Circle()
-                  .fill(colorOption.color)
-                  .frame(width: 12, height: 12)
-                Text(colorOption.name)
-              }
-              .tag(colorOption.name)
-            }
-          } label: {
-            Text("Theme Color")
-              .foqosText(.body)
-          }
-          .onChange(of: themeManager.selectedColorName) { _, _ in
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-          }
-        } header: {
-          FoqosSectionHeader("Theme")
-        }
-        .foqosFormRows()
 
         AppIconPicker()
           .foqosFormRows()
@@ -228,7 +196,6 @@ private struct SettingsValueRow: View {
 
 #Preview {
   SettingsView()
-    .environmentObject(ThemeManager.shared)
     .environmentObject(RequestAuthorizer())
     .environmentObject(StrategyManager.shared)
     .modelContainer(for: BlockedProfiles.self, inMemory: true)

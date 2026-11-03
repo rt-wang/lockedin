@@ -2,7 +2,7 @@ import FamilyControls
 import SwiftUI
 
 struct AppPicker: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let stateUpdateTimer = Timer.publish(every: 1, on: .main, in: .common)
     .autoconnect()
@@ -51,7 +51,7 @@ struct AppPicker: View {
           .id(refreshID)
       }
       .background(Color(.systemGroupedBackground).ignoresSafeArea())
-      .tint(themeManager.themeColor)
+      .tint(palette.foreground)
       .onReceive(stateUpdateTimer) { _ in
         updateFlag.toggle()
       }
@@ -71,14 +71,14 @@ struct AppPicker: View {
             HStack(spacing: 5) {
               Text("\(selectedCount)")
                 .fontWeight(.semibold)
-                .foregroundStyle(isOverLimit ? Color.red : themeManager.themeColor)
+                .foregroundStyle(isOverLimit ? Color.red : palette.foreground)
 
               Text("/ 50")
                 .foregroundStyle(.secondary)
 
               Image(systemName: "info.circle")
                 .font(.caption)
-                .foregroundStyle(isOverLimit ? Color.red : themeManager.themeColor)
+                .foregroundStyle(isOverLimit ? Color.red : palette.foreground)
             }
             .font(.subheadline)
             .monospacedDigit()
@@ -120,7 +120,6 @@ struct AppPicker: View {
         selection: .constant(FamilyActivitySelection()),
         isPresented: .constant(true)
       )
-      .environmentObject(ThemeManager.shared)
     }
   }
 #endif
