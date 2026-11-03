@@ -112,6 +112,7 @@ struct BlockedProfileListView: View {
             Button(action: { editMode = .inactive }) {
               Image(systemName: "checkmark.circle")
             }
+            .accessibilityLabel("Done")
           }
           if !profiles.isEmpty {
             Menu {

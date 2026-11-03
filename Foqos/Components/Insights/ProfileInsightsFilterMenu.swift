@@ -60,7 +60,7 @@ struct ProfileInsightsFilterMenu: View {
       Button(action: onSelectDate) {
         Label(
           viewMode == .week ? "Select Week..." : "Select Month...",
-          systemImage: isSpecificFilter ? "checkmark" : "calendar.view.day"
+          systemImage: isSpecificFilter ? "checkmark" : "calendar.circle"
         )
       }
 
