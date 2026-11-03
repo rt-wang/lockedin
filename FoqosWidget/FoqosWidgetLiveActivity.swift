@@ -532,8 +532,7 @@ extension FoqosWidgetAttributes.ContentState {
 }
 
 @available(iOS 18.0, *)
-#Preview("Cat Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview)
-{
+#Preview("Cat Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview) {
   FoqosWidgetLiveActivity()
 } contentStates: {
   FoqosWidgetAttributes.ContentState.catIcon

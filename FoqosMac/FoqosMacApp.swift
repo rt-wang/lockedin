@@ -37,7 +37,8 @@ struct FoqosMacApp: App {
             switch result {
             case .success(let requiresRestart):
               if requiresRestart {
-                print("LockedIn reset is pending. Restart this Mac to finish removing the extension.")
+                print(
+                  "LockedIn reset is pending. Restart this Mac to finish removing the extension.")
               } else {
                 print(
                   "LockedIn filter configuration was removed and the system extension was deactivated."
