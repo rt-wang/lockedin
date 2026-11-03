@@ -1,0 +1,41 @@
+import AppIntents
+import SwiftData
+
+struct StopProfileIntent: AppIntent {
+  @Dependency(key: "ModelContainer")
+  private var modelContainer: ModelContainer
+
+  @MainActor
+  private var modelContext: ModelContext {
+    return modelContainer.mainContext
+  }
+
+  @Parameter(title: "Profile") var profile: BlockedProfileEntity
+
+  static var title: LocalizedStringResource = "Stop Foqos Profile"
+
+  static var parameterSummary: some ParameterSummary {
+    Summary("Stop \(\.$profile)")
+  }
+
+  static var description = IntentDescription(
+    "Stop a Foqos blocking profile."
+  )
+
+  @MainActor
+  func perform() async throws -> some IntentResult {
+    let strategyManager = StrategyManager.shared
+
+    strategyManager
+      .stopSessionFromBackground(
+        profile.id,
+        context: modelContext
+      )
+
+    if let errorMessage = strategyManager.errorMessage {
+      throw FoqosControlError.actionFailed(errorMessage)
+    }
+
+    return .result()
+  }
+}

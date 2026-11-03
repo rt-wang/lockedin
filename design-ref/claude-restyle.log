@@ -1,0 +1,53 @@
+Three agents are now restyling the files in parallel: the Settings/Support/Emergency/Insights views, the guided creation and profile list views, and the seven Dashboard components. I'll check their work and list the changed files once they finish.
+
+Two of the 13 files are restyled so far: `GuidedBlockedProfileCreationView.swift` and `BlockedProfileListView.swift`. The other two agents are still working on the remaining 11.
+
+- **Guided profile creation:** the grey grouped background is now cream. Each step has a small "Step X of Y" label, a serif title, and hairline dividers instead of rounded cards. The filled continue button is now a text button with an arrow. One visible addition: each step's title now appears as a section label. The view was already given those titles but never showed them.
+- **Profile list:** now an open list on cream with hairline separators.
+
+The agent checked that every style symbol it used exists in `FoqosStyle.swift` and that the braces balance. Nothing has been compiled, as you asked. The steps, sheets, alerts and edit-mode delete/reorder are unchanged.
+
+I'll give you the full list of changed files once the other two agents finish.
+
+Four more files are restyled: `SettingsView.swift`, `SupportView.swift`, `EmergencyView.swift` and `ProfileInsightsView.swift`. That makes six of 13 done. All four pass a syntax-only check (`swiftc -parse`); nothing has been compiled.
+
+What changes visually:
+- **Settings:** an open cream list with a serif title and hairline separators. Links end in ↗ and actions in →. The Screen Time status dot is forest when authorized and red when not.
+- **Support:** the tip buttons are now plain price labels, with an underline under the selected one. The filled tip button is an arrow text button. While a tip is processing it reads "Processing…" instead of showing a spinner.
+- **Emergency:** the boxed card is gone; the remaining count is shown in large serif type. The red filled unblock button is now an arrow text button (it reads "Unblocking…" while running). The gear button lost its filled circle.
+- **Profile insights:** the theme and nav bar are now cream.
+
+Two screens will still look partly unstyled because their inner components live in files outside your list:
+- The app icon picker in Settings still has rounded icon tiles.
+- The insights content inside Profile Insights keeps its original styling.
+
+The Dashboard agent is still working on the last seven files.
+
+All 13 files are done: 11 restyled, and 2 left as they were because they already matched the cream/forest style. The rest of the app's logic is untouched. Every file passes a syntax-only check (`swiftc -parse`), but a parse doesn't confirm symbols or types resolve. Since I didn't run xcodebuild, the code hasn't been compiled. None of the 13 still uses `systemGroupedBackground`, `insetGrouped`, rounded-rectangle cards or material backgrounds.
+
+**Files changed:**
+- `Foqos/Views/SettingsView.swift`
+- `Foqos/Views/SupportView.swift`
+- `Foqos/Views/EmergencyView.swift`
+- `Foqos/Views/ProfileInsightsView.swift`
+- `Foqos/Views/GuidedBlockedProfileCreationView.swift`
+- `Foqos/Views/BlockedProfileListView.swift`
+- `Foqos/Components/Dashboard/StartProfilePickerView.swift`
+- `Foqos/Components/Dashboard/ChartConfigurationSheet.swift`
+- `Foqos/Components/Dashboard/FourWeekHeatmapView.swift`
+- `Foqos/Components/Dashboard/ProfileActivityView.swift`
+- `Foqos/Components/Dashboard/HomeAlertsView.swift`
+
+**Not changed:**
+- `HomeProfilesListView.swift` already used the cream palette, serif names and text styles.
+- `HomeActiveSessionView.swift` only shows `ActiveProfileSessionView`, which is already on the forest theme.
+
+**Things you'll notice when you preview:**
+- **Two screens are only partly restyled.** The app icon picker in Settings still has rounded tiles, and the insights content inside Profile Insights keeps its old look. Both live in files outside your list; I can restyle them if you want.
+- **Guided profile creation** now shows each step's title as a section label. The view already had those titles but never displayed them.
+- **Loading states:** Support shows "Processing…" on the tip button and Emergency shows "Unblocking…" on the unblock button, instead of spinners.
+- **Start profile picker:** its rows are now a simpler custom row rather than the shared `ProfileSummaryRow`. They compute the app and domain counts the same way the home profile list does.
+- **Alert icon:** in the home alerts list it follows the theme colour instead of red.
+- **Settings:** the Screen Time status dot is forest when authorized and stays red when not.
+
+To preview, open the `#Preview` blocks for these files in Xcode.

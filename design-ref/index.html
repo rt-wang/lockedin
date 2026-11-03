@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Brick UI Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    @font-face {
+      font-family: "Suisse BP";
+      src: url("./SuisseBPIntl-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Suisse BP";
+      src: url("./SuisseBPIntl-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --cream: #F7F0DC;
+      --forest: #16280D;
+      --mute: rgba(22, 40, 13, 0.48);
+      --line: rgba(22, 40, 13, 0.22);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --pad: 24px;
+      --display: "Instrument Serif", "Times New Roman", serif;
+      --ui: "Suisse BP", Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+
+    html, body {
+      min-height: 100%;
+      background: #0c1408;
+      color: var(--forest);
+      font-family: var(--ui);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 28px 16px 40px;
+    }
+
+    .meta {
+      color: var(--cream);
+      opacity: 0.5;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      max-width: 380px;
+      line-height: 1.5;
+    }
+
+    .phone {
+      width: min(390px, 100%);
+      height: min(820px, 90vh);
+      background: var(--cream);
+      color: var(--forest);
+      border-radius: 36px;
+      overflow: hidden;
+      position: relative;
+      box-shadow:
+        0 0 0 10px #1a2614,
+        0 0 0 12px #3a4d30,
+        0 40px 80px rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.35s var(--ease), color 0.35s var(--ease);
+    }
+    .phone.theme-forest {
+      background: var(--forest);
+      color: var(--cream);
+      --mute: rgba(247, 240, 220, 0.55);
+      --line: rgba(247, 240, 220, 0.28);
+    }
+
+    .notch {
+      height: 44px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 22px 6px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .screen {
+      flex: 1;
+      overflow: auto;
+      padding: 4px var(--pad) 130px;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    .page { display: none; animation: rise 0.5s var(--ease); }
+    .page.active { display: block; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .tabs {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .tabs button {
+      background: none;
+      border: none;
+      border-bottom: 1px solid transparent;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: inherit;
+      opacity: 0.35;
+      cursor: pointer;
+      padding: 0 0 8px;
+    }
+    .tabs button.on {
+      opacity: 1;
+      border-bottom-color: currentColor;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-size: clamp(48px, 13vw, 58px);
+      font-weight: 400;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      margin-bottom: 22px;
+    }
+    h1 em {
+      font-style: italic;
+      display: block;
+      color: var(--mute);
+    }
+
+    .lede {
+      font-size: 15px;
+      line-height: 1.4;
+      color: var(--mute);
+      max-width: 26ch;
+      margin-bottom: 4px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .lede strong {
+      display: block;
+      color: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      opacity: 1;
+    }
+
+    .mode {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      color: inherit;
+      font: inherit;
+      padding: 14px 0;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 16px;
+      align-items: baseline;
+    }
+    .mode:first-child { border-top: 1px solid var(--line); }
+    .mode .name {
+      font-family: var(--display);
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      text-transform: none;
+    }
+    .mode .apps {
+      grid-column: 1 / -1;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--mute);
+      line-height: 1.35;
+    }
+    .mode .mark {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mute);
+      opacity: 0;
+    }
+    .mode.selected .mark { opacity: 1; color: inherit; }
+    .mode:not(.selected) { opacity: 0.5; }
+    .mode:not(.selected):hover { opacity: 0.8; }
+
+    .dock {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 18px var(--pad) 30px;
+      background: linear-gradient(to top, var(--cream) 65%, transparent);
+      transition: background 0.35s var(--ease);
+    }
+    .phone.theme-forest .dock {
+      background: linear-gradient(to top, var(--forest) 65%, transparent);
+    }
+
+    .btn {
+      appearance: none;
+      width: 100%;
+      border: none;
+      border-top: 1px solid currentColor;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 18px 0 4px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn:active { opacity: 0.65; }
+
+    .locked-wrap {
+      min-height: calc(100% - 12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 40px;
+      padding-top: 12px;
+    }
+    .status-line {
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+    .status-line b {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .status-line span { color: var(--mute); font-weight: 700; }
+
+    .locked-copy h2 {
+      font-family: var(--display);
+      font-size: clamp(56px, 15vw, 68px);
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.025em;
+      text-transform: none;
+      margin: 0 0 18px;
+    }
+    .locked-copy p {
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--mute);
+      max-width: 24ch;
+    }
+    .timer {
+      margin-top: 32px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      max-width: 12ch;
+    }
+
+    .rule {
+      border-top: 1px solid var(--line);
+      padding: 22px 0;
+    }
+    .rule:last-of-type { border-bottom: 1px solid var(--line); }
+    .rule label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 10px;
+    }
+    .rule .value {
+      font-family: var(--display);
+      font-size: 34px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      text-transform: none;
+    }
+    .rule .list {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+    .rule .list a {
+      color: var(--mute);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      margin-left: 8px;
+      font-family: var(--ui);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+    }
+    .toggle-row:last-child { border-bottom: 1px solid var(--line); }
+    .toggle-row span {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .switch {
+      width: 36px;
+      height: 2px;
+      background: var(--line);
+      border: none;
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .switch i {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      margin-top: -5px;
+      background: currentColor;
+      border-radius: 50%;
+      transition: transform 0.25s var(--ease);
+    }
+    .switch.on { background: currentColor; }
+    .switch.on i { transform: translateX(26px); }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      top: 56px;
+      transform: translateX(-50%) translateY(-6px);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--forest);
+      background: var(--cream);
+      padding: 10px 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s var(--ease);
+      white-space: nowrap;
+      z-index: 5;
+    }
+    .phone:not(.theme-forest) .toast {
+      color: var(--cream);
+      background: var(--forest);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <p class="meta">Titles: Instrument Serif (site wordmark is custom SVG) · UI: Suisse BP · green screen on lock</p>
+
+  <div class="phone" id="phone">
+    <div class="notch"><span>9:41</span><span>●●● LTE</span></div>
+    <div class="toast" id="toast">NFC tag detected</div>
+
+    <div class="screen">
+      <section class="page active" id="home" data-page="home">
+        <div class="tabs">
+          <button class="on" data-go="home">Focus</button>
+          <button data-go="profile">Mode</button>
+        </div>
+        <p class="eyebrow">Personal brick</p>
+        <h1>Stay present<em>until you return</em></h1>
+        <p class="lede"><strong>Ready</strong>Choose a mode, then tap your tag to lock the apps.</p>
+
+        <div class="modes" id="modes">
+          <button class="mode selected" data-mode="Deep Work">
+            <span class="name">Deep Work</span>
+            <span class="mark">Selected</span>
+            <span class="apps">Instagram · TikTok · X · YouTube</span>
+          </button>
+          <button class="mode" data-mode="Sleep">
+            <span class="name">Sleep</span>
+            <span class="mark">Selected</span>
+            <span class="apps">Mail · Slack · News · Social</span>
+          </button>
+          <button class="mode" data-mode="Family">
+            <span class="name">Family</span>
+            <span class="mark">Selected</span>
+            <span class="apps">Everything except Phone &amp; Camera</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="page" id="locked" data-page="locked">
+        <div class="locked-wrap">
+          <div>
+            <p class="status-line"><b>Session active</b><span>Apps blocked</span></p>
+            <div class="locked-copy">
+              <h2 id="locked-mode">Deep Work</h2>
+              <p>Leave the tag behind. Open apps stay shielded until you tap again.</p>
+              <p class="timer" id="timer">00:00:12</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="profile" data-page="profile">
+        <div class="tabs">
+          <button data-go="home">Focus</button>
+          <button class="on" data-go="profile">Mode</button>
+        </div>
+        <p class="eyebrow">Edit mode</p>
+        <h1>Deep Work</h1>
+
+        <div class="rule">
+          <label>Blocked apps</label>
+          <p class="list">Instagram<br>TikTok<br>X<br>YouTube <a href="#" onclick="return false">+ Add</a></p>
+        </div>
+        <div class="rule">
+          <label>Unlock</label>
+          <p class="value">NFC tag only</p>
+        </div>
+        <div class="toggle-row">
+          <span>Strict unlock</span>
+          <button class="switch on" id="strict" aria-label="Strict unlock"><i></i></button>
+        </div>
+        <div class="toggle-row">
+          <span>Prevent deletion</span>
+          <button class="switch on" id="deletion" aria-label="Prevent deletion"><i></i></button>
+        </div>
+      </section>
+    </div>
+
+    <div class="dock" id="dock">
+      <button class="btn" id="primary">
+        <span id="primary-label">Tap tag to lock</span>
+        <span>→</span>
+      </button>
+      <button class="btn" id="secondary" hidden>Back to focus</button>
+    </div>
+  </div>
+
+  <script>
+    const state = { page: "home", mode: "Deep Work", seconds: 12 };
+    const phone = document.getElementById("phone");
+    const pages = [...document.querySelectorAll(".page")];
+    const toast = document.getElementById("toast");
+    const primary = document.getElementById("primary");
+    const primaryLabel = document.getElementById("primary-label");
+    const secondary = document.getElementById("secondary");
+    const lockedMode = document.getElementById("locked-mode");
+    const timerEl = document.getElementById("timer");
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    function go(page) {
+      state.page = page;
+      pages.forEach(p => p.classList.toggle("active", p.dataset.page === page));
+      document.querySelectorAll(".tabs button").forEach(b => {
+        b.classList.toggle("on", b.dataset.go === page);
+      });
+      phone.classList.toggle("theme-forest", page === "locked");
+
+      if (page === "home") {
+        primaryLabel.textContent = "Tap tag to lock";
+        secondary.hidden = true;
+        primary.hidden = false;
+      } else if (page === "locked") {
+        lockedMode.textContent = state.mode;
+        primaryLabel.textContent = "Tap tag to unlock";
+        secondary.hidden = true;
+        primary.hidden = false;
+      } else if (page === "profile") {
+        primary.hidden = true;
+        secondary.hidden = false;
+      }
+    }
+
+    document.querySelectorAll("[data-go]").forEach(btn => {
+      btn.addEventListener("click", () => go(btn.dataset.go));
+    });
+
+    document.querySelectorAll(".mode").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".mode").forEach(m => m.classList.remove("selected"));
+        btn.classList.add("selected");
+        state.mode = btn.dataset.mode;
+      });
+    });
+
+    primary.addEventListener("click", () => {
+      showToast("NFC tag detected");
+      setTimeout(() => {
+        if (state.page === "home") {
+          state.seconds = 0;
+          go("locked");
+        } else if (state.page === "locked") {
+          go("home");
+        }
+      }, 450);
+    });
+
+    secondary.addEventListener("click", () => go("home"));
+
+    document.querySelectorAll(".switch").forEach(sw => {
+      sw.addEventListener("click", () => sw.classList.toggle("on"));
+    });
+
+    setInterval(() => {
+      if (state.page !== "locked") return;
+      state.seconds += 1;
+      const h = String(Math.floor(state.seconds / 3600)).padStart(2, "0");
+      const m = String(Math.floor((state.seconds % 3600) / 60)).padStart(2, "0");
+      const s = String(state.seconds % 60).padStart(2, "0");
+      timerEl.textContent = `${h}:${m}:${s}`;
+    }, 1000);
+  </script>
+</body>
+</html>

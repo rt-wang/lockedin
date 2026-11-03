@@ -1,0 +1,35 @@
+I've restyled the three priority screens (Home, the green active session, and profile edit) to the cream/forest design. None of it has been compiled or run: there's no Swift toolchain on this box, so it has had a careful read-through only. Expect a build pass in Xcode to turn up a few small errors. No blocking, NFC or Screen Time code was touched.
+
+## Decision you need to make: Suisse BP is not bundled
+The font files say "© b+p swiss typefaces … All rights reserved" and link to their retail license. A web-font license generally doesn't allow embedding in an app, and this repo is MIT-licensed and public. So all labels use SF Pro with the reference's uppercase, wide letter-spacing. If you get an app license, convert the `.woff2` files to `.otf`, add them to the app's font list in Info.plist (`UIAppFonts`), and set `FoqosFont.uiFamily = "SuisseBPIntl"` in `FoqosStyle.swift`. That one line switches every label. Titles use the system serif (New York), so there's no license issue there.
+
+## Files changed
+**New**
+- `Foqos/Components/Common/FoqosStyle.swift`: the shared design pieces. Cream and forest palettes, serif title and uppercase label styles, hairline dividers, the line-and-arrow action button, small text links, and a hairline toggle.
+- `Foqos/Assets.xcassets/BrandCream.colorset`, `BrandForest.colorset`
+
+**Home**
+- `HomeDashboardView`: cream page, "Stay present / *until you return*" serif title, and a status line (Ready / Session active / Paused).
+- `HomeHeaderView`: a "Focus" label plus Support and Settings text links.
+- `HomeProfilesListView`: open list with hairlines, serif profile names, a muted "apps · domains · strategy" line and an ACTIVE marker.
+- `HomeProfileLauncher`: "Start a session →" at the bottom, or the running profile with its timer.
+- `Welcome`, `HomeAlertsView`, `SectionTitle`, `BlockedSessionsHabitTracker`, `FourWeekHeatmapView`, `HomeDashboardLayout`: card chrome removed.
+
+**Active session**
+- `ActiveProfileSessionView`: forest background with cream text. Status line, large serif profile name, rotating focus message, timer under a hairline, and line-style Break / Stop / Emergency actions. "Hold to break" now fills the line while you hold it.
+
+**Profile edit**
+- `BlockedProfileView` and `BlockedProfileFormSections`: serif profile name at the top, uppercase section headers, rows sitting directly on cream, hairline toggles.
+- Sub-rows (`CustomToggle`, `*Selector`, `BlockingStrategyRow`, `ProfileLockStatusSection`, `BlockedProfilePhysicalUnblockSelector`) turn forest inside the restyled screens. Everywhere else they keep the user's theme color.
+
+## Things I removed or changed that you should know about
+- **Removed:** the petal animation and its debug tuning panel on the active session screen, the mini bar chart in each home row (Insights is still in the row's ••• menu), and the sticker graphics on the empty state. `ActiveSessionPetalView.swift` and `ProfileUsageMiniBarChart` are now unused and could be deleted.
+- **Moved:** the Activity tracker now sits below the profile list instead of above it.
+- **Not built as tabs:** the reference's Focus / Mode tabs aren't real tabs. "Mode" is still the profile edit sheet you get by tapping a row.
+
+## Needs checking on a device
+- **Status bar in dark mode:** the screens force their own light/dark look but don't control the status bar. With the phone in dark mode, the status bar text will probably be white on cream. On the forest screen it may be dark on green in light mode. The usual fix is to force light mode for the whole app, which would also change Settings and other screens, so I left that for you to decide.
+- **Unthemed screens:** Settings, Manage profiles, the start picker and the editor's pop-up pickers still use the old look.
+
+## Preview in Xcode
+Open `foqos.xcodeproj`. The new files should be picked up automatically (the project uses folder-synced groups). Build the `foqos` scheme, then use the Canvas previews in `FoqosStyle.swift`, `HomeDashboardView`, `HomeProfileLauncher`, `ActiveProfileSessionView` and `BlockedProfileView`. Run `make lint` before committing.
