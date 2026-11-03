@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>com.foqos.backgroundprocessing</string>
+		<string>sh.shen.lockedin.backgroundprocessing</string>
 	</array>
 	<key>CFBundleURLTypes</key>
 	<array>

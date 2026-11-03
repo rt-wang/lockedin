@@ -1,7 +1,7 @@
 import DeviceActivity
 import OSLog
 
-private let log = Logger(subsystem: "com.foqos.monitor", category: PauseTimerActivity.id)
+private let log = Logger(subsystem: "sh.shen.lockedin.monitor", category: PauseTimerActivity.id)
 
 class PauseTimerActivity: TimerActivity {
   static var id: String = "PauseScheduleActivity"

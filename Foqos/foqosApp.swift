@@ -41,7 +41,7 @@ struct foqosApp: App {
   init() {
     TimersUtil.registerBackgroundTasks()
     // The user-selectable theme color was removed; drop the stale preference from older installs.
-    UserDefaults(suiteName: "group.dev.ambitionsoftware.foqos")?
+    UserDefaults(suiteName: "group.sh.shen.lockedin")?
       .removeObject(forKey: "foqosThemeColorName")
 
     let asyncDependency: @Sendable () async -> (ModelContainer) = {
