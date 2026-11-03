@@ -68,6 +68,15 @@ struct BlockedProfileListView: View {
           }
         } else {
           List {
+            ProfileSheetHeader(
+              eyebrow: "Manage",
+              title: "Profiles",
+              message: editMode == .active
+                ? "Drag to reorder, or swipe to delete."
+                : "Tap a profile to edit it."
+            )
+            .profileSheetHeaderRow()
+
             ForEach(profiles) { profile in
               ProfileRow(profile: profile, isActive: profile.id == activeSessionProfileId)
                 .contentShape(Rectangle())
@@ -88,12 +97,14 @@ struct BlockedProfileListView: View {
       }
       .foqosForm(.cream)
       .navigationTitle("Profiles")
+      .navigationBarTitleDisplayMode(.inline)
       .toolbarBackground(FoqosColors.cream, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { dismiss() }) {
             Image(systemName: "xmark")
           }
+          .accessibilityLabel("Close")
         }
 
         ToolbarItemGroup(placement: .topBarTrailing) {

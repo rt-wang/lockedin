@@ -17,14 +17,10 @@ struct BlockedProfileHardModeFields: View {
 
     if draft.enableHardMode && draft.selectedStrategyAllowsHardMode {
       VStack(alignment: .leading, spacing: 10) {
-        HStack {
-          Text("Lock Duration")
-          Spacer()
-          Text(DateFormatters.formatMinutes(draft.hardModeDurationInMinutes))
-            .fontWeight(.semibold)
-            .foregroundStyle(.secondary)
-            .contentTransition(.numericText())
-        }
+        ProfileFormValueHeader(
+          title: "Lock Duration",
+          value: DateFormatters.formatMinutes(draft.hardModeDurationInMinutes)
+        )
 
         Slider(
           value: Binding(
@@ -38,13 +34,7 @@ struct BlockedProfileHardModeFields: View {
         .accessibilityLabel("Hard Mode lock duration")
         .accessibilityValue(DateFormatters.formatMinutes(draft.hardModeDurationInMinutes))
 
-        HStack {
-          Text("30m")
-          Spacer()
-          Text("12h")
-        }
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+        ProfileFormRangeLabels(lower: "30m", upper: "12h")
       }
       .disabled(disabled)
     }
@@ -60,4 +50,5 @@ struct BlockedProfileHardModeFields: View {
       disabled: false
     )
   }
+  .foqosForm(.cream)
 }

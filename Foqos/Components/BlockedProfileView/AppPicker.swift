@@ -50,13 +50,13 @@ struct AppPicker: View {
         FamilyActivityPicker(selection: $selection)
           .id(refreshID)
       }
-      .background(Color(.systemGroupedBackground).ignoresSafeArea())
+      .background(FoqosColors.cream.ignoresSafeArea())
       .tint(palette.foreground)
       .onReceive(stateUpdateTimer) { _ in
         updateFlag.toggle()
       }
       .navigationBarTitleDisplayMode(.inline)
-      .toolbarBackground(Color(.systemGroupedBackground), for: .navigationBar)
+      .toolbarBackground(FoqosColors.cream, for: .navigationBar)
       .toolbarBackground(.visible, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
@@ -68,19 +68,14 @@ struct AppPicker: View {
 
         ToolbarItem(placement: .principal) {
           Button(action: { showLimitInfo = true }) {
-            HStack(spacing: 5) {
+            HStack(alignment: .firstTextBaseline, spacing: 5) {
               Text("\(selectedCount)")
-                .fontWeight(.semibold)
                 .foregroundStyle(isOverLimit ? Color.red : palette.foreground)
 
-              Text("/ 50")
-                .foregroundStyle(.secondary)
-
-              Image(systemName: "info.circle")
-                .font(.caption)
-                .foregroundStyle(isOverLimit ? Color.red : palette.foreground)
+              Text("/ 50 selected")
+                .foregroundStyle(palette.mute)
             }
-            .font(.subheadline)
+            .foqosText(.mark)
             .monospacedDigit()
           }
           .accessibilityLabel("\(selectedCount) of 50 items selected")
@@ -94,6 +89,7 @@ struct AppPicker: View {
           .accessibilityLabel("Done")
         }
       }
+      .tint(FoqosColors.forest)
       .alert("Apple's 50-App Limit", isPresented: $showLimitInfo) {
         Button("OK", role: .cancel) {}
       } message: {

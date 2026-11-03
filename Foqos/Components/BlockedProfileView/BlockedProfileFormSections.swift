@@ -6,7 +6,7 @@ private struct ProfileFieldDivider: View {
 
   var body: some View {
     if isVisible {
-      Divider()
+      FoqosHairline()
     }
   }
 }
@@ -22,6 +22,7 @@ struct BlockedProfileNameFields: View {
       text: $draft.name,
       prompt: Text("Profile Name")
     )
+    .font(FoqosFont.ui(.body, size: 17, bold: false))
     .textContentType(.none)
     .disabled(disabled)
   }
@@ -42,8 +43,6 @@ struct BlockedProfileNameSection: View {
 }
 
 struct BlockedProfileStrategyFields: View {
-  @Environment(\.foqosPalette) private var palette
-
   @ObservedObject var draft: BlockedProfileDraft
   @Binding var showingStrategyPicker: Bool
   var disabled: Bool
@@ -51,14 +50,10 @@ struct BlockedProfileStrategyFields: View {
 
   var body: some View {
     Button(action: { showingStrategyPicker = true }) {
-      HStack {
-        Text("Choose Strategy")
-          .foregroundStyle(palette.foreground)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.gray)
-      }
+      ProfileFormActionRow(
+        title: draft.selectedStrategy == nil ? "Choose strategy" : "Change strategy")
     }
+    .buttonStyle(FoqosPressStyle())
     .disabled(disabled)
 
     if let selectedStrategy = draft.selectedStrategy {
@@ -76,8 +71,6 @@ struct BlockedProfileStrategyFields: View {
 }
 
 struct BlockedProfileStrategySection: View {
-  @Environment(\.foqosPalette) private var palette
-
   @ObservedObject var draft: BlockedProfileDraft
   @Binding var showingStrategyPicker: Bool
   var disabled: Bool
@@ -98,14 +91,9 @@ struct BlockedProfileStrategySection: View {
         Button {
           onUpdateStartSettings?(settingsKind)
         } label: {
-          HStack {
-            Text("Update Start Settings")
-              .foregroundStyle(palette.foreground)
-            Spacer()
-            Image(systemName: "chevron.right")
-              .foregroundStyle(.secondary)
-          }
+          ProfileFormActionRow(title: "Update start settings")
         }
+        .buttonStyle(FoqosPressStyle())
         .disabled(disabled)
 
         CustomToggle(
@@ -204,7 +192,7 @@ struct BlockedProfileDomainsFields: View {
         "Block the same selected domains on your Mac with the LockedIn for Mac app.",
       isOn: $draft.enableMacSync,
       isDisabled: disabled
-      // TODO(LockedIn): add a learnMoreURL once LockedIn has its own Mac setup page.
+        // TODO(LockedIn): add a learnMoreURL once LockedIn has its own Mac setup page.
     )
     .onChange(of: draft.enableMacSync) { _, newValue in
       if newValue {
@@ -371,16 +359,10 @@ struct BlockedProfileBreaksFields: View {
 
   private var breakDurationPicker: some View {
     VStack(alignment: .leading, spacing: 10) {
-      HStack {
-        Text("Break Duration")
-
-        Spacer()
-
-        Text(DateFormatters.formatMinutes(draft.breakTimeInMinutes))
-          .fontWeight(.semibold)
-          .foregroundStyle(.secondary)
-          .contentTransition(.numericText())
-      }
+      ProfileFormValueHeader(
+        title: "Break Duration",
+        value: DateFormatters.formatMinutes(draft.breakTimeInMinutes)
+      )
 
       Slider(
         value: breakDurationBinding,
@@ -390,13 +372,7 @@ struct BlockedProfileBreaksFields: View {
       .tint(palette.foreground)
       .accessibilityValue(DateFormatters.formatMinutes(draft.breakTimeInMinutes))
 
-      HStack {
-        Text("5m")
-        Spacer()
-        Text("1h")
-      }
-      .font(.caption2)
-      .foregroundStyle(.secondary)
+      ProfileFormRangeLabels(lower: "5m", upper: "1h")
     }
     .disabled(disabled)
   }
@@ -424,19 +400,20 @@ struct BlockedProfileBreaksSection: View {
 }
 
 private struct ProfileFieldNotice: View {
+  @Environment(\.foqosPalette) private var palette
+
   let title: String
   let message: String
 
   var body: some View {
     VStack(alignment: .leading, spacing: 6) {
       Text(title)
-        .font(.subheadline)
-        .fontWeight(.semibold)
-        .foregroundStyle(.primary)
+        .foqosText(.toggle)
+        .foregroundStyle(palette.foreground)
 
       Text(message)
-        .font(.caption)
-        .foregroundStyle(.secondary)
+        .foqosText(.caption)
+        .foregroundStyle(palette.mute)
         .fixedSize(horizontal: false, vertical: true)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -594,8 +571,9 @@ struct BlockedProfileNotificationsFields: View {
     if draft.enableReminder {
       ProfileFieldDivider(isVisible: showsSeparators)
 
-      HStack {
+      HStack(alignment: .firstTextBaseline) {
         Text("Reminder time")
+          .foqosText(.toggle)
         Spacer()
         TextField(
           "",
@@ -604,42 +582,38 @@ struct BlockedProfileNotificationsFields: View {
         )
         .keyboardType(.numberPad)
         .multilineTextAlignment(.center)
-        .frame(width: 58)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .background(Color.secondary.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-        .overlay {
-          RoundedRectangle(cornerRadius: 8, style: .continuous)
-            .stroke(
-              isReminderTimeFocused
-                ? palette.foreground : Color.secondary.opacity(0.4),
-              lineWidth: isReminderTimeFocused ? 2 : 1
-            )
+        .frame(width: 52)
+        .padding(.bottom, 4)
+        .overlay(alignment: .bottom) {
+          Rectangle()
+            .fill(isReminderTimeFocused ? palette.foreground : palette.line)
+            .frame(height: 1)
         }
         .focused($isReminderTimeFocused)
         .disabled(disabled)
-        .font(.subheadline)
-        .foregroundStyle(disabled ? Color.secondary : Color.primary)
+        .font(FoqosFont.ui(.body, size: 16, bold: false))
+        .foregroundStyle(disabled ? palette.mute : palette.foreground)
         .accessibilityLabel("Reminder time in minutes")
 
         Text("minutes")
-          .font(.subheadline)
-          .foregroundColor(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
       }
       .listRowSeparator(.visible)
 
       ProfileFieldDivider(isVisible: showsSeparators)
 
-      VStack(alignment: .leading) {
+      VStack(alignment: .leading, spacing: 8) {
         Text("Reminder message")
+          .foqosText(.toggle)
         TextField(
           "Reminder message",
           text: $draft.customReminderMessage,
           prompt: Text(strategyManager.defaultReminderMessage(forProfile: profile)),
           axis: .vertical
         )
-        .foregroundColor(.secondary)
+        .font(FoqosFont.ui(.body, size: 16, bold: false))
+        .foregroundStyle(palette.foreground)
         .lineLimit(...3)
         .onChange(of: draft.customReminderMessage) { _, newValue in
           if newValue.count > 178 {
@@ -656,10 +630,9 @@ struct BlockedProfileNotificationsFields: View {
           UIApplication.shared.open(url)
         }
       } label: {
-        Text("Manage notification settings")
-          .foregroundStyle(palette.foreground)
-          .font(.caption)
+        ProfileFormActionRow(title: "Manage notification settings", trailing: "↗")
       }
+      .buttonStyle(FoqosPressStyle())
     }
   }
 }

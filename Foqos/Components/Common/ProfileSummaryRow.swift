@@ -26,58 +26,6 @@ enum ProfileSummaryStatusMode: Equatable {
   case scheduleOrIndicators
 }
 
-struct ProfileSummaryRow<Accessory: View>: View {
-  let profile: BlockedProfiles
-  let isActive: Bool
-  let metadata: ProfileSummaryMetadata
-  let showsStatusLine: Bool
-  let layout: ProfileSummaryLayout
-  let statusMode: ProfileSummaryStatusMode
-  let accessory: () -> Accessory
-
-  init(
-    profile: BlockedProfiles,
-    isActive: Bool,
-    metadata: ProfileSummaryMetadata,
-    showsStatusLine: Bool,
-    layout: ProfileSummaryLayout = .dashboard,
-    statusMode: ProfileSummaryStatusMode = .scheduleOrIndicators,
-    @ViewBuilder accessory: @escaping () -> Accessory
-  ) {
-    self.profile = profile
-    self.isActive = isActive
-    self.metadata = metadata
-    self.showsStatusLine = showsStatusLine
-    self.layout = layout
-    self.statusMode = statusMode
-    self.accessory = accessory
-  }
-
-  var body: some View {
-    HStack(spacing: rowSpacing) {
-      ProfileSummaryContent(
-        profile: profile,
-        isActive: isActive,
-        metadata: metadata,
-        showsStatusLine: showsStatusLine,
-        layout: layout,
-        statusMode: statusMode
-      )
-
-      accessory()
-    }
-  }
-
-  private var rowSpacing: CGFloat {
-    switch layout {
-    case .dashboard:
-      return 12
-    case .compact:
-      return 10
-    }
-  }
-}
-
 struct ProfileSummaryContent: View {
   @Environment(\.foqosPalette) private var palette
 
@@ -122,12 +70,12 @@ struct ProfileSummaryContent: View {
     }
   }
 
-  private var titleFont: Font {
+  private var titleSize: CGFloat {
     switch layout {
     case .dashboard:
-      return .headline
+      return 26
     case .compact:
-      return .subheadline
+      return 22
     }
   }
 
@@ -135,7 +83,7 @@ struct ProfileSummaryContent: View {
     HStack(spacing: layout == .dashboard ? 12 : 10) {
       BlockingStrategyIconImage(strategy: blockingStrategy)
         .font(.system(size: iconFontSize, weight: .semibold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(palette.mute)
         .frame(width: iconSize, height: iconSize)
 
       VStack(alignment: .leading, spacing: contentSpacing) {
@@ -166,93 +114,27 @@ struct ProfileSummaryContent: View {
 
   private var activeChip: some View {
     Text("Active")
-      .font(.caption2)
-      .fontWeight(.bold)
-      .foregroundStyle(.primary)
-      .padding(.horizontal, 7)
-      .padding(.vertical, 4)
-      .background(Color(.secondarySystemFill), in: Capsule())
+      .foqosText(.mark)
+      .foregroundStyle(palette.foreground)
+      .padding(.bottom, 3)
+      .overlay(alignment: .bottom) {
+        Rectangle()
+          .fill(palette.foreground)
+          .frame(height: 1)
+      }
   }
 
   private var profileTitle: some View {
     Text(profile.name)
-      .font(titleFont)
-      .fontWeight(.semibold)
-      .foregroundStyle(.primary)
+      .foqosDisplay(size: titleSize)
+      .foregroundStyle(palette.foreground)
       .lineLimit(1)
   }
 }
 
-struct ProfileUsageMiniBarChart: View {
+private struct ProfileSummaryMetadataLine: View {
   @Environment(\.foqosPalette) private var palette
 
-  let profile: BlockedProfiles
-
-  private var weekStart: Date {
-    WeeklySessionAggregator.startOfWeek(for: Date())
-  }
-
-  private var aggregation: WeeklySessionAggregation {
-    let intervals = profile.sessions.compactMap { session -> WeeklySessionInterval? in
-      guard let endTime = session.endTime else { return nil }
-      return WeeklySessionInterval(startTime: session.startTime, endTime: endTime)
-    }
-
-    return WeeklySessionAggregator.aggregate(
-      sessions: intervals,
-      weekStart: weekStart
-    )
-  }
-
-  private var values: [TimeInterval] {
-    aggregation.dailyDurations
-  }
-
-  private var maxValue: TimeInterval {
-    max(values.max() ?? 0, 1)
-  }
-
-  private var dayLabels: [String] {
-    let calendar = Calendar.current
-
-    return (0..<7).map { dayOffset in
-      guard let date = calendar.date(byAdding: .day, value: dayOffset, to: weekStart) else {
-        return ""
-      }
-
-      return String(date.formatted(.dateTime.weekday(.narrow)).prefix(1))
-    }
-  }
-
-  var body: some View {
-    VStack(spacing: 3) {
-      HStack(alignment: .bottom, spacing: 4) {
-        ForEach(Array(values.enumerated()), id: \.offset) { _, value in
-          let normalizedValue = CGFloat(value / maxValue)
-
-          RoundedRectangle(cornerRadius: 2, style: .continuous)
-            .fill(palette.foreground)
-            .opacity(value > 0 ? 0.36 + (normalizedValue * 0.64) : 0.14)
-            .frame(maxWidth: .infinity)
-            .frame(height: value > 0 ? max(5, normalizedValue * 25) : 3)
-        }
-      }
-      .frame(height: 45, alignment: .bottom)
-
-      HStack(spacing: 4) {
-        ForEach(Array(dayLabels.enumerated()), id: \.offset) { _, label in
-          Text(label)
-            .font(.system(size: 6, weight: .semibold))
-            .foregroundStyle(.secondary.opacity(0.7))
-            .frame(maxWidth: .infinity)
-        }
-      }
-    }
-    .accessibilityHidden(true)
-  }
-}
-
-private struct ProfileSummaryMetadataLine: View {
   let profile: BlockedProfiles
   let metadata: ProfileSummaryMetadata
 
@@ -273,7 +155,7 @@ private struct ProfileSummaryMetadataLine: View {
       return ""
     case .appsAndDomains:
       return
-        "\(countLabel(selectedItemsCount, singular: "App", plural: "Apps")) | \(countLabel(domainsCount, singular: "Domain", plural: "Domains"))"
+        "\(countLabel(selectedItemsCount, singular: "App", plural: "Apps")) · \(countLabel(domainsCount, singular: "Domain", plural: "Domains"))"
     case .updatedAt(let date):
       let formatter = RelativeDateTimeFormatter()
       formatter.unitsStyle = .short
@@ -283,9 +165,8 @@ private struct ProfileSummaryMetadataLine: View {
 
   var body: some View {
     Text(metadataText)
-      .font(.caption)
-      .fontWeight(.medium)
-      .foregroundStyle(.secondary)
+      .foqosText(.mark)
+      .foregroundStyle(palette.mute)
       .lineLimit(1)
   }
 
@@ -313,20 +194,24 @@ private struct ProfileSummaryStatusLine: View {
 }
 
 private struct ProfileSummaryNextScheduleLine: View {
+  @Environment(\.foqosPalette) private var palette
+
   let schedule: BlockedProfileSchedule
 
   var body: some View {
     if let message = schedule.nextStartMessage(includePrefix: false) {
       Text(message)
-        .font(.caption2)
+        .foqosText(.caption)
         .lineLimit(1)
         .minimumScaleFactor(0.82)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(palette.mute)
     }
   }
 }
 
 private struct ProfileSummaryCompactIndicators: View {
+  @Environment(\.foqosPalette) private var palette
+
   let enableLiveActivity: Bool
   let hasReminders: Bool
   let enableBreaks: Bool
@@ -357,12 +242,12 @@ private struct ProfileSummaryCompactIndicators: View {
         ForEach(Array(indicators.prefix(3)), id: \.self) { label in
           HStack(spacing: 5) {
             Circle()
-              .fill(Color.primary.opacity(0.85))
-              .frame(width: 5, height: 5)
+              .fill(palette.foreground)
+              .frame(width: 4, height: 4)
 
             Text(label)
-              .font(.caption2)
-              .foregroundColor(.secondary)
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
               .lineLimit(1)
           }
         }

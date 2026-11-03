@@ -14,77 +14,66 @@ struct StrategyRow: View {
   let onTap: () -> Void
   var accessoryStyle: AccessoryStyle = .selection
 
-  private func backgroundColor(for tag: BlockingStrategyTag) -> Color {
-    if tag == .beta {
-      return .orange.opacity(0.16)
-    }
-
-    return .secondary.opacity(0.14)
-  }
-
-  private func foregroundColor(for tag: BlockingStrategyTag) -> Color {
-    if tag == .beta {
-      return .orange
-    }
-
-    return .secondary
-  }
-
   var body: some View {
     Button(action: onTap) {
       VStack(alignment: .leading, spacing: 8) {
-        HStack(alignment: .center, spacing: 8) {
+        HStack(alignment: .center, spacing: 12) {
           BlockingStrategyIconImage(strategy: strategy)
             .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(palette.mute)
             .frame(width: 34, height: 34)
 
           Text(strategy.name)
-            .font(.headline)
-            .foregroundStyle(
-              accessoryStyle == .selection && isSelected
-                ? palette.foreground : .primary
-            )
+            .foqosDisplay(size: 22)
+            .foregroundStyle(palette.foreground)
 
           Spacer(minLength: 8)
 
           if accessoryStyle == .selection {
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-              .foregroundStyle(isSelected ? palette.foreground : .secondary)
-              .font(.system(size: 20))
+            ZStack {
+              Circle()
+                .stroke(isSelected ? palette.foreground : palette.line, lineWidth: 1)
+                .frame(width: 16, height: 16)
+              if isSelected {
+                Circle()
+                  .fill(palette.foreground)
+                  .frame(width: 8, height: 8)
+              }
+            }
+            .accessibilityHidden(true)
           } else if accessoryStyle == .chevron {
-            Image(systemName: "chevron.right")
-              .foregroundStyle(.secondary)
-              .font(.system(size: 14, weight: .semibold))
+            Text("→")
+              .foqosText(.cta)
+              .foregroundStyle(palette.foreground)
+              .accessibilityHidden(true)
           }
         }
 
         Text(strategy.description)
-          .font(.subheadline)
-          .foregroundStyle(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
           .lineLimit(2)
 
         if !strategy.tags.isEmpty {
-          HStack(spacing: 6) {
+          HStack(spacing: 12) {
             ForEach(strategy.tags, id: \.self) { tag in
               Text(tag.title)
-                .font(.caption2)
-                .fontWeight(tag == .beta ? .semibold : .medium)
-                .foregroundStyle(foregroundColor(for: tag))
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(backgroundColor(for: tag))
-                .clipShape(Capsule())
+                .foqosText(.mark)
+                .foregroundStyle(tag == .beta ? palette.foreground : palette.mute)
             }
           }
         }
       }
-      .padding(.vertical, 4)
+      .padding(.vertical, 6)
+      .contentShape(Rectangle())
     }
-    .buttonStyle(PlainButtonStyle())
+    .buttonStyle(FoqosPressStyle())
+    .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 }
 
 #Preview {
   StrategyRow(strategy: NFCBlockingStrategy(), isSelected: true, onTap: {})
+    .padding(24)
+    .foqosTheme(.cream)
 }

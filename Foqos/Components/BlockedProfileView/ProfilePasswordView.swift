@@ -61,38 +61,24 @@ struct ProfilePasswordView: View {
     NavigationStack {
       Form {
         Section {
-          VStack(spacing: 12) {
-            Image("ProfileLockSticker")
-              .resizable()
-              .scaledToFit()
-              .frame(maxWidth: 140)
-              .rotationEffect(.degrees(-4))
-              .frame(maxWidth: .infinity)
-              .accessibilityHidden(true)
-
-            Text(mode.title)
-              .font(.headline)
-              .multilineTextAlignment(.center)
-
-            Text(description)
-              .font(.subheadline)
-              .foregroundStyle(.primary)
-              .multilineTextAlignment(.center)
-              .fixedSize(horizontal: false, vertical: true)
-          }
-          .padding(.horizontal, 8)
-          .padding(.vertical, 12)
+          ProfileSheetHeader(
+            eyebrow: isUnlocking ? "Locked profile" : "Profile password",
+            title: mode.title,
+            message: description
+          )
         }
+        .profileSheetHeaderRow()
 
         passwordFields
 
         if let errorMessage {
           Section {
             Text(errorMessage)
-              .font(.subheadline)
+              .foqosText(.caption)
               .foregroundStyle(.red)
               .accessibilityIdentifier("profilePasswordError")
           }
+          .foqosFormRows()
         }
 
         Section {
@@ -103,20 +89,22 @@ struct ProfilePasswordView: View {
             action: submit
           )
           .accessibilityIdentifier("profilePasswordSubmit")
-          .listRowInsets(EdgeInsets())
+          .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
           .listRowBackground(Color.clear)
+          .listRowSeparator(.hidden)
         } footer: {
           Text(protectionNote)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
+            .foqosText(.caption)
+            .foregroundStyle(palette.mute)
             .fixedSize(horizontal: false, vertical: true)
+            .padding(.top, 8)
         }
       }
+      .foqosForm(.cream)
       .scrollDismissesKeyboard(.interactively)
       .navigationTitle(isUnlocking ? "Unlock Profile" : "Profile Password")
       .navigationBarTitleDisplayMode(.inline)
+      .profileSheetChrome()
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { dismiss() }) {
@@ -172,13 +160,14 @@ struct ProfilePasswordView: View {
           }
           .accessibilityIdentifier("profilePassword")
       } header: {
-        Text(isUnlocking ? "Password" : "Choose a password")
+        FoqosSectionHeader(isUnlocking ? "Password" : "Choose a password")
       } footer: {
         Text("\(password.count)/\(ProfileLockUtil.maximumPasswordLength) characters")
-          .font(.caption)
+          .foqosText(.mark)
           .foregroundStyle(
-            password.count > ProfileLockUtil.maximumPasswordLength ? .red : .secondary)
+            password.count > ProfileLockUtil.maximumPasswordLength ? Color.red : palette.mute)
       }
+      .foqosFormRows()
 
       if !isUnlocking {
         Section {
@@ -191,14 +180,15 @@ struct ProfilePasswordView: View {
             .onSubmit { submit() }
             .accessibilityIdentifier("profilePasswordConfirmation")
         } header: {
-          Text("Confirm password")
+          FoqosSectionHeader("Confirm password")
         } footer: {
           if !confirmation.isEmpty && password != confirmation {
             Text("Passwords don’t match yet.")
-              .font(.caption)
-              .foregroundStyle(.secondary)
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
           }
         }
+        .foqosFormRows()
       }
     }
     .disabled(isWorking)

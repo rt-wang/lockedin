@@ -34,7 +34,7 @@ struct CustomToggle: View {
         .tint(palette.foreground)
 
       Text(attributedDescription)
-        .font(.caption)
+        .foqosText(.caption)
         .foregroundStyle(palette.mute)
         .padding(.vertical, 4)
         .fixedSize(horizontal: false, vertical: true)
@@ -43,8 +43,8 @@ struct CustomToggle: View {
 
       if isDisabled && errorMessage != nil {
         Text(errorMessage!)
-          .font(.caption)
-          .foregroundColor(.red)
+          .foqosText(.caption)
+          .foregroundStyle(Color.red)
       }
     }
   }
@@ -73,4 +73,6 @@ struct CustomToggle: View {
     )
   }
   .padding()
+  .toggleStyle(FoqosLineToggleStyle())
+  .foqosTheme(.cream)
 }

@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct BlockedProfileScheduleSelector: View {
-  @Environment(\.foqosPalette) private var palette
-
   var schedule: BlockedProfileSchedule
   var buttonAction: () -> Void
   var disabled: Bool = false
@@ -14,29 +12,17 @@ struct BlockedProfileScheduleSelector: View {
 
   var body: some View {
     Button(action: buttonAction) {
-      HStack {
-        Text(buttonText)
-          .foregroundStyle(palette.foreground)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.gray)
-      }
+      ProfileFormActionRow(title: buttonText)
     }
+    .buttonStyle(FoqosPressStyle())
     .disabled(disabled)
 
     if let disabledText = disabledText, disabled {
-      Text(disabledText)
-        .foregroundStyle(.red)
-        .padding(.top, 4)
-        .font(.caption)
+      ProfileFormCaption(disabledText, isWarning: true)
     } else if daysCount == 0 {
-      Text("No Schedule Set")
-        .foregroundStyle(.gray)
+      ProfileFormCaption("No schedule set")
     } else {
-      Text(schedule.summaryText)
-        .font(.footnote)
-        .foregroundStyle(.gray)
-        .padding(.top, 4)
+      ProfileFormCaption(schedule.summaryText)
     }
   }
 }
@@ -59,4 +45,5 @@ struct BlockedProfileScheduleSelector: View {
     )
   }
   .padding()
+  .foqosTheme(.cream)
 }

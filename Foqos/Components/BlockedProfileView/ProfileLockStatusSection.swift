@@ -10,30 +10,34 @@ struct ProfileLockStatusSection: View {
 
   var body: some View {
     Section {
-      HStack(alignment: .top, spacing: 12) {
+      HStack(alignment: .firstTextBaseline, spacing: 12) {
         Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
-          .font(.title3)
-          .foregroundStyle(isLocked ? .orange : .green)
-          .padding(.top, 2)
+          .font(.subheadline)
+          .foregroundStyle(palette.foreground)
 
         VStack(alignment: .leading, spacing: 4) {
-          Text(isLocked ? "Profile Locked" : "Unlocked for Editing")
-            .font(.headline)
+          Text(isLocked ? "Profile locked" : "Unlocked for editing")
+            .foqosText(.toggle)
           Text(
             isLocked
               ? "Unlock with your password to make changes."
               : "Your password is still on. This profile locks again when you leave."
           )
-          .font(.subheadline)
-          .foregroundStyle(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
+          .fixedSize(horizontal: false, vertical: true)
         }
       }
       .padding(.vertical, 4)
 
-      Button(isLocked ? "Unlock Profile" : "Lock Now", action: isLocked ? onUnlock : onLock)
-        .foregroundStyle(palette.foreground)
-        .disabled(isBlocking)
-        .accessibilityIdentifier("profileLockAction")
+      Button(action: isLocked ? onUnlock : onLock) {
+        ProfileFormActionRow(title: isLocked ? "Unlock profile" : "Lock now")
+      }
+      .buttonStyle(FoqosPressStyle())
+      .disabled(isBlocking)
+      .accessibilityIdentifier("profileLockAction")
+    } header: {
+      FoqosSectionHeader("Password")
     }
     .foqosFormRows()
   }
@@ -44,4 +48,5 @@ struct ProfileLockStatusSection: View {
     ProfileLockStatusSection(isLocked: true, isBlocking: false, onUnlock: {}, onLock: {})
     ProfileLockStatusSection(isLocked: false, isBlocking: false, onUnlock: {}, onLock: {})
   }
+  .foqosForm(.cream)
 }
