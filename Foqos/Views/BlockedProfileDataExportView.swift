@@ -79,7 +79,6 @@ struct BlockedProfileDataExportView: View {
 
         ActionButton(
           title: "Export as CSV",
-          backgroundColor: palette.foreground,
           isLoading: isGenerating,
           isDisabled: isExportDisabled
         ) {

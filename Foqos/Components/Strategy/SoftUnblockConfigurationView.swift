@@ -164,9 +164,7 @@ struct SoftUnblockConfigurationView: View {
 
   private var startButton: some View {
     ActionButton(
-      title: actionTitle,
-      backgroundColor: palette.foreground,
-      iconName: "checkmark.circle.fill"
+      title: actionTitle
     ) {
       onStart(
         SoftUnblockStrategyData(

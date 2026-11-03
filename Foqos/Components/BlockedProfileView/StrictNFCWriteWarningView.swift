@@ -37,9 +37,7 @@ struct StrictNFCWriteWarningView: View {
 
         VStack(spacing: 12) {
           ActionButton(
-            title: "Never mind",
-            backgroundColor: palette.foreground,
-            iconName: "xmark"
+            title: "Never mind"
           ) {
             onCancel()
           }

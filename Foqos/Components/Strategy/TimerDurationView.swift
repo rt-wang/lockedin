@@ -63,9 +63,7 @@ struct TimerDurationView: View {
 
       // Confirm button
       ActionButton(
-        title: actionTitle,
-        backgroundColor: palette.foreground,
-        iconName: "checkmark.circle.fill"
+        title: actionTitle
       ) {
         handleConfirm()
       }

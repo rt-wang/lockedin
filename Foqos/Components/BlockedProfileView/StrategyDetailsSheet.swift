@@ -36,7 +36,6 @@ struct StrategyDetailsSheet: View {
 
         ActionButton(
           title: isSelected ? "Selected" : "Use this strategy",
-          backgroundColor: palette.foreground,
           isDisabled: isSelected,
           action: onSelect
         )

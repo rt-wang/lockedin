@@ -98,8 +98,6 @@ struct ProfilePasswordView: View {
         Section {
           ActionButton(
             title: mode.buttonTitle,
-            backgroundColor: palette.foreground,
-            iconName: isUnlocking ? "lock.open" : "lock",
             isLoading: isWorking,
             isDisabled: !canSubmit,
             action: submit

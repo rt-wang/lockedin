@@ -160,9 +160,7 @@ struct LabeledCodeScannerView: View {
               .padding(.horizontal)
 
             ActionButton(
-              title: "Open Settings",
-              backgroundColor: .red,
-              iconName: "gearshape.fill"
+              title: "Open Settings"
             ) {
               if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(settingsURL)
