@@ -310,23 +310,21 @@ struct SoftUnblockDebugCard: View {
 
   @ViewBuilder
   private var configurationDetails: some View {
-    Divider()
+    FoqosHairline()
     Text("Strategy Configuration")
-      .font(.caption)
-      .foregroundColor(.secondary)
-      .bold()
+      .foqosText(.mark)
+      .foregroundStyle(.secondary)
 
     if diagnostics.profileConfigurations.isEmpty {
       Text("No profiles use the soft-unblock strategy")
         .font(.caption)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     } else {
       ForEach(diagnostics.profileConfigurations) { profile in
         VStack(alignment: .leading, spacing: 4) {
           Text(profile.name)
-            .font(.caption)
-            .foregroundColor(.secondary)
-            .bold()
+            .foqosText(.mark)
+            .foregroundStyle(.secondary)
           DebugRow(label: "Profile ID", value: profile.id.uuidString)
           DebugRow(label: "Model Strategy ID", value: profile.modelStrategyId ?? "None")
           DebugRow(label: "Model Data Bytes", value: byteCount(profile.modelStrategyData))
@@ -374,23 +372,21 @@ struct SoftUnblockDebugCard: View {
 
   @ViewBuilder
   private var grantDetails: some View {
-    Divider()
+    FoqosHairline()
     Text("Stored Grants")
-      .font(.caption)
-      .foregroundColor(.secondary)
-      .bold()
+      .foqosText(.mark)
+      .foregroundStyle(.secondary)
 
     if diagnostics.store.grants.isEmpty {
       Text("No decodable grants are stored")
         .font(.caption)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     } else {
       ForEach(diagnostics.store.grants) { grant in
         VStack(alignment: .leading, spacing: 4) {
           Text(grant.id.uuidString)
-            .font(.caption)
-            .foregroundColor(.secondary)
-            .bold()
+            .foqosText(.mark)
+            .foregroundStyle(.secondary)
           DebugRow(label: "Session ID", value: grant.sessionId)
           DebugRow(label: "Profile ID", value: grant.profileId.uuidString)
           DebugRow(label: "Resource Type", value: resourceType(grant.resource))
@@ -411,11 +407,10 @@ struct SoftUnblockDebugCard: View {
   @ViewBuilder
   private var undecodableGrantDetails: some View {
     if !diagnostics.store.undecodableGrantKeys.isEmpty {
-      Divider()
+      FoqosHairline()
       Text("Undecodable Grant Keys")
-        .font(.caption)
-        .foregroundColor(.secondary)
-        .bold()
+        .foqosText(.mark)
+        .foregroundStyle(.secondary)
 
       ForEach(diagnostics.store.undecodableGrantKeys, id: \.self) { key in
         DebugRow(label: "Storage Key", value: key)
@@ -425,16 +420,15 @@ struct SoftUnblockDebugCard: View {
 
   @ViewBuilder
   private var activityDetails: some View {
-    Divider()
+    FoqosHairline()
     Text("Grant Activities")
-      .font(.caption)
-      .foregroundColor(.secondary)
-      .bold()
+      .foqosText(.mark)
+      .foregroundStyle(.secondary)
 
     if diagnostics.grantActivities.isEmpty {
       Text("No soft-unblock grant activities are scheduled")
         .font(.caption)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     } else {
       ForEach(diagnostics.grantActivities, id: \.rawValue) { activity in
         VStack(alignment: .leading, spacing: 4) {

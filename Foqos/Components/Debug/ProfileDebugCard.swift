@@ -15,7 +15,7 @@ struct ProfileDebugCard: View {
         DebugRow(label: "Order", value: "\(profile.order)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Strategy & Features
       Group {
@@ -41,7 +41,7 @@ struct ProfileDebugCard: View {
         )
       }
 
-      Divider()
+      FoqosHairline()
 
       // Reminders
       Group {
@@ -55,7 +55,7 @@ struct ProfileDebugCard: View {
         )
       }
 
-      Divider()
+      FoqosHairline()
 
       // Physical Unlock
       Group {
@@ -68,7 +68,7 @@ struct ProfileDebugCard: View {
         }
       }
 
-      Divider()
+      FoqosHairline()
 
       // Sessions & Activity
       Group {

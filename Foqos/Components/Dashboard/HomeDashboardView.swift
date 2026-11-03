@@ -41,7 +41,7 @@ struct HomeDashboardView: View {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 0) {
         HomeHeaderView(onSettingsTapped: onSettingsTapped)
-        .padding(.bottom, 22)
+          .padding(.bottom, 22)
 
         hero(isCompact: showsProfileInsights)
 
@@ -164,11 +164,12 @@ struct HomeDashboardView: View {
         ProfileInsightsContent(profile: selectedProfile)
           .id(selectedProfile.id)
       } else {
-        ContentUnavailableView(
-          "No Profiles",
-          systemImage: "chart.line.uptrend.xyaxis",
-          description: Text("Create a profile to see its focus insights here.")
+        EmptyView(
+          iconName: "chart.line.uptrend.xyaxis",
+          headingText: "No profiles yet",
+          detailText: "Create a profile to see its focus insights here."
         )
+        .foqosTheme(.cream)
       }
     }
   }

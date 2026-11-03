@@ -10,18 +10,17 @@ struct DeviceActivitiesDebugCard: View {
       if activities.isEmpty {
         Text("No device activities scheduled")
           .font(.caption)
-          .foregroundColor(.secondary)
+          .foregroundStyle(.secondary)
       } else {
         DebugRow(label: "Total Activities", value: "\(activities.count)")
 
-        Divider()
+        FoqosHairline()
 
         ForEach(Array(activities.enumerated()), id: \.element.rawValue) { index, activity in
           VStack(alignment: .leading, spacing: 4) {
             Text("Activity \(index + 1)")
-              .font(.caption)
-              .foregroundColor(.secondary)
-              .bold()
+              .foqosText(.mark)
+              .foregroundStyle(.secondary)
 
             DebugRow(label: "Name", value: activity.rawValue)
             DebugRow(label: "Type", value: activityType(for: activity))
@@ -35,7 +34,7 @@ struct DeviceActivitiesDebugCard: View {
           }
 
           if index < activities.count - 1 {
-            Divider()
+            FoqosHairline()
           }
         }
       }

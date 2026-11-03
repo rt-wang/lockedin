@@ -27,7 +27,7 @@ struct HomeProfileLauncher: View {
       LinearGradient(
         stops: [
           .init(color: palette.background.opacity(0), location: 0),
-          .init(color: palette.background, location: 0.35),
+          .init(color: palette.background, location: 0.2),
         ],
         startPoint: .top,
         endPoint: .bottom

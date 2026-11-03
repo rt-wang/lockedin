@@ -25,9 +25,14 @@ struct SettingsView: View {
     NavigationStack {
       Form {
         Section {
-          Text("Settings")
-            .foqosDisplay(size: 44)
-            .accessibilityAddTraits(.isHeader)
+          VStack(alignment: .leading, spacing: 12) {
+            Text("LockedIn")
+              .foqosText(.eyebrow)
+            Text("Settings")
+              .foqosDisplay(size: 44)
+              .accessibilityAddTraits(.isHeader)
+          }
+          .padding(.bottom, 8)
         }
         .foqosFormRows()
         .listRowSeparator(.hidden)
@@ -39,17 +44,26 @@ struct SettingsView: View {
         Section {
           // TODO(LockedIn): add Help Center / "Block Safari & Settings" guide links once LockedIn
           // has its own support pages. The upstream Foqos pages were removed.
-          SettingsRow(title: "Debug Mode", trailing: "→")
-            .contentShape(Rectangle())
-            .onTapGesture {
-              showDebugView = true
-            }
+          Button {
+            showDebugView = true
+          } label: {
+            SettingsRow(
+              title: "Debug Mode",
+              subtitle: "Inspect sessions, schedules, and timers.",
+              trailing: "→"
+            )
+          }
+          .buttonStyle(FoqosPressStyle())
 
           if !strategyManager.isBlocking {
             Button {
               showResetBlockingAlert = true
             } label: {
-              SettingsRow(title: "Fix Stuck Blocking", trailing: "→")
+              SettingsRow(
+                title: "Fix Stuck Blocking",
+                subtitle: "Clear restrictions left behind after a session.",
+                trailing: "→"
+              )
             }
             .buttonStyle(FoqosPressStyle())
           }
@@ -77,9 +91,10 @@ struct SettingsView: View {
                   ? "Authorized" : "Not Authorized"
               )
               .foqosText(.mark)
-              .foregroundStyle(FoqosPalette.cream.mute)
+              .foregroundStyle(palette.mute)
             }
           }
+          .padding(.vertical, 6)
         } header: {
           FoqosSectionHeader("About")
         }
@@ -124,6 +139,11 @@ struct SettingsView: View {
       .sheet(isPresented: $showDebugView) {
         DebugView()
       }
+      #if DEBUG
+        .onAppear {
+          if ProcessInfo.processInfo.arguments.contains("--open-debug") { showDebugView = true }
+        }
+      #endif
     }
   }
 }
@@ -135,27 +155,30 @@ private struct SettingsRow: View {
   var subtitle: String? = nil
   var trailing: String? = nil
 
+  // Mirrors the home screen's row actions: bold uppercase title, caption, trailing arrow.
   var body: some View {
-    HStack(alignment: .firstTextBaseline) {
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
       VStack(alignment: .leading, spacing: 4) {
         Text(title)
-          .foqosText(.body)
+          .foqosText(.toggle)
           .foregroundStyle(palette.foreground)
         if let subtitle {
           Text(subtitle)
             .foqosText(.caption)
             .foregroundStyle(palette.mute)
+            .fixedSize(horizontal: false, vertical: true)
         }
       }
-      Spacer()
+      .frame(maxWidth: .infinity, alignment: .leading)
       if let trailing {
         Text(trailing)
           .foqosText(.cta)
-          .foregroundStyle(palette.mute)
+          .foregroundStyle(palette.foreground)
           .accessibilityHidden(true)
       }
     }
-    .padding(.vertical, 4)
+    .padding(.vertical, 10)
+    .contentShape(Rectangle())
   }
 }
 
@@ -174,6 +197,7 @@ private struct SettingsValueRow: View {
         .foqosText(.caption)
         .foregroundStyle(palette.mute)
     }
+    .padding(.vertical, 6)
   }
 }
 

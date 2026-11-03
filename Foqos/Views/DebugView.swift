@@ -19,9 +19,22 @@ struct DebugView: View {
   }
 
   var body: some View {
-    NavigationView {
+    NavigationStack {
       ScrollView {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 28) {
+          VStack(alignment: .leading, spacing: 8) {
+            Text("Troubleshooting")
+              .foqosText(.eyebrow)
+              .foregroundStyle(FoqosPalette.cream.mute)
+            Text("Debug mode")
+              .foqosDisplay(size: 44)
+              .accessibilityAddTraits(.isHeader)
+            Text("Internal state for diagnosing blocking issues. Copy it as Markdown to share.")
+              .foqosText(.body)
+              .foregroundStyle(FoqosPalette.cream.mute)
+              .fixedSize(horizontal: false, vertical: true)
+          }
+
           // Strategy Manager Section (always shown)
           DebugSection(title: "Strategy Manager") {
             StrategyManagerDebugCard(strategyManager: strategyManager)
@@ -53,7 +66,7 @@ struct DebugView: View {
                 ForEach(allProfiles) { profile in
                   VStack(alignment: .leading, spacing: 8) {
                     Text(profile.name)
-                      .font(.headline)
+                      .foqosDisplay(size: 26)
 
                     ProfileDebugCard(profile: profile)
 
@@ -74,16 +87,20 @@ struct DebugView: View {
                   .padding(.vertical, 8)
 
                   if profile.id != allProfiles.last?.id {
-                    Divider()
+                    FoqosHairline(isStrong: true)
                   }
                 }
               }
             }
           }
         }
-        .padding()
+        .padding(.horizontal, 24)
+        .padding(.bottom, 32)
       }
+      .foqosTheme(.cream)
       .navigationTitle("Debug Mode")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(FoqosColors.cream, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { dismiss() }) {
@@ -105,6 +122,7 @@ struct DebugView: View {
       .refreshable {
         loadActiveProfile()
       }
+      .tint(FoqosColors.forest)
       .alert("Copied to Clipboard", isPresented: $showCopyConfirmation) {
         Button("OK", role: .cancel) {}
       } message: {
