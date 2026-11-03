@@ -152,8 +152,9 @@ struct MonthlySessionChart: View {
     for week: [MonthlyDayAggregate]
   ) -> some View {
     HStack(spacing: 4) {
-      ForEach(week) { day in
-        daySquareView(for: day)
+      // Padding cells all use distantPast as their date, so identify cells by position.
+      ForEach(week.indices, id: \.self) { index in
+        daySquareView(for: week[index])
       }
     }
   }
