@@ -68,13 +68,13 @@ struct StrictNFCWriteWarningView: View {
       + Text("Do not write over that unlock tag")
       .fontWeight(.bold)
       + Text(
-        ". Rewriting it can change what Foqos reads later and may stop this profile from unlocking. You do not need to create another NFC tag for this profile."
+        ". Rewriting it can change what LockedIn reads later and may stop this profile from unlocking. You do not need to create another NFC tag for this profile."
       )
   }
 
   private var convenienceText: String {
     return
-      "This only creates a convenience shortcut: scan the tag, tap the iOS notification, and Foqos opens this profile for you."
+      "This only creates a convenience shortcut: scan the tag, tap the iOS notification, and LockedIn opens this profile for you."
   }
 }
 

@@ -22,7 +22,8 @@ MAC_BUNDLE_IDENTIFIER := dev.ambitionsoftware.foqos.mac
 BUILD_NUMBER ?= $(shell git rev-list --count HEAD)
 NOTARY_PROFILE ?= foqos-notary
 SPARKLE_KEY_ACCOUNT ?= ambitionsoftware
-GITHUB_REPOSITORY ?= awaseem/foqos
+# TODO(LockedIn): set to the repository that hosts LockedIn Mac releases and its appcast.
+GITHUB_REPOSITORY ?=
 RELEASE_NOTES_FILE ?=
 LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 

@@ -107,7 +107,7 @@ struct HomeDashboardView: View {
 
   private func hero(isCompact: Bool) -> some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text("Foqos")
+      Text("LockedIn")
         .foqosText(.eyebrow)
         .padding(.bottom, 14)
 

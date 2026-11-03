@@ -17,13 +17,13 @@ struct MacOnboardingView: View {
         .scaledToFit()
         .frame(width: 180, height: 180)
         .shadow(color: Color.black.opacity(0.1), radius: 16, y: 10)
-        .accessibilityLabel("Foqos hourglass")
+        .accessibilityLabel("LockedIn hourglass")
 
       Spacer(minLength: 30)
 
       VStack(spacing: 0) {
         SetupProgressRow(
-          title: "Install the Foqos network extension",
+          title: "Install the LockedIn network extension",
           symbol: "puzzlepiece.extension",
           state: installationStepState
         )
@@ -32,7 +32,7 @@ struct MacOnboardingView: View {
           .padding(.leading, 42)
 
         SetupProgressRow(
-          title: "Enable Foqos in Login Items & Extensions",
+          title: "Enable LockedIn in Login Items & Extensions",
           symbol: "checkmark.shield",
           state: approvalStepState,
           detail: approvalStepDetail
@@ -91,7 +91,7 @@ struct MacOnboardingView: View {
     ) { _ in
       MacDiagnostics.shared.record(
         "onboarding.app_active",
-        "Foqos became active while onboarding was visible; rechecking filter status."
+        "LockedIn became active while onboarding was visible; rechecking filter status."
       )
       filterManager.refreshStatus()
     }

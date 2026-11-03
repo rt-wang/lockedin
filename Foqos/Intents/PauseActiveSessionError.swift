@@ -10,7 +10,7 @@ enum PauseActiveSessionError: LocalizedError, Equatable {
   var errorDescription: String? {
     switch self {
     case .noActiveSession:
-      return "No active Foqos session to pause."
+      return "No active LockedIn session to pause."
     case .unsupportedStrategy(let profileName):
       return "\(profileName) does not use a strategy that supports pausing."
     case .alreadyPaused(let profileName):

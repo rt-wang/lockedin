@@ -63,7 +63,7 @@ final class FoqosOnboardingWindowController: NSObject, ObservableObject, NSWindo
       backing: .buffered,
       defer: false
     )
-    window.title = "Welcome to Foqos"
+    window.title = "Welcome to LockedIn"
     window.delegate = self
     window.titleVisibility = .hidden
     window.titlebarAppearsTransparent = true
@@ -129,7 +129,7 @@ final class FoqosMacAppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationWillTerminate(_ notification: Notification) {
-    MacDiagnostics.shared.record("app.terminating", "Foqos Mac is terminating.")
+    MacDiagnostics.shared.record("app.terminating", "LockedIn Mac is terminating.")
     MacDiagnostics.shared.flush()
   }
 }

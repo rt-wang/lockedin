@@ -23,7 +23,8 @@ VERSION="${VERSION:-}"
 BUILD_NUMBER="${BUILD_NUMBER:-}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-foqos-notary}"
 SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-ambitionsoftware}"
-GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-awaseem/foqos}"
+# TODO(LockedIn): no default; pass the repository that hosts LockedIn releases and its appcast.
+GITHUB_REPOSITORY="${GITHUB_REPOSITORY:?Set GITHUB_REPOSITORY (owner/repo) for LockedIn releases}"
 RELEASE_NOTES_FILE="${RELEASE_NOTES_FILE:-}"
 
 fail() {

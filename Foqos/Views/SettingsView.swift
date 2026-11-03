@@ -2,7 +2,6 @@ import FamilyControls
 import SwiftData
 import SwiftUI
 
-let AMZN_STORE_LINK = "https://amzn.to/4fbMuTM"
 let TEMU_STORE_LINK =
   "https://www.temu.com/ca/nfc-sticker-with--blank-chip-operating-at-13-56mhz-is-a-rewritable-label-with-504--of-memory-compatible-with-nfc-enabled-smartphones-g-601102251435878.html"
 let ALIEXPRESS_STORE_LINK = "https://www.aliexpress.com/item/1005010075431327.html"
@@ -38,18 +37,8 @@ struct SettingsView: View {
           .foqosFormRows()
 
         Section {
-          Link(destination: URL(string: "https://www.foqos.app/support.html")!) {
-            SettingsRow(
-              title: "Help Center",
-              subtitle: "Setup guides and common questions",
-              trailing: "↗"
-            )
-          }
-
-          Link(destination: URL(string: "https://www.foqos.app/blocking-native-apps.html")!) {
-            SettingsRow(title: "Block Safari & Settings", trailing: "↗")
-          }
-
+          // TODO(LockedIn): add Help Center / "Block Safari & Settings" guide links once LockedIn
+          // has its own support pages. The upstream Foqos pages were removed.
           SettingsRow(title: "Debug Mode", trailing: "→")
             .contentShape(Rectangle())
             .onTapGesture {
@@ -65,7 +54,7 @@ struct SettingsView: View {
             .buttonStyle(FoqosPressStyle())
           }
         } header: {
-          FoqosSectionHeader("Help & Troubleshooting")
+          FoqosSectionHeader("Troubleshooting")
         }
         .foqosFormRows()
 
@@ -91,18 +80,12 @@ struct SettingsView: View {
               .foregroundStyle(FoqosPalette.cream.mute)
             }
           }
-
-          SettingsValueRow(title: "Made in", value: "Calgary AB 🇨🇦")
         } header: {
           FoqosSectionHeader("About")
         }
         .foqosFormRows()
 
         Section {
-          Link(destination: URL(string: AMZN_STORE_LINK)!) {
-            SettingsRow(title: "Amazon", trailing: "↗")
-          }
-
           Link(destination: URL(string: TEMU_STORE_LINK)!) {
             SettingsRow(title: "Temu", trailing: "↗")
           }

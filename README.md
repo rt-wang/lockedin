@@ -1,38 +1,10 @@
-<p align="center">
-  <img src="./images/foqos-logo.png" width="250" style="border-radius: 40px;" alt="Foqos app icon">
-</p>
+# LockedIn
 
-<h1 align="center"><a href="https://apps.apple.com/ca/app/foqos/id6736793117">Foqos</a></h1>
+**An iPhone app blocker with NFC and QR code unlocking.**
 
-<p align="center">
-  <strong>Free, open-source iPhone app blocker with NFC and QR code unlocking.</strong>
-</p>
-
-<p align="center">
-  Foqos is a privacy-first iOS app blocker that uses Apple's Screen Time API to block distracting apps and websites. Start a focus session manually, with an NFC tag, with a QR code or barcode, with a timer, or with temporary access rules. It is built as a free and open-source alternative to Brick, Unpluq, Blok, Opal, and other paid app blockers for iPhone.
-</p>
-
-<p align="center">
-  <a href="https://www.foqos.app/">Website</a> |
-  <a href="https://www.foqos.app/support.html">Help Center</a> |
-  <a href="https://apps.apple.com/ca/app/foqos/id6736793117">App Store</a> |
-  <a href="https://github.com/awaseem/foqos/releases">Releases</a> |
-  <a href="https://coff.ee/ambitionsoftware">Support the project</a>
-</p>
-
----
-
-## What Foqos Does
-
-Foqos helps you put friction between yourself and the apps or websites you want to avoid. You create blocking profiles for work, study, bedtime, or any other routine, choose the apps and domains to block, then decide how that profile starts and stops.
-
-Unlike hardware-first blockers, Foqos works with cheap NFC tags, printable QR codes, barcodes, iOS Shortcuts, and in-app controls. Your data stays on your device. There is no account requirement, no tracking, no ads, and no subscription.
-
-## Free Alternative to Brick, Unpluq, Blok, and Opal
-
-Foqos is built for people who want physical app blocking on iPhone without buying a dedicated device or paying for a subscription. It covers the core workflows people often look for in a Brick alternative, Unpluq alternative, Blok alternative, or Opal alternative: app blocking, website blocking, NFC unlocks, QR code unlocks, timed focus sessions, and local privacy.
-
-Foqos is not affiliated with Brick, Unpluq, Blok, or Opal.
+LockedIn uses Apple's Screen Time API to block distracting apps and websites. Start a focus
+session manually, with an NFC tag, with a QR code or barcode, with a timer, or with temporary
+access rules. Data stays on your device: no account, no tracking, no ads.
 
 ## Features
 
@@ -52,11 +24,11 @@ Foqos is not affiliated with Brick, Unpluq, Blok, or Opal.
 
 ## Blocking Strategies
 
-Foqos includes several ways to start and stop a blocking session. All strategies are implemented in `Foqos/Models/Strategies/` and registered in `Foqos/Utils/StrategyManager.swift`.
+LockedIn includes several ways to start and stop a blocking session. All strategies are implemented in `Foqos/Models/Strategies/` and registered in `Foqos/Utils/StrategyManager.swift`.
 
 | Strategy | Best for | How it works |
 | --- | --- | --- |
-| `ManualBlockingStrategy` | Simple in-app blocking | Start and stop directly in Foqos. |
+| `ManualBlockingStrategy` | Simple in-app blocking | Start and stop directly in LockedIn. |
 | `NFCBlockingStrategy` | Physical NFC app blocking | Scan an NFC tag to start. Scan the same tag again to stop, unless strict unlock rules are configured. |
 | `QRCodeBlockingStrategy` | QR code or barcode blocking | Scan a QR code or barcode to start. Scan the same code again to stop, unless strict unlock rules are configured. |
 | `NFCManualBlockingStrategy` | Easy start, physical stop | Start in the app. Stop by scanning an NFC tag. |
@@ -71,14 +43,6 @@ Foqos includes several ways to start and stop a blocking session. All strategies
 
 Strict unlocks can require specific physical unlock items. When a profile has an approved NFC tag, QR code, or barcode configured, other tags and codes cannot stop that profile.
 
-## How It Works
-
-1. Download Foqos from the [App Store](https://apps.apple.com/ca/app/foqos/id6736793117).
-2. Grant Screen Time access so Foqos can block selected apps and websites.
-3. Create a profile for the apps, categories, and domains you want to block.
-4. Pick a blocking strategy: manual, NFC, QR/barcode, timer, pause timer, or temporary access.
-5. Start the session and let Foqos enforce the block until your chosen stop condition is met.
-
 ## Requirements
 
 - iOS 17.6+
@@ -88,7 +52,7 @@ Strict unlocks can require specific physical unlock items. When a profile has an
 
 ## NFC Tags and QR Codes
 
-Foqos works with common NFC tags such as NTAG213. You can write profile links to NFC tags from inside the app, then place tags where they match the routine: desk, bedside table, gym bag, office door, or another physical location.
+LockedIn works with common NFC tags such as NTAG213. You can write profile links to NFC tags from inside the app, then place tags where they match the routine: desk, bedside table, gym bag, office door, or another physical location.
 
 QR codes are free to print or display on another device. Each profile can expose a deep link in this format:
 
@@ -96,21 +60,25 @@ QR codes are free to print or display on another device. Each profile can expose
 https://foqos.app/profile/<PROFILE_UUID>
 ```
 
-Scanning a QR code with that link can toggle the profile. If the profile is inactive, Foqos starts it. If it is active, Foqos stops it when the profile's strategy and unlock rules allow that stop.
+> TODO(LockedIn): profile links, universal links (`applinks:foqos.app`) and NFC tag parsing still
+> use the upstream `foqos.app` domain. Move them to a LockedIn-owned domain before shipping; tags
+> written with the old links will need to be rewritten.
+
+Scanning a QR code with that link can toggle the profile. If the profile is inactive, LockedIn starts it. If it is active, LockedIn stops it when the profile's strategy and unlock rules allow that stop.
 
 ## Siri
 
-Open Foqos once after installing or updating it, then ask Siri to control your sessions.
+Open LockedIn once after installing or updating it, then ask Siri to control your sessions.
 For a profile named "Work", try:
 
-- "Start Work in Foqos"
-- "Start a profile in Foqos" (Siri asks which profile)
-- "Stop my session in Foqos"
-- "Pause my session in Foqos"
-- "Start a break in Foqos"
-- "End my break in Foqos"
-- "Is my session active in Foqos"
-- "What profile is active in Foqos"
+- "Start Work in LockedIn"
+- "Start a profile in LockedIn" (Siri asks which profile)
+- "Stop my session in LockedIn"
+- "Pause my session in LockedIn"
+- "Start a break in LockedIn"
+- "End my break in LockedIn"
+- "Is my session active in LockedIn"
+- "What profile is active in LockedIn"
 
 Replace "Work" with your profile's name. These commands are available automatically—no shortcut
 setup is needed. Enable breaks in your profile to use the break commands, or choose a Pause Timer
@@ -118,36 +86,24 @@ strategy to use the pause command.
 
 ## iOS Shortcuts Setup
 
-You can trigger Foqos profiles through iOS Shortcuts. For NFC automations, create one automation per NFC tag.
+You can trigger LockedIn profiles through iOS Shortcuts. For NFC automations, create one automation per NFC tag.
 
 1. Open the Shortcuts app and go to the Automation tab.
 2. Tap Create Personal Automation and choose NFC.
-3. Scan the NFC tag and name it for the Foqos profile you want to run.
+3. Scan the NFC tag and name it for the LockedIn profile you want to run.
 4. Enable Run Immediately and turn on Notify When Run.
 
 <img width="250" alt="iOS Shortcuts NFC setup screen" src="/images/shortcut-instructions-1.png" />
 
-5. Add a blank automation, search for Foqos, and add Check if Foqos Session is Active. Turn off Show When Run.
+5. Add a blank automation, search for LockedIn, and add Check if LockedIn Session is Active. Turn off Show When Run.
 
 <img width="250" alt="iOS Shortcuts action setup" src="/images/shortcut-instructions-2.png" />
 
-6. Add an If block with Start Foqos Profile and Stop Foqos Profile. For both actions, select the target Foqos profile.
+6. Add an If block with Start LockedIn Profile and Stop LockedIn Profile. For both actions, select the target LockedIn profile.
 7. Arrange the actions so the profile stops if active and starts if inactive.
 
 <img width="250" alt="iOS Shortcuts If block setup" src="/images/shortcut-instructions-3.png" />
 <img width="250" alt="iOS Shortcuts If block configuration" src="/images/shortcut-instructions-4.png" />
-
-## 3D Printable NFC Accessories
-
-Foqos also has a printable NFC brick and keychain design for 25 mm NFC tags:
-
-- [Foqos NFC Brick and Keychain on Printables](https://www.printables.com/model/1537982-foqos-nfc-brick-keychain)
-
-<img width="500" alt="3D printable Foqos NFC brick and keychain" src="/images/foqos-brick-keychain.png" />
-
-## Android Alternative
-
-Foqos is iOS-only. Android users looking for a similar physical app blocker can try [Switchly](https://switchly.saltyy.at/#features) or [Lock](https://lock-app.fr) ([source](https://github.com/NathanLenias/lock-app)), a free and open-source NFC app blocker for Android.
 
 ## Development
 
@@ -159,8 +115,6 @@ Foqos is iOS-only. Android users looking for a similar physical app blocker can 
 - Apple Developer account with Screen Time and NFC entitlements
 
 ### Build Commands
-
-This project includes a `Makefile` with common development tasks:
 
 ```bash
 make build      # Build the project
@@ -174,94 +128,20 @@ make help       # Show all commands
 Or open the project in Xcode:
 
 ```bash
-git clone https://github.com/awaseem/foqos.git
-cd foqos
+git clone https://github.com/rt-wang/lockedin.git
+cd lockedin
 open foqos.xcodeproj
 ```
 
-### iOS Releases
+Xcode targets, bundle identifiers, app groups, and folder names still use the upstream `foqos`
+names; only the user-visible name has changed.
 
-Run iOS releases from a clean, up-to-date `main` branch with GitHub CLI authenticated:
+### Releases
 
-```bash
-make app-release VERSION=2.2.1
-```
-
-The command shows a release plan before making changes. After confirmation, it updates the main
-iOS app and every embedded extension to the requested marketing version, resets their build
-numbers to `1`, commits and pushes `main`, creates and pushes the matching `vVERSION` tag, then
-publishes a `Foqos for iOS VERSION` GitHub release with generated notes.
-
-The iOS release is marked as GitHub's repository-wide “Latest” release. Generated notes use the
-previous iOS `vVERSION` tag as their baseline rather than the latest `mac-vVERSION` tag. The `main`
-push triggers the repository's configured Xcode Cloud workflow. The entire release is performed
-locally, so no GitHub Actions workflow needs permission to bypass `main` branch protection.
-
-### Mac Releases
-
-Foqos for Mac is distributed as a notarized DMG attached to a GitHub release. Sparkle reads
-`appcast-macos.xml` from the repository's `main` branch and downloads signed updates from GitHub
-Releases.
-
-The release Mac needs:
-
-- The `Developer ID Application: Ali Waseem (YR54789JNV)` certificate and private key
-- The `Foqos Mac Developer ID` and `Foqos Filter Developer ID` provisioning profiles
-- GitHub CLI authentication for `awaseem/foqos`
-- [`create-dmg`](https://github.com/create-dmg/create-dmg) for the Finder installation layout
-- The Sparkle private key in the login Keychain under account `ambitionsoftware`
-- A notarytool Keychain profile named `foqos-notary`
-
-Install the DMG layout tool with Homebrew if necessary:
-
-```bash
-brew install create-dmg
-```
-
-Authenticate GitHub CLI if necessary:
-
-```bash
-gh auth login
-```
-
-Create the notarization profile using the Apple ID, team ID `YR54789JNV`, and an app-specific
-password:
-
-```bash
-xcrun notarytool store-credentials foqos-notary
-```
-
-The Sparkle private key must be backed up outside the repository. Never add the exported key to
-Git, a release asset, or the app bundle.
-
-Run releases from a clean, up-to-date `main` branch:
-
-```bash
-make mac-release VERSION=0.1.0
-```
-
-The build number defaults to the repository commit count. Override it when needed:
-
-```bash
-make mac-release VERSION=0.1.0 BUILD_NUMBER=812
-```
-
-Provide Markdown release notes with:
-
-```bash
-make mac-release VERSION=0.1.0 RELEASE_NOTES_FILE=release-notes.md
-```
-
-The command validates the release environment, updates both Mac targets from
-`Config/MacRelease.xcconfig`, builds a universal Developer ID app, notarizes the app and DMG,
-adds the drag-to-Applications Finder layout, updates the signed Sparkle appcast, and publishes a
-`mac-vx.y.z` GitHub release. Mac releases are not marked as GitHub's repository-wide “Latest”
-release, so they do not replace the current iOS release badge.
-
-Release artifacts are retained under `.build/mac-release/`, which is ignored by Git. If the
-command fails before committing the Mac version, it restores the version and appcast source files
-automatically. If it fails after pushing the version, inspect the draft GitHub release before
-retrying. Do not publish a release unless its appcast entry and DMG are both present.
+`make app-release` and `make mac-release` come from upstream. Before using them, replace the
+upstream signing team, provisioning profiles, notarization profile, and Sparkle key with your own,
+and set `GITHUB_REPOSITORY`. The Mac app has no update feed configured yet (see the TODO in
+`FoqosMac/Info.plist`).
 
 ### Project Structure
 
@@ -293,64 +173,12 @@ foqos/
 - WidgetKit
 - App Intents
 
-## Contributing
-
-Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
-Verify reports and changes yourself; do not publish unverified automated audits or batches of
-speculative improvements. For performance reports, include measurements and a reproducible workload.
-
-Before opening a pull request:
-
-1. Fork the repository and create a focused branch.
-2. Make the change and update documentation when behavior changes.
-3. Run `make lint` or `make lint-fix`.
-4. Run `make build` or `make check` when your local signing setup allows it.
-5. Open a pull request with a clear description of the change.
-
-## Issues and Support
-
-Foqos has grown to 100,000+ users, and hundreds of daily messages have made individual support
-unsustainable. Read [Ali's personal note on why support is changing](SUPPORT.md#why-support-is-changing).
-
-Start with the searchable [Help Center](https://www.foqos.app/support.html) for setup questions,
-troubleshooting, existing features, and known limitations. Then search
-[open and closed issues](https://github.com/awaseem/foqos/issues?q=is%3Aissue) for previous discussions.
-
-Foqos is maintained in spare time, and individual setup support is not available. GitHub Issues
-tracks reproducible bugs and new feature proposals. Support questions and duplicates may be closed
-with a link to the relevant answer; a response or fix is not guaranteed.
-
-If a problem is not covered, use the [bug-report form](https://github.com/awaseem/foqos/issues/new?template=01-bug-report.yml).
-For a new capability, use the [feature-request form](https://github.com/awaseem/foqos/issues/new?template=02-feature-request.yml)
-and explain why existing strategies do not meet your needs. See [SUPPORT.md](SUPPORT.md) for details.
-
-When reporting a bug, include:
-
-- iOS or macOS version (both for Mac sync problems)
-- Device model
-- Foqos version
-- The support answer you tried and what happened
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
-- Screenshots or screen recordings when useful
-- Relevant debug output from Settings -> Help -> Debug Mode, with private details removed
-
 ## License
 
-Foqos is released under the MIT License. See [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).
 
-## Links
+## Credits
 
-- [Website](https://www.foqos.app/)
-- [Help Center](https://www.foqos.app/support.html)
-- [App Store](https://apps.apple.com/ca/app/foqos/id6736793117)
-- [GitHub Issues](https://github.com/awaseem/foqos/issues)
-- [Releases](https://github.com/awaseem/foqos/releases)
-- [Support the Project](https://coff.ee/ambitionsoftware)
-
----
-
-<p align="center">
-  Made in Calgary, AB by <a href="https://github.com/awaseem">Ali Waseem</a>.
-</p>
+LockedIn is a fork of [Foqos](https://github.com/awaseem/foqos) by Ali Waseem, released under the
+MIT License. The original copyright notice is kept in [LICENSE](LICENSE). Thanks to the Foqos
+author and contributors for the app this project is built on.

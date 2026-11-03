@@ -201,10 +201,10 @@ struct BlockedProfileDomainsFields: View {
     CustomToggle(
       title: "Sync to Mac",
       description:
-        "Block the same selected domains on your Mac with the Foqos for Mac app.",
+        "Block the same selected domains on your Mac with the LockedIn for Mac app.",
       isOn: $draft.enableMacSync,
-      isDisabled: disabled,
-      learnMoreURL: URL(string: "https://www.foqos.app/mac.html")
+      isDisabled: disabled
+      // TODO(LockedIn): add a learnMoreURL once LockedIn has its own Mac setup page.
     )
     .onChange(of: draft.enableMacSync) { _, newValue in
       if newValue {
@@ -453,7 +453,7 @@ struct BlockedProfileStrictSafeguardsFields: View {
     CustomToggle(
       title: "Prevent App Deletion",
       description:
-        "Stop apps from being deleted during sessions, including Foqos.",
+        "Stop apps from being deleted during sessions, including LockedIn.",
       isOn: $draft.enableStrictMode,
       isDisabled: disabled
     )
@@ -483,7 +483,7 @@ struct BlockedProfileSessionSafeguardsFields: View {
     ProfileFieldDivider(isVisible: showsSeparators)
 
     CustomToggle(
-      title: "Require Foqos to Stop",
+      title: "Require LockedIn to Stop",
       description:
         "Prevent this profile from being stopped by Control Center, Shortcuts, NFC links, or QR links outside the app.",
       isOn: $draft.disableBackgroundStops,

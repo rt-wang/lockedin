@@ -143,7 +143,7 @@ struct HomeAlertDetailView: View {
         title: "Screen Time access needed",
         message: "Blocking is paused until access is restored.",
         detailMessage:
-          "Foqos needs Screen Time access to block apps and websites. Grant access again to restore blocking.",
+          "LockedIn needs Screen Time access to block apps and websites. Grant access again to restore blocking.",
         primaryActionTitle: "Allow Screen Time Access",
         iconName: "exclamationmark.shield.fill"
       )

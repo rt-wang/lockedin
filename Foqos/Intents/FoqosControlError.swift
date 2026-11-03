@@ -17,13 +17,13 @@ enum FoqosControlError: LocalizedError, Equatable {
   var errorDescription: String? {
     switch self {
     case .appUnavailable:
-      return "Open Foqos and try the control again."
+      return "Open LockedIn and try the control again."
     case .profileUnavailable:
-      return "Choose an existing Foqos profile in this control's settings."
+      return "Choose an existing LockedIn profile in this control's settings."
     case .anotherProfileActive:
-      return "Another Foqos profile is already active."
+      return "Another LockedIn profile is already active."
     case .backgroundStopDisabled:
-      return "Background stops are disabled for this profile. Stop it in Foqos."
+      return "Background stops are disabled for this profile. Stop it in LockedIn."
     case .sessionChanged:
       return "The active session has changed. Try the control again."
     case .actionFailed(let message):

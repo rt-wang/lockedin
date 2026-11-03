@@ -203,9 +203,7 @@ struct SchedulePicker: View {
           .frame(maxWidth: .infinity, alignment: .center)
         } footer: {
           VStack(alignment: .center, spacing: 4) {
-            Text(
-              "If you're looking for more granularity, you can use Shortcuts. \(Text("[Here is a quick video](https://youtube.com/shorts/1xZeO9lg5f8)").foregroundStyle(palette.foreground))"
-            )
+            Text("If you're looking for more granularity, you can use Shortcuts automations.")
             .font(.caption)
             .foregroundStyle(.secondary)
           }

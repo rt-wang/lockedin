@@ -67,14 +67,14 @@ final class FoqosFilterManager: NSObject, ObservableObject {
   var statusText: String {
     switch status {
     case .activatingExtension:
-      return "Installing the Foqos network extension."
+      return "Installing the LockedIn network extension."
     case .approvalRequired:
       return """
         In Login Items & Extensions, scroll down to Extensions, choose By Category, then enable \
         Foqos Website Filter under Network Extensions.
         """
     case .configuringFilter:
-      return "Choose Allow when macOS asks Foqos to filter network content."
+      return "Choose Allow when macOS asks LockedIn to filter network content."
     case .disabled:
       return "Active profiles cannot block websites while the network filter is disabled."
     case .enabled:
@@ -142,7 +142,7 @@ final class FoqosFilterManager: NSObject, ObservableObject {
     inspectionID = UUID().uuidString
     diagnostics.record(
       "onboarding.inspection_requested",
-      "Asking macOS which Foqos extension versions are installed.",
+      "Asking macOS which LockedIn extension versions are installed.",
       fields: [
         "operationID": inspectionID!, "bundledVersion": bundledExtensionVersion ?? "missing",
       ])
@@ -317,11 +317,11 @@ final class FoqosFilterManager: NSObject, ObservableObject {
       configuration.filterDataProviderBundleIdentifier = Self.extensionIdentifier
       configuration.filterPackets = false
       configuration.filterSockets = true
-      configuration.organization = "Foqos"
+      configuration.organization = "LockedIn"
       configuration.vendorConfiguration = self.vendorConfiguration(
         for: self.latestRules ?? .disabled)
 
-      manager.localizedDescription = "Foqos Website Filter"
+      manager.localizedDescription = "LockedIn Website Filter"
       manager.providerConfiguration = configuration
       manager.isEnabled = true
       self.diagnostics.record(
@@ -566,7 +566,7 @@ extension FoqosFilterManager: OSSystemExtensionRequestDelegate {
     status = .approvalRequired
     diagnostics.record(
       "onboarding.approval_required",
-      "Waiting for the user to enable Foqos in Login Items & Extensions, under Network Extensions.",
+      "Waiting for the user to enable LockedIn in Login Items & Extensions, under Network Extensions.",
       fields: ["operationID": activationID ?? "unknown"])
   }
 

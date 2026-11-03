@@ -34,12 +34,12 @@ final class DiagnosticsExportController: ObservableObject {
       do {
         let data = try await diagnostics.exportArchive()
         let panel = NSSavePanel()
-        panel.title = "Export Foqos Diagnostics"
-        panel.message = "Save setup and sync diagnostics to share with Foqos support."
+        panel.title = "Export LockedIn Diagnostics"
+        panel.message = "Save setup and sync diagnostics for troubleshooting."
         panel.allowedContentTypes = [.zip]
         panel.canCreateDirectories = true
         panel.nameFieldStringValue =
-          "Foqos-Diagnostics-\(Date().formatted(.iso8601.year().month().day())).zip"
+          "LockedIn-Diagnostics-\(Date().formatted(.iso8601.year().month().day())).zip"
         panel.hidesOnDeactivate = false
         panel.isReleasedWhenClosed = false
         savePanel = panel

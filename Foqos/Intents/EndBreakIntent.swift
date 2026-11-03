@@ -5,9 +5,9 @@ struct EndBreakIntent: AppIntent {
   @Dependency(key: "ModelContainer")
   private var modelContainer: ModelContainer
 
-  static var title: LocalizedStringResource = "End Foqos Break"
+  static var title: LocalizedStringResource = "End LockedIn Break"
   static var description = IntentDescription(
-    "End the current Foqos break and resume blocking. Unused break time remains available when multiple breaks are enabled. Does nothing if no break is active."
+    "End the current LockedIn break and resume blocking. Unused break time remains available when multiple breaks are enabled. Does nothing if no break is active."
   )
   static var openAppWhenRun: Bool = false
 
@@ -18,7 +18,7 @@ struct EndBreakIntent: AppIntent {
         context: modelContainer.mainContext
       )
     else {
-      return .result(dialog: "No Foqos break is active.")
+      return .result(dialog: "No LockedIn break is active.")
     }
 
     return .result(dialog: "Ended the break. \(profileName) is blocking again.")
