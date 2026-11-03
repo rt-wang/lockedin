@@ -1056,7 +1056,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosDeviceMonitor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosDeviceMonitor;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Device Monitor";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1089,7 +1089,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosDeviceMonitor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosDeviceMonitor;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Device Monitor";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1431,7 +1431,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosShieldConfig/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosShieldConfig;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Shield Configuration";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1459,7 +1459,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosShieldConfig/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosShieldConfig;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Shield Configuration";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1490,7 +1490,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1521,7 +1521,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1551,7 +1551,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosShieldAction/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosShieldAction;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Shield Action";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1579,7 +1579,7 @@
 				DEVELOPMENT_TEAM = 67K94N9B2N;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FoqosShieldAction/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FoqosShieldAction;
+				INFOPLIST_KEY_CFBundleDisplayName = "LockedIn Shield Action";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
