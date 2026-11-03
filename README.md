@@ -135,15 +135,22 @@ cd lockedin
 open foqos.xcodeproj
 ```
 
-Xcode targets, bundle identifiers, app groups, and folder names still use the upstream `foqos`
-names; only the user-visible name has changed.
+Signing uses team `67K94N9B2N`. Bundle identifiers start with `sh.shen.lockedin` and the app group
+is `group.sh.shen.lockedin`. Xcode targets, schemes and folder names still use the upstream
+`foqos` names.
 
 ### Releases
 
-`make app-release` and `make mac-release` come from upstream. Before using them, replace the
-upstream signing team, provisioning profiles, notarization profile, and Sparkle key with your own,
-and set `GITHUB_REPOSITORY`. The Mac app has no update feed configured yet (see the TODO in
-`FoqosMac/Info.plist`).
+`make app-release` and `make mac-release` come from upstream. Before running `make mac-release`:
+
+- create a Developer ID Application certificate for team `67K94N9B2N`, and Developer ID
+  provisioning profiles named `LockedIn Mac Developer ID` (`sh.shen.lockedin.mac`) and
+  `LockedIn Filter Developer ID` (`sh.shen.lockedin.mac.filter`)
+- store notary credentials as `lockedin-notary` (`xcrun notarytool store-credentials`)
+- generate a Sparkle key under the account `lockedin`
+- set `GITHUB_REPOSITORY`
+
+The Mac app has no update feed configured yet (see the TODO in `FoqosMac/Info.plist`).
 
 ### Project Structure
 

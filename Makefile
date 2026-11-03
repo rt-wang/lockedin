@@ -20,8 +20,9 @@ MAC_INSTALL_PATH ?= /Applications/Foqos for Mac.app
 MAC_LEGACY_INSTALL_PATH := /Applications/Foqos Mac.app
 MAC_BUNDLE_IDENTIFIER := sh.shen.lockedin.mac
 BUILD_NUMBER ?= $(shell git rev-list --count HEAD)
-NOTARY_PROFILE ?= foqos-notary
-SPARKLE_KEY_ACCOUNT ?= ambitionsoftware
+# TODO(LockedIn): create the notary keychain profile and Sparkle key under these names (see README).
+NOTARY_PROFILE ?= lockedin-notary
+SPARKLE_KEY_ACCOUNT ?= lockedin
 # TODO(LockedIn): set to the repository that hosts LockedIn Mac releases and its appcast.
 GITHUB_REPOSITORY ?=
 RELEASE_NOTES_FILE ?=

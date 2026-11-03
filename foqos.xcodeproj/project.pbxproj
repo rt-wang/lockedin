@@ -1653,7 +1653,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sh.shen.lockedin.mac;
 				PRODUCT_NAME = "Foqos for Mac";
-				PROVISIONING_PROFILE_SPECIFIER = "Foqos Mac Developer ID";
+				PROVISIONING_PROFILE_SPECIFIER = "LockedIn Mac Developer ID";
 				SDKROOT = macosx;
 				SUPPORTED_PLATFORMS = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1713,7 +1713,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = sh.shen.lockedin.mac.filter;
 				PRODUCT_NAME = "$(PRODUCT_BUNDLE_IDENTIFIER)";
-				PROVISIONING_PROFILE_SPECIFIER = "Foqos Filter Developer ID";
+				PROVISIONING_PROFILE_SPECIFIER = "LockedIn Filter Developer ID";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = macosx;
