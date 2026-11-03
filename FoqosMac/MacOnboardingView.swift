@@ -12,11 +12,11 @@ struct MacOnboardingView: View {
     VStack(spacing: 0) {
       Spacer(minLength: 8)
 
-      Image("FoqosStickerLogo")
+      Image("LockedInLogo")
         .resizable()
         .scaledToFit()
         .frame(width: 140, height: 140)
-        .accessibilityLabel("LockedIn hourglass")
+        .accessibilityLabel("LockedIn")
 
       Spacer(minLength: 20)
 

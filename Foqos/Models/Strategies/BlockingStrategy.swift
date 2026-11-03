@@ -197,7 +197,7 @@ struct BlockingStrategyIconImage: View {
   let strategy: BlockingStrategy?
 
   var body: some View {
-    Image(strategy?.iconAssetName ?? "FoqosStickerLogo")
+    Image(strategy?.iconAssetName ?? "LockedInLogo")
       .resizable()
       .scaledToFit()
   }

@@ -169,7 +169,7 @@ struct ProfileWidgetEntryView: View {
     HStack(spacing: 6) {
       Image(
         entry.profileInfo.map { BlockingStrategyArtwork.assetName(for: $0.strategyID) }
-          ?? "FoqosStickerLogo"
+          ?? "LockedInLogo"
       )
       .resizable()
       .widgetAccentedRenderingMode(.fullColor)

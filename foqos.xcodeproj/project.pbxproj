@@ -29,7 +29,6 @@
 		F0A300082F80000300000001 /* ActiveProfileSyncRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A300022F80000300000001 /* ActiveProfileSyncRecord.swift */; };
 		F0A300092F80000300000001 /* FilterRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A300012F80000300000001 /* FilterRules.swift */; };
 		F0A400022F80000400000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0A400012F80000400000001 /* Assets.xcassets */; };
-		F0A400042F80000400000001 /* foqos-icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = F0A400032F80000400000001 /* foqos-icon.icon */; };
 		F0B100012F90000100000001 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = F0B100032F90000100000001 /* Sparkle */; };
 		F0C100012FA0000100000001 /* TLSClientHelloParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C100022FA0000100000001 /* TLSClientHelloParser.swift */; };
 		F0C1000C2FA0000100000001 /* FilterRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A300012F80000300000001 /* FilterRules.swift */; };
@@ -145,7 +144,6 @@
 		F0A300012F80000300000001 /* FilterRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRules.swift; sourceTree = "<group>"; };
 		F0A300022F80000300000001 /* ActiveProfileSyncRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveProfileSyncRecord.swift; sourceTree = "<group>"; };
 		F0A400012F80000400000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Foqos/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		F0A400032F80000400000001 /* foqos-icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = "foqos-icon.icon"; path = "Foqos/foqos-icon.icon"; sourceTree = SOURCE_ROOT; };
 		F0B100052F90000100000001 /* MacRelease.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = MacRelease.xcconfig; sourceTree = "<group>"; };
 		F0B100072F90000100000001 /* MacReleaseExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MacReleaseExportOptions.plist; sourceTree = "<group>"; };
 		F0C100022FA0000100000001 /* TLSClientHelloParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TLSClientHelloParser.swift; path = FoqosFilter/TLSClientHelloParser.swift; sourceTree = SOURCE_ROOT; };
@@ -529,7 +527,6 @@
 				F0A300012F80000300000001 /* FilterRules.swift */,
 				F0A300022F80000300000001 /* ActiveProfileSyncRecord.swift */,
 				F0A400012F80000400000001 /* Assets.xcassets */,
-				F0A400032F80000400000001 /* foqos-icon.icon */,
 			);
 			path = FoqosShared;
 			sourceTree = "<group>";
@@ -903,7 +900,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0A400022F80000400000001 /* Assets.xcassets in Resources */,
-				F0A400042F80000400000001 /* foqos-icon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1237,8 +1233,8 @@
 		801B20BB2CB363A20073E9E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "foqos-icon-blue foqos-icon-cat foqos-icon-original foqos-icon-pop";
-				ASSETCATALOG_COMPILER_APPICON_NAME = "foqos-icon";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Cream AppIcon-Sage";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = foqos/foqos.entitlements;
@@ -1286,8 +1282,8 @@
 		801B20BC2CB363A20073E9E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "foqos-icon-blue foqos-icon-cat foqos-icon-original foqos-icon-pop";
-				ASSETCATALOG_COMPILER_APPICON_NAME = "foqos-icon";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Cream AppIcon-Sage";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = foqos/foqos.entitlements;
@@ -1606,7 +1602,7 @@
 		F0A100072F80000100000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "foqos-icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FoqosMac/FoqosMac.Debug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1636,7 +1632,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F0B100052F90000100000001 /* MacRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "foqos-icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FoqosMac/FoqosMac.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;

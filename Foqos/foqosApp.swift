@@ -38,6 +38,8 @@ struct foqosApp: App {
   @StateObject private var liveActivityManager = LiveActivityManager.shared
   @StateObject private var alertsManager = AlertsManager.shared
 
+  @Environment(\.scenePhase) private var scenePhase
+
   init() {
     TimersUtil.registerBackgroundTasks()
     // The user-selectable theme color was removed; drop the stale preference from older installs.
@@ -85,6 +87,26 @@ struct foqosApp: App {
         .environmentObject(liveActivityManager)
     }
     .modelContainer(container)
+    .onChange(of: scenePhase) { _, phase in
+      if phase == .active {
+        resetRemovedAlternateIcon()
+      }
+    }
+  }
+
+  // Upstream Foqos shipped alternate icons (Blue, Cat, Pop, Original) that LockedIn removed.
+  // Anyone who had one selected is moved back to the default icon. This only works while the
+  // app is active, so it runs on scene activation rather than at launch.
+  private func resetRemovedAlternateIcon() {
+    let application = UIApplication.shared
+    guard application.supportsAlternateIcons,
+      AppIconOption.isRemovedAlternate(application.alternateIconName)
+    else { return }
+    application.setAlternateIconName(nil) { error in
+      if let error {
+        print("Failed to reset removed alternate icon: \(error.localizedDescription)")
+      }
+    }
   }
 
   private func handleUniversalLink(_ url: URL) {

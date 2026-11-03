@@ -456,9 +456,9 @@ extension FoqosWidgetAttributes {
 }
 
 extension FoqosWidgetAttributes.ContentState {
-  fileprivate static var catIcon: FoqosWidgetAttributes.ContentState {
+  fileprivate static var creamIcon: FoqosWidgetAttributes.ContentState {
     var state = shortTime
-    state.appIconName = AppIconOption.cat.alternateIconName
+    state.appIconName = AppIconOption.cream.alternateIconName
     return state
   }
 
@@ -524,7 +524,7 @@ extension FoqosWidgetAttributes.ContentState {
 #Preview("Notification", as: .content, using: FoqosWidgetAttributes.preview) {
   FoqosWidgetLiveActivity()
 } contentStates: {
-  FoqosWidgetAttributes.ContentState.catIcon
+  FoqosWidgetAttributes.ContentState.creamIcon
   FoqosWidgetAttributes.ContentState.shortTime
   FoqosWidgetAttributes.ContentState.longTime
   FoqosWidgetAttributes.ContentState.breakActive
@@ -532,17 +532,17 @@ extension FoqosWidgetAttributes.ContentState {
 }
 
 @available(iOS 18.0, *)
-#Preview("Cat Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview) {
+#Preview("Cream Dynamic Island", as: .dynamicIsland(.compact), using: FoqosWidgetAttributes.preview) {
   FoqosWidgetLiveActivity()
 } contentStates: {
-  FoqosWidgetAttributes.ContentState.catIcon
+  FoqosWidgetAttributes.ContentState.creamIcon
 }
 
 #Preview("StandBy · Focus", traits: .fixedLayout(width: 390, height: 180)) {
   FoqosStandByActivityView(
     profileName: "💪 Work",
     message: FoqosWidgetAttributes.preview.message,
-    state: FoqosWidgetAttributes.ContentState.catIcon
+    state: FoqosWidgetAttributes.ContentState.creamIcon
   )
   .background(.black)
 }
