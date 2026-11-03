@@ -45,7 +45,7 @@ struct ProfileControlProvider: AppIntentTimelineProvider {
       logger.error("Unable to read widget data: \(error.localizedDescription, privacy: .public)")
       return Entry(
         date: now, selectedProfileId: nil, profileName: "LockedIn", activeSession: nil,
-        profileInfo: nil, deepLinkURL: URL(string: "foqos://"), focusMessage: "",
+        profileInfo: nil, deepLinkURL: URL(string: "lockedin://"), focusMessage: "",
         useProfileURL: false, isDataUnavailable: true, activityPeriod: configuration.activityPeriod
       )
     }

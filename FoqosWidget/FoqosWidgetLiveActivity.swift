@@ -102,7 +102,7 @@ struct FoqosWidgetLiveActivity: Widget {
       } minimal: {
         activityIcon(for: context.state, size: minimalLogoSize)
       }
-      .widgetURL(URL(string: "http://www.foqos.app"))
+      .widgetURL(URL(string: "https://shen.sh"))
       .keylineTint(context.state.accentColor)
     }
     .supplementalActivityFamilies([.medium])

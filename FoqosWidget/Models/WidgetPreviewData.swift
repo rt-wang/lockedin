@@ -28,7 +28,7 @@ enum WidgetPreviewData {
       profileInfo: WidgetProfileInfo(
         enableStrictMode: true, enableAllowMode: false, selectedItemCount: 8,
         strategyID: "NFCBlockingStrategy"),
-      deepLinkURL: URL(string: "foqos://"), focusMessage: "Make room for what matters.",
+      deepLinkURL: URL(string: "lockedin://"), focusMessage: "Make room for what matters.",
       useProfileURL: false,
       activity: .make(sessions: sessions, at: date), activityPeriod: period
     )

@@ -57,12 +57,14 @@ LockedIn works with common NFC tags such as NTAG213. You can write profile links
 QR codes are free to print or display on another device. Each profile can expose a deep link in this format:
 
 ```text
-https://foqos.app/profile/<PROFILE_UUID>
+https://shen.sh/profile/<PROFILE_UUID>
 ```
 
-> TODO(LockedIn): profile links, universal links (`applinks:foqos.app`) and NFC tag parsing still
-> use the upstream `foqos.app` domain. Move them to a LockedIn-owned domain before shipping; tags
-> written with the old links will need to be rewritten.
+The same routes also open through the custom scheme, for example `lockedin://profile/<PROFILE_UUID>`.
+
+Universal links need `https://shen.sh/.well-known/apple-app-site-association` to list the app's
+`<TEAM_ID>.<BUNDLE_ID>`. NFC tags written by upstream Foqos (`https://foqos.app/profile/...`) are
+still read, but they only open LockedIn when scanned from inside the app.
 
 Scanning a QR code with that link can toggle the profile. If the profile is inactive, LockedIn starts it. If it is active, LockedIn stops it when the profile's strategy and unlock rules allow that stop.
 

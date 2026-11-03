@@ -44,8 +44,8 @@ struct ProfileWidgetEntry: TimelineEntry {
   }
 
   var destination: URL {
-    if isSessionActive || hasOtherActiveProfile { return URL(string: "https://foqos.app")! }
-    return deepLinkURL ?? URL(string: "foqos://")!
+    if isSessionActive || hasOtherActiveProfile { return URL(string: "https://shen.sh")! }
+    return deepLinkURL ?? URL(string: "lockedin://")!
   }
 
   var statusLabel: String {
