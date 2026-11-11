@@ -18,7 +18,7 @@ struct SessionDebugCard: View {
         DebugRow(label: "Force Started", value: "\(session.forceStarted)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Status Flags
       Group {
@@ -28,7 +28,7 @@ struct SessionDebugCard: View {
         DebugRow(label: "Is Pause Active", value: "\(session.isPauseActive)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Break Times
       Group {
@@ -50,7 +50,7 @@ struct SessionDebugCard: View {
         )
       }
 
-      Divider()
+      FoqosHairline()
 
       // Pause Times
       Group {
@@ -64,7 +64,7 @@ struct SessionDebugCard: View {
         )
       }
 
-      Divider()
+      FoqosHairline()
 
       // Duration
       DebugRow(label: "Duration", value: DateFormatters.formatDuration(session.duration))

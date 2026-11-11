@@ -12,7 +12,7 @@ struct GetActiveSessionInfoIntent: AppIntent {
 
   static var title: LocalizedStringResource = "Get Active Session Info"
   static var description = IntentDescription(
-    "Get the profile name, start date, and optional end date for the active Foqos session."
+    "Get the profile name, start date, and optional end date for the active LockedIn session."
   )
 
   static var openAppWhenRun: Bool = false
@@ -27,7 +27,7 @@ struct GetActiveSessionInfoIntent: AppIntent {
     guard let activeSession = strategyManager.activeSession, activeSession.isActive else {
       return .result(
         value: Optional<ActiveSessionInfoEntity>.none,
-        dialog: "No Foqos session is active."
+        dialog: "No LockedIn session is active."
       )
     }
 

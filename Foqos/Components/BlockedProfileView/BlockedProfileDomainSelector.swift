@@ -1,9 +1,6 @@
 import SwiftUI
 
 struct BlockedProfileDomainSelector: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
-
   var domains: [String]
   var buttonAction: () -> Void
   var allowMode: Bool = false
@@ -26,29 +23,17 @@ struct BlockedProfileDomainSelector: View {
 
   var body: some View {
     Button(action: buttonAction) {
-      HStack {
-        Text(buttonText)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.gray)
-      }
+      ProfileFormActionRow(title: buttonText)
     }
+    .buttonStyle(FoqosPressStyle())
     .disabled(disabled)
 
     if let disabledText = disabledText, disabled {
-      Text(disabledText)
-        .foregroundStyle(.red)
-        .padding(.top, 4)
-        .font(.caption)
+      ProfileFormCaption(disabledText, isWarning: true)
     } else if domainCount == 0 {
-      Text("No domains selected")
-        .foregroundStyle(.gray)
+      ProfileFormCaption("No domains selected")
     } else {
-      Text("\(domainCount) \(domainCount == 1 ? "domain" : "domains") selected")
-        .font(.footnote)
-        .foregroundStyle(.gray)
-        .padding(.top, 4)
+      ProfileFormCaption("\(domainCount) \(domainCount == 1 ? "domain" : "domains") selected")
     }
   }
 }
@@ -74,4 +59,5 @@ struct BlockedProfileDomainSelector: View {
     )
   }
   .padding()
+  .foqosTheme(.cream)
 }

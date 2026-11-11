@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DomainPicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Binding var domains: [String]
   @Binding var isPresented: Bool
@@ -24,8 +24,19 @@ struct DomainPicker: View {
     NavigationStack {
       Form {
         Section {
-          HStack {
-            TextField("Enter domain (e.g., example.com)", text: $newDomain)
+          ProfileSheetHeader(
+            eyebrow: allowMode ? "Allowed domains" : "Blocked domains",
+            title: allowMode ? "Keep these open" : "Websites to block",
+            message:
+              "Enter a domain like reddit.com. Every page under it is \(allowMode ? "allowed" : "blocked") too."
+          )
+        }
+        .profileSheetHeaderRow()
+
+        Section {
+          HStack(alignment: .firstTextBaseline, spacing: 12) {
+            TextField("example.com", text: $newDomain)
+              .font(FoqosFont.ui(.body, size: 17, bold: false))
               .autocapitalization(.none)
               .keyboardType(.URL)
               .textContentType(.URL)
@@ -34,55 +45,60 @@ struct DomainPicker: View {
               }
 
             Button(action: addDomain) {
-              Image(systemName: "plus.circle.fill")
-                .foregroundStyle(themeManager.themeColor)
-                .font(.title2)
+              Text("Add")
+                .foqosText(.cta)
+                .foregroundStyle(palette.foreground)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(FoqosPressStyle())
             .disabled(newDomain.isEmpty || domains.count >= maxDomains)
           }
         } header: {
-          Text("Add Domain")
-        } footer: {
-          Text(
-            "Enter a domain (e.g., reddit.com, facebook.com, instagram.com). This will also \(allowMode ? "allow" : "block") all subpaths (e.g., reddit.com/r/popular) automatically."
-          )
-          .font(.caption)
+          FoqosSectionHeader("Add domain")
         }
+        .foqosFormRows()
 
         Section {
           ForEach(domains, id: \.self) { domain in
             Text(domain)
-              .font(.subheadline)
+              .foqosText(.body)
           }
           .onDelete(perform: deleteDomains)
 
           if domains.isEmpty {
             Text("No domains added")
-              .foregroundStyle(.secondary)
-              .font(.subheadline)
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
           }
         } header: {
-          HStack {
-            Text(allowMode ? "Allowed Domains" : "Blocked Domains")
+          HStack(alignment: .firstTextBaseline) {
+            FoqosSectionHeader(allowMode ? "Allowed domains" : "Blocked domains")
             Spacer()
             Text("\(domains.count)/\(maxDomains)")
-              .foregroundStyle(.secondary)
+              .foqosText(.mark)
+              .foregroundStyle(palette.mute)
+              .monospacedDigit()
           }
         } footer: {
-          VStack(alignment: .leading, spacing: 4) {
+          VStack(alignment: .leading, spacing: 6) {
             Text(message)
-              .font(.caption)
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
 
             if domains.count >= maxDomains {
-              Text("⚠️ Maximum of 50 domains reached (Apple's limit)")
-                .font(.caption)
-                .foregroundStyle(.orange)
+              Text("Maximum of 50 domains reached (Apple's limit).")
+                .foqosText(.caption)
+                .foregroundStyle(palette.foreground)
             }
           }
         }
+        .foqosFormRows()
       }
+      .foqosForm(.cream)
       .navigationTitle(allowMode ? "Allow Domains" : "Block Domains")
       .navigationBarTitleDisplayMode(.inline)
+      .profileSheetChrome()
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button(action: { isPresented = false }) {

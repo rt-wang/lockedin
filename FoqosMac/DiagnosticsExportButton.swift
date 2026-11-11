@@ -17,7 +17,7 @@ struct DiagnosticsExportButton: View {
       }
     }
     .help(
-      "Save setup and sync diagnostics to share with Foqos support. No website or profile names are included."
+      "Save setup and sync diagnostics for troubleshooting. No website or profile names are included."
     )
   }
 }

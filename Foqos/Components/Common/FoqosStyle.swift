@@ -29,28 +29,18 @@ struct FoqosPalette: Equatable {
 }
 
 enum FoqosColors {
-  static let cream = Color("BrandCream")
-  static let forest = Color("BrandForest")
+  static let cream = BrandColors.cream
+  static let forest = BrandColors.forest
 }
 
 private struct FoqosPaletteKey: EnvironmentKey {
   static let defaultValue = FoqosPalette.cream
 }
 
-private struct FoqosAccentKey: EnvironmentKey {
-  static let defaultValue: Color? = nil
-}
-
 extension EnvironmentValues {
   var foqosPalette: FoqosPalette {
     get { self[FoqosPaletteKey.self] }
     set { self[FoqosPaletteKey.self] = newValue }
-  }
-
-  /// Set inside restyled screens. Shared components fall back to the user's theme color when nil.
-  var foqosAccent: Color? {
-    get { self[FoqosAccentKey.self] }
-    set { self[FoqosAccentKey.self] = newValue }
   }
 }
 
@@ -61,7 +51,6 @@ private struct FoqosThemeModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .environment(\.foqosPalette, palette)
-      .environment(\.foqosAccent, palette.foreground)
       .environment(\.colorScheme, palette.colorScheme)
       .foregroundStyle(palette.foreground)
       .tint(palette.foreground)

@@ -12,7 +12,7 @@ struct ScheduleDebugCard: View {
         DebugRow(label: "Updated At", value: DateFormatters.formatDate(schedule.updatedAt))
       }
 
-      Divider()
+      FoqosHairline()
 
       // Schedule Details
       Group {
@@ -31,7 +31,7 @@ struct ScheduleDebugCard: View {
         DebugRow(label: "Duration (seconds)", value: "\(schedule.totalDurationInSeconds)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Status Checks
       Group {

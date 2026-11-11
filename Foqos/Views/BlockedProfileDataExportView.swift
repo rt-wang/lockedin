@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct BlockedProfileDataExportView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Environment(\.modelContext) private var context
 
@@ -27,68 +27,112 @@ struct BlockedProfileDataExportView: View {
 
   private var defaultFilename: String {
     let timestamp = Int(Date().timeIntervalSince1970)
-    return "foqos_sessions_\(timestamp)"
+    return "lockedin_sessions_\(timestamp)"
   }
 
   var body: some View {
     NavigationStack {
       Form {
-        Section(header: Text("Profiles")) {
+        Section {
+          VStack(alignment: .leading, spacing: 8) {
+            Text("Export data")
+              .foqosDisplay(size: 40)
+              .accessibilityAddTraits(.isHeader)
+            Text("Download completed sessions as a CSV file.")
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
+          }
+          .padding(.vertical, 4)
+        }
+        .foqosFormRows()
+        .listRowSeparator(.hidden)
+
+        Section {
           if profiles.isEmpty {
             Text("No profiles yet")
-              .foregroundStyle(.secondary)
+              .foqosText(.body)
+              .foregroundStyle(palette.mute)
           } else {
             ForEach(profiles) { profile in
               let isSelected = selectedProfileIDs.contains(profile.id)
-              HStack {
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                  .foregroundStyle(isSelected ? .green : .secondary)
+              HStack(alignment: .firstTextBaseline) {
                 Text(profile.name)
+                  .foqosText(.body)
+                  .foregroundStyle(palette.foreground)
                 Spacer()
+                Text(isSelected ? "Selected" : "Select")
+                  .foqosText(.mark)
+                  .foregroundStyle(isSelected ? palette.foreground : palette.mute)
+                  .padding(.bottom, 3)
+                  .overlay(alignment: .bottom) {
+                    Rectangle()
+                      .fill(isSelected ? palette.foreground : .clear)
+                      .frame(height: 1)
+                  }
               }
+              .frame(minHeight: 32)
               .contentShape(Rectangle())
               .onTapGesture { toggleSelection(for: profile.id) }
-              .accessibilityAddTraits(.isButton)
+              .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
             }
           }
+        } header: {
+          FoqosSectionHeader("Profiles")
         }
+        .foqosFormRows()
 
-        Section(
-          header: Text("Sorting"),
-          footer: Text("Controls the order of sessions in the CSV based on their start time.")
-        ) {
-          Picker("Sort order", selection: $sortDirection) {
+        Section {
+          Picker(selection: $sortDirection) {
             Text("Ascending (oldest first)").tag(DataExportSortDirection.ascending)
             Text("Descending (newest first)").tag(DataExportSortDirection.descending)
+          } label: {
+            Text("Sort order").foqosText(.body)
           }
           .pickerStyle(.menu)
+        } header: {
+          FoqosSectionHeader("Sorting")
+        } footer: {
+          Text("Controls the order of sessions in the CSV based on their start time.")
+            .foqosText(.caption)
+            .foregroundStyle(palette.mute)
         }
+        .foqosFormRows()
 
-        Section(
-          header: Text("Date & Time"),
-          footer: Text(
-            "Choose how timestamps are exported. UTC is portable across tools. Local uses your device's time zone. All timestamps use ISO 8601."
-          )
-        ) {
-          Picker("Time zone", selection: $timeZone) {
+        Section {
+          Picker(selection: $timeZone) {
             Text("UTC").tag(DataExportTimeZone.utc)
             Text("Local").tag(DataExportTimeZone.local)
+          } label: {
+            Text("Time zone").foqosText(.body)
           }
           .pickerStyle(.menu)
+        } header: {
+          FoqosSectionHeader("Date & time")
+        } footer: {
+          Text(
+            "Choose how timestamps are exported. UTC is portable across tools. Local uses your device's time zone. All timestamps use ISO 8601."
+          )
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
         }
+        .foqosFormRows()
 
-        ActionButton(
-          title: "Export as CSV",
-          backgroundColor: themeManager.themeColor,
-          isLoading: isGenerating,
-          isDisabled: isExportDisabled
-        ) {
-          generateAndExport()
+        Section {
+          ActionButton(
+            title: "Export as CSV",
+            isLoading: isGenerating,
+            isDisabled: isExportDisabled
+          ) {
+            generateAndExport()
+          }
         }
         .listRowBackground(Color.clear)
-        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
       }
-      .navigationTitle("Export Data")
+      .foqosForm(.cream)
+      .toolbarBackground(FoqosColors.cream, for: .navigationBar)
+      .navigationTitle("Export")
       .navigationBarTitleDisplayMode(.inline)
       .fileExporter(
         isPresented: $isExportPresented,

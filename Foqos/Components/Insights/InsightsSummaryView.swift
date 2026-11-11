@@ -1,27 +1,30 @@
 import SwiftUI
 
 struct InsightsSummaryRow: View {
+  @Environment(\.foqosPalette) private var palette
+
   let icon: String
   let label: String
   let value: String
 
   var body: some View {
-    HStack(spacing: 12) {
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
       Image(systemName: icon)
-        .font(.body)
-        .foregroundStyle(.secondary)
+        .font(.footnote)
+        .foregroundStyle(palette.mute)
         .frame(width: 20)
+        .accessibilityHidden(true)
 
       Text(label)
-        .font(.body)
-        .foregroundStyle(.secondary)
+        .foqosText(.body)
+        .foregroundStyle(palette.foreground)
 
       Spacer()
 
       Text(value)
-        .font(.body)
-        .fontWeight(.medium)
-        .foregroundStyle(.primary)
+        .foqosText(.caption)
+        .monospacedDigit()
+        .foregroundStyle(palette.mute)
     }
     .padding(.vertical, 4)
   }
@@ -29,7 +32,7 @@ struct InsightsSummaryRow: View {
 
 #Preview("Row") {
   List {
-    Section("Summary") {
+    Section {
       InsightsSummaryRow(
         icon: "clock.fill",
         label: "Total Focus Time",
@@ -45,6 +48,10 @@ struct InsightsSummaryRow: View {
         label: "Profile ID",
         value: "abc12345..."
       )
+    } header: {
+      FoqosSectionHeader("Summary")
     }
+    .foqosFormRows()
   }
+  .foqosForm(.cream)
 }

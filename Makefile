@@ -18,11 +18,13 @@ MAC_DERIVED_DATA ?= $(TMPDIR)foqos-mac-derived-data
 MAC_APP := $(MAC_DERIVED_DATA)/Build/Products/$(MAC_CONFIGURATION)/Foqos for Mac.app
 MAC_INSTALL_PATH ?= /Applications/Foqos for Mac.app
 MAC_LEGACY_INSTALL_PATH := /Applications/Foqos Mac.app
-MAC_BUNDLE_IDENTIFIER := dev.ambitionsoftware.foqos.mac
+MAC_BUNDLE_IDENTIFIER := sh.shen.lockedin.mac
 BUILD_NUMBER ?= $(shell git rev-list --count HEAD)
-NOTARY_PROFILE ?= foqos-notary
-SPARKLE_KEY_ACCOUNT ?= ambitionsoftware
-GITHUB_REPOSITORY ?= awaseem/foqos
+# TODO(LockedIn): create the notary keychain profile and Sparkle key under these names (see README).
+NOTARY_PROFILE ?= lockedin-notary
+SPARKLE_KEY_ACCOUNT ?= lockedin
+# TODO(LockedIn): set to the repository that hosts LockedIn Mac releases and its appcast.
+GITHUB_REPOSITORY ?=
 RELEASE_NOTES_FILE ?=
 LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
@@ -67,7 +69,7 @@ mac-reset: mac-install ## Remove the local Foqos filter configuration and system
 	fi
 
 mac-logs: ## Stream structured Mac filter observations and verdicts
-	log stream --style compact --level info --predicate 'subsystem == "dev.ambitionsoftware.foqos.mac.filter"'
+	log stream --style compact --level info --predicate 'subsystem == "sh.shen.lockedin.mac.filter"'
 
 mac-test: ## Run Mac TCP/TLS filter unit tests
 	xcodebuild -project $(PROJECT) -scheme '$(MAC_TEST_SCHEME)' -configuration Debug -destination '$(MAC_DESTINATION)' CODE_SIGNING_ALLOWED=NO test

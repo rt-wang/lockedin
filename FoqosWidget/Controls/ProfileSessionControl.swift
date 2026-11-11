@@ -17,9 +17,9 @@ struct ProfileSessionControl: ControlWidget {
       }
       .tint(.green)
     }
-    .displayName("Foqos Profile")
+    .displayName("LockedIn Profile")
     .description(
-      "Start a profile like the Start Foqos Profile shortcut, or stop it when background stops are allowed."
+      "Start a profile like the Start LockedIn Profile shortcut, or stop it when background stops are allowed."
     )
     .promptsForUserConfiguration()
   }
@@ -43,7 +43,7 @@ struct ProfileSessionControlProvider: AppIntentControlValueProvider {
   func previewValue(configuration: ProfileSessionControlConfiguration) -> Value {
     Value(
       profileID: configuration.profile?.id ?? "",
-      name: configuration.profile?.name ?? "Foqos Profile", isActive: false,
+      name: configuration.profile?.name ?? "LockedIn Profile", isActive: false,
       icon: configuration.icon
     )
   }

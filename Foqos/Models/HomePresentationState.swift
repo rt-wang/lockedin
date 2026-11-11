@@ -5,7 +5,6 @@ struct HomePresentationState {
   var showNewProfileView = false
   var showGuidedProfileCreationView = false
   var showStartProfilePicker = false
-  var showDonationView = false
   var showSettingsView = false
   var showActiveProfileSessionView = false
 

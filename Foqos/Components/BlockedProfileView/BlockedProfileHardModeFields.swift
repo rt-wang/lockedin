@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfileHardModeFields: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
   @ObservedObject var draft: BlockedProfileDraft
   var disabled: Bool
 
@@ -18,14 +17,10 @@ struct BlockedProfileHardModeFields: View {
 
     if draft.enableHardMode && draft.selectedStrategyAllowsHardMode {
       VStack(alignment: .leading, spacing: 10) {
-        HStack {
-          Text("Lock Duration")
-          Spacer()
-          Text(DateFormatters.formatMinutes(draft.hardModeDurationInMinutes))
-            .fontWeight(.semibold)
-            .foregroundStyle(.secondary)
-            .contentTransition(.numericText())
-        }
+        ProfileFormValueHeader(
+          title: "Lock Duration",
+          value: DateFormatters.formatMinutes(draft.hardModeDurationInMinutes)
+        )
 
         Slider(
           value: Binding(
@@ -35,17 +30,11 @@ struct BlockedProfileHardModeFields: View {
           in: 30...720,
           step: 30
         )
-        .tint(foqosAccent ?? themeManager.themeColor)
+        .tint(palette.foreground)
         .accessibilityLabel("Hard Mode lock duration")
         .accessibilityValue(DateFormatters.formatMinutes(draft.hardModeDurationInMinutes))
 
-        HStack {
-          Text("30m")
-          Spacer()
-          Text("12h")
-        }
-        .font(.caption2)
-        .foregroundStyle(.secondary)
+        ProfileFormRangeLabels(lower: "30m", upper: "12h")
       }
       .disabled(disabled)
     }
@@ -61,5 +50,5 @@ struct BlockedProfileHardModeFields: View {
       disabled: false
     )
   }
-  .environmentObject(ThemeManager())
+  .foqosForm(.cream)
 }

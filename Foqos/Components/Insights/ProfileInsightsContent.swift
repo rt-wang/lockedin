@@ -183,7 +183,7 @@ struct ProfileInsightsContent: View {
       }
       return "Sessions"
     case .allSessions:
-      return "All Sessions"
+      return "All sessions"
     }
   }
 
@@ -207,6 +207,7 @@ struct ProfileInsightsContent: View {
         }
       )
     }
+    .foqosForm(.cream)
     .navigationTitle("\(profileName) Insights")
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {

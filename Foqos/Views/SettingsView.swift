@@ -2,7 +2,6 @@ import FamilyControls
 import SwiftData
 import SwiftUI
 
-let AMZN_STORE_LINK = "https://amzn.to/4fbMuTM"
 let TEMU_STORE_LINK =
   "https://www.temu.com/ca/nfc-sticker-with--blank-chip-operating-at-13-56mhz-is-a-rewritable-label-with-504--of-memory-compatible-with-nfc-enabled-smartphones-g-601102251435878.html"
 let ALIEXPRESS_STORE_LINK = "https://www.aliexpress.com/item/1005010075431327.html"
@@ -10,7 +9,7 @@ let ALIEXPRESS_STORE_LINK = "https://www.aliexpress.com/item/1005010075431327.ht
 struct SettingsView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var context
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @EnvironmentObject var requestAuthorizer: RequestAuthorizer
   @EnvironmentObject var strategyManager: StrategyManager
 
@@ -26,78 +25,50 @@ struct SettingsView: View {
     NavigationStack {
       Form {
         Section {
-          Text("Settings")
-            .foqosDisplay(size: 44)
-            .accessibilityAddTraits(.isHeader)
+          VStack(alignment: .leading, spacing: 12) {
+            Text("LockedIn")
+              .foqosText(.eyebrow)
+            Text("Settings")
+              .foqosDisplay(size: 44)
+              .accessibilityAddTraits(.isHeader)
+          }
+          .padding(.bottom, 8)
         }
         .foqosFormRows()
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 0, trailing: 20))
 
-        Section {
-          VStack(alignment: .leading, spacing: 4) {
-            Text("Appearance")
-              .foqosText(.toggle)
-            Text("Customize the look of your app")
-              .foqosText(.caption)
-              .foregroundStyle(FoqosPalette.cream.mute)
-          }
-          .padding(.vertical, 6)
-
-          Picker(selection: $themeManager.selectedColorName) {
-            ForEach(ThemeManager.availableColors, id: \.name) { colorOption in
-              HStack {
-                Circle()
-                  .fill(colorOption.color)
-                  .frame(width: 12, height: 12)
-                Text(colorOption.name)
-              }
-              .tag(colorOption.name)
-            }
-          } label: {
-            Text("Theme Color")
-              .foqosText(.body)
-          }
-          .onChange(of: themeManager.selectedColorName) { _, _ in
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-          }
-        } header: {
-          FoqosSectionHeader("Theme")
-        }
-        .foqosFormRows()
-
         AppIconPicker()
           .foqosFormRows()
 
         Section {
-          Link(destination: URL(string: "https://www.foqos.app/support.html")!) {
+          // TODO(LockedIn): add Help Center / "Block Safari & Settings" guide links once LockedIn
+          // has its own support pages. The upstream Foqos pages were removed.
+          Button {
+            showDebugView = true
+          } label: {
             SettingsRow(
-              title: "Help Center",
-              subtitle: "Setup guides and common questions",
-              trailing: "↗"
+              title: "Debug Mode",
+              subtitle: "Inspect sessions, schedules, and timers.",
+              trailing: "→"
             )
           }
-
-          Link(destination: URL(string: "https://www.foqos.app/blocking-native-apps.html")!) {
-            SettingsRow(title: "Block Safari & Settings", trailing: "↗")
-          }
-
-          SettingsRow(title: "Debug Mode", trailing: "→")
-            .contentShape(Rectangle())
-            .onTapGesture {
-              showDebugView = true
-            }
+          .buttonStyle(FoqosPressStyle())
 
           if !strategyManager.isBlocking {
             Button {
               showResetBlockingAlert = true
             } label: {
-              SettingsRow(title: "Fix Stuck Blocking", trailing: "→")
+              SettingsRow(
+                title: "Fix Stuck Blocking",
+                subtitle: "Clear restrictions left behind after a session.",
+                trailing: "→"
+              )
             }
             .buttonStyle(FoqosPressStyle())
           }
         } header: {
-          FoqosSectionHeader("Help & Troubleshooting")
+          FoqosSectionHeader("Troubleshooting")
         }
         .foqosFormRows()
 
@@ -120,21 +91,16 @@ struct SettingsView: View {
                   ? "Authorized" : "Not Authorized"
               )
               .foqosText(.mark)
-              .foregroundStyle(FoqosPalette.cream.mute)
+              .foregroundStyle(palette.mute)
             }
           }
-
-          SettingsValueRow(title: "Made in", value: "Calgary AB 🇨🇦")
+          .padding(.vertical, 6)
         } header: {
           FoqosSectionHeader("About")
         }
         .foqosFormRows()
 
         Section {
-          Link(destination: URL(string: AMZN_STORE_LINK)!) {
-            SettingsRow(title: "Amazon", trailing: "↗")
-          }
-
           Link(destination: URL(string: TEMU_STORE_LINK)!) {
             SettingsRow(title: "Temu", trailing: "↗")
           }
@@ -173,6 +139,11 @@ struct SettingsView: View {
       .sheet(isPresented: $showDebugView) {
         DebugView()
       }
+      #if DEBUG
+        .onAppear {
+          if ProcessInfo.processInfo.arguments.contains("--open-debug") { showDebugView = true }
+        }
+      #endif
     }
   }
 }
@@ -184,27 +155,30 @@ private struct SettingsRow: View {
   var subtitle: String? = nil
   var trailing: String? = nil
 
+  // Mirrors the home screen's row actions: bold uppercase title, caption, trailing arrow.
   var body: some View {
-    HStack(alignment: .firstTextBaseline) {
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
       VStack(alignment: .leading, spacing: 4) {
         Text(title)
-          .foqosText(.body)
+          .foqosText(.toggle)
           .foregroundStyle(palette.foreground)
         if let subtitle {
           Text(subtitle)
             .foqosText(.caption)
             .foregroundStyle(palette.mute)
+            .fixedSize(horizontal: false, vertical: true)
         }
       }
-      Spacer()
+      .frame(maxWidth: .infinity, alignment: .leading)
       if let trailing {
         Text(trailing)
           .foqosText(.cta)
-          .foregroundStyle(palette.mute)
+          .foregroundStyle(palette.foreground)
           .accessibilityHidden(true)
       }
     }
-    .padding(.vertical, 4)
+    .padding(.vertical, 10)
+    .contentShape(Rectangle())
   }
 }
 
@@ -223,12 +197,12 @@ private struct SettingsValueRow: View {
         .foqosText(.caption)
         .foregroundStyle(palette.mute)
     }
+    .padding(.vertical, 6)
   }
 }
 
 #Preview {
   SettingsView()
-    .environmentObject(ThemeManager.shared)
     .environmentObject(RequestAuthorizer())
     .environmentObject(StrategyManager.shared)
     .modelContainer(for: BlockedProfiles.self, inMemory: true)

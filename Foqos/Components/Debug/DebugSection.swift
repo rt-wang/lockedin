@@ -1,6 +1,9 @@
 import SwiftUI
 
+/// Open section: uppercase eyebrow over a hairline, rows sitting directly on the page.
 struct DebugSection<Content: View>: View {
+  @Environment(\.foqosPalette) private var palette
+
   let title: String
   let content: Content
 
@@ -12,13 +15,15 @@ struct DebugSection<Content: View>: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       Text(title)
-        .font(.headline.monospaced())
-        .foregroundColor(.primary)
+        .foqosText(.eyebrow)
+        .foregroundStyle(palette.foreground)
+
+      FoqosHairline()
 
       VStack(alignment: .leading, spacing: 8) {
         content
       }
-      .padding(.vertical, 12)
+      .padding(.bottom, 12)
     }
   }
 }
@@ -30,6 +35,7 @@ struct DebugSection<Content: View>: View {
     DebugRow(label: "Duration", value: "1h 23m 45s")
   }
   .padding()
+  .foqosTheme(.cream)
 }
 
 #Preview("Multiple Sections") {

@@ -13,7 +13,7 @@ struct StrategyManagerDebugCard: View {
         DebugRow(label: "Is Break Available", value: "\(strategyManager.isBreakAvailable)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Timer Info
       Group {
@@ -24,7 +24,7 @@ struct StrategyManagerDebugCard: View {
         DebugRow(label: "Timer Active", value: "\(strategyManager.timer != nil)")
       }
 
-      Divider()
+      FoqosHairline()
 
       // UI State
       Group {
@@ -35,7 +35,7 @@ struct StrategyManagerDebugCard: View {
         DebugRow(label: "Error Message", value: strategyManager.errorMessage ?? "nil")
       }
 
-      Divider()
+      FoqosHairline()
 
       // Emergency Unblocks
       DebugRow(
@@ -43,19 +43,19 @@ struct StrategyManagerDebugCard: View {
         value: "\(strategyManager.getRemainingEmergencyUnblocks())"
       )
 
-      Divider()
+      FoqosHairline()
 
       // Available Strategies
       VStack(alignment: .leading, spacing: 4) {
         Text("Available Strategies:")
           .font(.caption)
-          .foregroundColor(.secondary)
+          .foregroundStyle(.secondary)
 
         ForEach(Array(StrategyManager.availableStrategies.enumerated()), id: \.offset) {
           _, strategy in
           Text("• \(strategy.getIdentifier())")
             .font(.caption)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
       }
     }

@@ -10,6 +10,8 @@ struct BlockingStrategyActionView: View {
         AnyView(customViewToDisplay)
       }
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .strategySheetTheme()
     .presentationDetents(presentationDetents)
   }
 }

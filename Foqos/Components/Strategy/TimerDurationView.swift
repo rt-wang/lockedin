@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TimerDurationView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let profileName: String
@@ -37,19 +37,12 @@ struct TimerDurationView: View {
   }
 
   var body: some View {
-    VStack(spacing: 32) {
-      // Header
-      VStack(alignment: .leading, spacing: 12) {
-        Text("Timer Settings")
-          .font(.title2).bold()
-
-        Text(
-          "Select how long you want \(profileName) to last."
-        )
-        .font(.callout)
-        .foregroundColor(.secondary)
-      }
-      .frame(maxWidth: .infinity, alignment: .leading)
+    VStack(spacing: 28) {
+      StrategySheetHeader(
+        eyebrow: "Timer",
+        title: "How long?",
+        message: "Select how long you want \(profileName) to last."
+      )
       .padding(.top, 16)
 
       // Large time display
@@ -63,83 +56,58 @@ struct TimerDurationView: View {
 
       // Confirm button
       ActionButton(
-        title: actionTitle,
-        backgroundColor: themeManager.themeColor,
-        iconName: "checkmark.circle.fill"
+        title: actionTitle
       ) {
         handleConfirm()
       }
     }
     .padding(24)
+    .strategySheetTheme()
   }
 
   private var timeDisplay: some View {
-    VStack(spacing: 8) {
-      Text(formattedDuration)
-        .font(.system(size: 56, weight: .bold, design: .rounded))
-        .contentTransition(.numericText())
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: durationMinutes)
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 16)
+    StrategyValueDisplay(value: formattedDuration)
+      .animation(.spring(response: 0.3, dampingFraction: 0.8), value: durationMinutes)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 8)
   }
 
   private var sliderControls: some View {
-    VStack(spacing: 16) {
-      // +/- buttons with slider
-      HStack(spacing: 16) {
-        // Decrement button
-        Button {
-          decrementDuration()
-        } label: {
-          Image(systemName: "minus.circle.fill")
-            .font(.system(size: 32))
-            .foregroundColor(durationMinutes > minMinutes ? themeManager.themeColor : .gray)
-        }
-        .disabled(durationMinutes <= minMinutes)
-        .scaleEffect(durationMinutes <= minMinutes ? 0.9 : 1.0)
-        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
+    HStack(alignment: .top, spacing: 8) {
+      StrategyStepButton(
+        symbol: "−",
+        accessibilityLabel: "Decrease duration",
+        isEnabled: durationMinutes > minMinutes,
+        action: decrementDuration
+      )
+      .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
 
-        // Slider
-        VStack(spacing: 8) {
-          Slider(
-            value: $durationMinutes,
-            in: minMinutes...maxMinutes,
-            step: 5,
-            onEditingChanged: { editing in
-              isSliding = editing
-              if !editing {
-                snapToNearestPreset()
-              }
+      VStack(spacing: 8) {
+        Slider(
+          value: $durationMinutes,
+          in: minMinutes...maxMinutes,
+          step: 5,
+          onEditingChanged: { editing in
+            isSliding = editing
+            if !editing {
+              snapToNearestPreset()
             }
-          )
-          .tint(themeManager.themeColor)
-          .sensoryFeedback(.selection, trigger: durationMinutes)
-
-          // Min/Max labels
-          HStack {
-            Text("15m")
-              .font(.caption2)
-              .foregroundColor(.secondary)
-            Spacer()
-            Text("24h")
-              .font(.caption2)
-              .foregroundColor(.secondary)
           }
-        }
+        )
+        .tint(palette.foreground)
+        .sensoryFeedback(.selection, trigger: durationMinutes)
 
-        // Increment button
-        Button {
-          incrementDuration()
-        } label: {
-          Image(systemName: "plus.circle.fill")
-            .font(.system(size: 32))
-            .foregroundColor(durationMinutes < maxMinutes ? themeManager.themeColor : .gray)
-        }
-        .disabled(durationMinutes >= maxMinutes)
-        .scaleEffect(durationMinutes >= maxMinutes ? 0.9 : 1.0)
-        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
+        StrategyRangeLabels(lower: "15m", upper: "24h")
       }
+      .padding(.top, 6)
+
+      StrategyStepButton(
+        symbol: "+",
+        accessibilityLabel: "Increase duration",
+        isEnabled: durationMinutes < maxMinutes,
+        action: incrementDuration
+      )
+      .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
     }
   }
 
@@ -200,23 +168,13 @@ struct TimerDurationView: View {
   }
 
   private var hideStopButtonToggle: some View {
-    HStack(spacing: 12) {
-      VStack(alignment: .leading, spacing: 2) {
-        Text("Disable Stop Button")
-          .font(.body)
-          .fontWeight(.medium)
-
-        Text("Prevent early stopping during timer sessions")
-          .font(.caption)
-          .foregroundColor(.secondary)
-          .lineLimit(1)
-      }
-
-      Spacer()
-
-      Toggle("", isOn: $hideStopButton)
-        .labelsHidden()
-        .tint(themeManager.themeColor)
+    VStack(alignment: .leading, spacing: 2) {
+      FoqosHairline()
+      Toggle("Disable stop button", isOn: $hideStopButton)
+      Text("Prevent early stopping during timer sessions.")
+        .foqosText(.caption)
+        .foregroundStyle(palette.mute)
+        .fixedSize(horizontal: false, vertical: true)
     }
   }
 

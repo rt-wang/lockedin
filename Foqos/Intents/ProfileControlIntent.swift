@@ -2,7 +2,7 @@ import AppIntents
 import SwiftData
 
 struct ProfileControlIntent: SetValueIntent, LiveActivityIntent {
-  static var title: LocalizedStringResource = "Set Foqos Profile State"
+  static var title: LocalizedStringResource = "Set LockedIn Profile State"
   static var isDiscoverable = false
 
   @Parameter(title: "Profile ID") var profileID: String

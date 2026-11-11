@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrategyDetailsSheet: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let strategy: BlockingStrategy
   let isSelected: Bool
@@ -10,40 +10,35 @@ struct StrategyDetailsSheet: View {
 
   var body: some View {
     NavigationStack {
-      VStack(spacing: 22) {
-        Spacer(minLength: 10)
-
+      VStack(alignment: .leading, spacing: 22) {
         BlockingStrategyIconImage(strategy: strategy)
-          .font(.system(size: 50))
-          .foregroundStyle(strategy.color)
-          .frame(width: 104, height: 104)
+          .font(.system(size: 34))
+          .foregroundStyle(palette.foreground)
+          .frame(width: 64, height: 64, alignment: .leading)
+          .accessibilityHidden(true)
 
-        VStack(spacing: 10) {
-          Text(strategy.name)
-            .font(.title2.weight(.bold))
-            .foregroundStyle(.primary)
-            .multilineTextAlignment(.center)
-
-          Text(strategy.description)
-            .font(.body)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.horizontal, 28)
+        ProfileSheetHeader(
+          eyebrow: isSelected ? "Current strategy" : "Strategy",
+          title: strategy.name,
+          message: strategy.description
+        )
 
         Spacer(minLength: 12)
 
         ActionButton(
           title: isSelected ? "Selected" : "Use this strategy",
-          backgroundColor: themeManager.themeColor,
           isDisabled: isSelected,
           action: onSelect
         )
       }
-      .padding()
+      .padding(.horizontal, 24)
+      .padding(.top, 8)
+      .padding(.bottom, 16)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      .foqosTheme(.cream)
       .navigationTitle("Details")
       .navigationBarTitleDisplayMode(.inline)
+      .profileSheetChrome()
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: onCancel) {

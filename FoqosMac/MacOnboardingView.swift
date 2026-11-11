@@ -12,18 +12,29 @@ struct MacOnboardingView: View {
     VStack(spacing: 0) {
       Spacer(minLength: 8)
 
-      Image("FoqosStickerLogo")
+      Image("LockedInLogo")
         .resizable()
         .scaledToFit()
-        .frame(width: 180, height: 180)
-        .shadow(color: Color.black.opacity(0.1), radius: 16, y: 10)
-        .accessibilityLabel("Foqos hourglass")
+        .frame(width: 140, height: 140)
+        .accessibilityLabel("LockedIn")
 
-      Spacer(minLength: 30)
+      Spacer(minLength: 20)
+
+      VStack(spacing: 6) {
+        Text("LOCKEDIN")
+          .font(.caption.weight(.bold))
+          .tracking(2.2)
+        Text("Set up website blocking")
+          .font(.system(size: 30, design: .serif))
+          .multilineTextAlignment(.center)
+      }
+      .foregroundStyle(Color.onboardingForest)
+
+      Spacer(minLength: 24)
 
       VStack(spacing: 0) {
         SetupProgressRow(
-          title: "Install the Foqos network extension",
+          title: "Install the LockedIn network extension",
           symbol: "puzzlepiece.extension",
           state: installationStepState
         )
@@ -32,7 +43,7 @@ struct MacOnboardingView: View {
           .padding(.leading, 42)
 
         SetupProgressRow(
-          title: "Enable Foqos in Login Items & Extensions",
+          title: "Enable LockedIn in Login Items & Extensions",
           symbol: "checkmark.shield",
           state: approvalStepState,
           detail: approvalStepDetail
@@ -67,7 +78,7 @@ struct MacOnboardingView: View {
       }
       .buttonStyle(.borderedProminent)
       .controlSize(.large)
-      .tint(filterManager.status == .enabled ? .green : .indigo)
+      .tint(Color.onboardingForest)
       .disabled(isWorking)
       .frame(maxWidth: 390)
 
@@ -79,7 +90,7 @@ struct MacOnboardingView: View {
     .padding(.vertical, 38)
     .frame(minWidth: 480, maxWidth: .infinity, minHeight: 580, maxHeight: .infinity)
     .background {
-      Color.white
+      Color.onboardingCream
         .ignoresSafeArea()
     }
     .preferredColorScheme(.light)
@@ -91,7 +102,7 @@ struct MacOnboardingView: View {
     ) { _ in
       MacDiagnostics.shared.record(
         "onboarding.app_active",
-        "Foqos became active while onboarding was visible; rechecking filter status."
+        "LockedIn became active while onboarding was visible; rechecking filter status."
       )
       filterManager.refreshStatus()
     }
@@ -268,4 +279,12 @@ private struct SetupProgressRow: View {
   MacOnboardingView(onComplete: {}, onDismiss: {})
     .environmentObject(FoqosFilterManager())
     .frame(width: 520, height: 620)
+}
+
+// LockedIn palette (BrandColors isn't part of the Mac target).
+extension Color {
+  fileprivate static let onboardingCream = Color(
+    red: 0xF7 / 255, green: 0xF0 / 255, blue: 0xDC / 255)
+  fileprivate static let onboardingForest = Color(
+    red: 0x16 / 255, green: 0x28 / 255, blue: 0x0D / 255)
 }

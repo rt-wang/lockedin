@@ -197,8 +197,10 @@ struct BlockingStrategyIconImage: View {
   let strategy: BlockingStrategy?
 
   var body: some View {
-    Image(strategy?.iconAssetName ?? "FoqosStickerLogo")
+    // Always shown next to the strategy name, so VoiceOver would only read the asset name.
+    Image(strategy?.iconAssetName ?? "LockedInLogo")
       .resizable()
       .scaledToFit()
+      .accessibilityHidden(true)
   }
 }

@@ -17,7 +17,7 @@ struct FoqosMacApp: App {
       "macOS": ProcessInfo.processInfo.operatingSystemVersionString,
     ]
     MacDiagnostics.shared.record(
-      "app.launched", "Foqos Mac launched; local diagnostics are active.", fields: appFields)
+      "app.launched", "LockedIn Mac launched; local diagnostics are active.", fields: appFields)
     MacDiagnostics.shared.updateState("app", fields: appFields)
     let filterManager = FoqosFilterManager()
     let onboardingController = FoqosOnboardingWindowController(filterManager: filterManager)
@@ -37,15 +37,16 @@ struct FoqosMacApp: App {
             switch result {
             case .success(let requiresRestart):
               if requiresRestart {
-                print("Foqos reset is pending. Restart this Mac to finish removing the extension.")
+                print(
+                  "LockedIn reset is pending. Restart this Mac to finish removing the extension.")
               } else {
                 print(
-                  "Foqos filter configuration was removed and the system extension was deactivated."
+                  "LockedIn filter configuration was removed and the system extension was deactivated."
                 )
               }
               exit(EXIT_SUCCESS)
             case .failure(let error):
-              fputs("Unable to reset Foqos: \(error.localizedDescription)\n", stderr)
+              fputs("Unable to reset LockedIn: \(error.localizedDescription)\n", stderr)
               exit(EXIT_FAILURE)
             }
           }
@@ -62,7 +63,7 @@ struct FoqosMacApp: App {
         .environmentObject(onboardingController)
         .environmentObject(updaterController)
     } label: {
-      Label("Foqos", systemImage: menuBarSystemImage)
+      Label("LockedIn", systemImage: menuBarSystemImage)
     }
     .menuBarExtraStyle(.window)
   }

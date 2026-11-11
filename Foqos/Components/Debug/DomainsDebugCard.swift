@@ -8,10 +8,10 @@ struct DomainsDebugCard: View {
       ForEach(domains, id: \.self) { domain in
         HStack {
           Text("•")
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
           Text(domain)
-            .font(.caption)
-            .foregroundColor(.primary)
+            .font(.caption.monospaced())
+            .foregroundStyle(.primary)
         }
       }
     }

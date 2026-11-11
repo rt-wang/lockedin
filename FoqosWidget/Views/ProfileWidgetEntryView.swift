@@ -20,7 +20,7 @@ struct ProfileWidgetEntryView: View {
           if let start = entry.sessionStartTime, !entry.isPauseActive, !entry.isBreakActive {
             Text(start, style: .timer)
           } else {
-            Text(entry.isSessionActive ? entry.statusLabel : entry.profileName ?? "Foqos")
+            Text(entry.isSessionActive ? entry.statusLabel : entry.profileName ?? "LockedIn")
           }
         } icon: {
           Image(systemName: statusSymbol)
@@ -29,15 +29,15 @@ struct ProfileWidgetEntryView: View {
         circular
       case .accessoryRectangular:
         VStack(alignment: .leading, spacing: 3) {
-          Text(entry.profileName ?? "Foqos").font(.headline).lineLimit(1)
+          Text(entry.profileName ?? "LockedIn").font(.headline).lineLimit(1)
           Text("\(WidgetActivitySummary.durationLabel(entry.activity.weeklyDuration)) this week")
             .font(.caption)
           status(compact: false)
         }
       case .systemMedium:
-        medium
+        medium.lockedInHomeScreenStyle()
       default:
-        small
+        small.lockedInHomeScreenStyle()
       }
     }
     .widgetURL(entry.destination)
@@ -169,7 +169,7 @@ struct ProfileWidgetEntryView: View {
     HStack(spacing: 6) {
       Image(
         entry.profileInfo.map { BlockingStrategyArtwork.assetName(for: $0.strategyID) }
-          ?? "FoqosStickerLogo"
+          ?? "LockedInLogo"
       )
       .resizable()
       .widgetAccentedRenderingMode(.fullColor)
@@ -177,7 +177,7 @@ struct ProfileWidgetEntryView: View {
       .frame(width: compact ? 22 : 26, height: compact ? 22 : 26)
       .accessibilityHidden(true)
       Text(entry.profileName ?? "Your focus")
-        .font(.system(size: compact ? 12 : 14, weight: .semibold))
+        .font(.system(size: compact ? 14 : 16, design: .serif))
         .lineLimit(1)
       Spacer(minLength: 0)
       if !compact {
@@ -191,7 +191,7 @@ struct ProfileWidgetEntryView: View {
   }
 
   private var profileDetail: String {
-    guard let profile = entry.profileInfo else { return "FOQOS" }
+    guard let profile = entry.profileInfo else { return "LOCKEDIN" }
     if profile.enableStrictMode { return "Strict mode" }
     if profile.enableAllowMode { return "Allow mode" }
     return "\(profile.selectedItemCount) selected"
@@ -203,8 +203,8 @@ struct ProfileWidgetEntryView: View {
         WidgetActivitySummary.durationLabel(
           duration)
       )
-      .font(.system(size: size, weight: .semibold, design: .rounded))
-      .tracking(-1.2)
+      .font(.system(size: size, weight: .regular, design: .serif))
+      .tracking(-0.6)
       .minimumScaleFactor(0.65)
       .lineLimit(1)
       .foregroundStyle(.primary)
@@ -231,7 +231,7 @@ struct ProfileWidgetEntryView: View {
     HStack(spacing: 5) {
       Image(systemName: statusSymbol)
         .font(.system(size: entry.isSessionActive ? 7 : 9, weight: .bold))
-        .foregroundStyle(entry.themeColor)
+        .foregroundStyle(entry.accentColor)
         .widgetAccentable()
       if let start = entry.sessionStartTime, !entry.isBreakActive, !entry.isPauseActive {
         if !compact { Text("Focusing").foregroundStyle(.secondary) }
@@ -242,8 +242,8 @@ struct ProfileWidgetEntryView: View {
       }
       if !compact {
         Spacer(minLength: 0)
-        Text("foqos").font(.system(size: 11, weight: .bold, design: .rounded))
-          .foregroundStyle(.tertiary)
+        Text("LockedIn").font(.system(size: 12, design: .serif).italic())
+          .foregroundStyle(.secondary)
       }
     }
     .font(.system(size: 10, weight: .medium))
@@ -262,11 +262,11 @@ struct WidgetWeekChart: View {
           let isToday = Calendar.current.isDate(day.date, inSameDayAs: entry.date)
           VStack(spacing: 5) {
             ZStack(alignment: .bottom) {
-              RoundedRectangle(cornerRadius: 4)
-                .fill(entry.themeColor.opacity(0.07))
+              Rectangle()
+                .fill(entry.accentColor.opacity(0.07))
               if day.duration > 0 {
-                RoundedRectangle(cornerRadius: 4)
-                  .fill(entry.themeColor.opacity(isToday ? 1 : 0.55))
+                Rectangle()
+                  .fill(entry.accentColor.opacity(isToday ? 1 : 0.55))
                   .frame(height: max(3, plotHeight * day.duration / maxDuration))
                   .widgetAccentable()
               }
@@ -355,7 +355,7 @@ struct WidgetMonthGrid: View {
       .fill(
         day.duration == 0
           ? Color.primary.opacity(isFuture ? 0.025 : 0.055)
-          : entry.themeColor.opacity(level * (colorScheme == .dark ? 0.5 : 1))
+          : entry.accentColor.opacity(level * (colorScheme == .dark ? 0.5 : 1))
       )
       .overlay {
         if showsNumbers {
@@ -365,7 +365,7 @@ struct WidgetMonthGrid: View {
         }
       }
       .overlay {
-        shape.strokeBorder(isToday ? entry.themeColor : .clear, lineWidth: 1.5)
+        shape.strokeBorder(isToday ? entry.accentColor : .clear, lineWidth: 1.5)
       }
       .widgetAccentable()
       .accessibilityLabel(
@@ -376,6 +376,16 @@ struct WidgetMonthGrid: View {
 
 struct ProfileWidgetBackground: View {
   var body: some View {
-    Color(uiColor: .systemBackground)
+    BrandColors.cream
+  }
+}
+
+extension View {
+  /// Home-screen widgets always use the fixed cream-and-forest palette, regardless of system
+  /// appearance. Lock-screen accessory families stay system-rendered.
+  fileprivate func lockedInHomeScreenStyle() -> some View {
+    self
+      .environment(\.colorScheme, .light)
+      .foregroundStyle(BrandColors.forest)
   }
 }

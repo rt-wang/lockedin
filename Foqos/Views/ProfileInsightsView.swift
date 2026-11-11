@@ -67,7 +67,6 @@ struct ProfileInsightsView: View {
 
     var body: some View {
       ProfileInsightsView(profile: profile)
-        .environmentObject(ThemeManager.shared)
         .modelContainer(container)
     }
   }

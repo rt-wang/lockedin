@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct StrategyPicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
-
   let strategies: [BlockingStrategy]
   @Binding var selectedStrategy: BlockingStrategy?
   @Binding var isPresented: Bool
@@ -25,7 +23,13 @@ struct StrategyPicker: View {
   var body: some View {
     NavigationStack {
       ScrollView {
-        LazyVStack(alignment: .leading, spacing: 30) {
+        LazyVStack(alignment: .leading, spacing: 36) {
+          ProfileSheetHeader(
+            eyebrow: "Blocking strategy",
+            title: "How do you unlock?",
+            message: "Pick how sessions start and stop for this profile."
+          )
+
           ForEach(sections) { section in
             StrategyPickerHorizontalSection(
               section: section,
@@ -36,11 +40,14 @@ struct StrategyPicker: View {
             )
           }
         }
-        .padding(.vertical, 18)
+        .padding(.horizontal, 24)
+        .padding(.top, 8)
+        .padding(.bottom, 32)
       }
-      .background(Color(.systemGroupedBackground))
+      .foqosTheme(.cream)
       .navigationTitle("Blocking Strategy")
       .navigationBarTitleDisplayMode(.inline)
+      .profileSheetChrome()
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button {
@@ -90,5 +97,4 @@ struct StrategyPicker: View {
     selectedStrategy: $selectedStrategy,
     isPresented: $isPresented
   )
-  .environmentObject(ThemeManager())
 }

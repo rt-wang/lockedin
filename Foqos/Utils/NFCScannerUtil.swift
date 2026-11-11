@@ -8,6 +8,9 @@ struct NFCResult: Equatable {
 }
 
 class NFCScannerUtil: NSObject {
+  // foqos.app stays accepted so tags written by upstream Foqos keep working.
+  static let profileLinkHosts: Set<String> = ["shen.sh", "foqos.app"]
+
   // Callback closures for handling results and errors
   var onTagScanned: ((NFCResult) -> Void)?
   var onError: ((String) -> Void)?
@@ -91,7 +94,9 @@ extension NFCScannerUtil: NFCTagReaderSessionDelegate {
       (payload: NFCNDEFPayload) -> URLComponents? in
       if let url = payload.wellKnownTypeURIPayload() {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if components?.host == "foqos.app" && components?.scheme == "https" {
+        if let host = components?.host, Self.profileLinkHosts.contains(host),
+          components?.scheme == "https"
+        {
           return components
         }
       }

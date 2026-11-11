@@ -31,23 +31,16 @@ struct ProfileInsightsSections: View {
           }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background {
-          RoundedRectangle(cornerRadius: 24)
-            .fill(Color(.systemBackground))
-        }
-        .overlay {
-          RoundedRectangle(cornerRadius: 24)
-            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            .allowsHitTesting(false)
-        }
-        .listRowInsets(EdgeInsets(top: 12, leading: 0, bottom: 0, trailing: 0))
-        .listRowBackground(Color.clear)
+        .padding(.vertical, 8)
+        .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+      } header: {
+        FoqosSectionHeader(viewMode == .week ? "Week" : "Month")
       }
+      .foqosFormRows()
     }
 
     if !sessions.isEmpty {
-      Section(sessionsSectionTitle) {
+      Section {
         ForEach(sessions) { session in
           Button {
             onSelectSession(session)
@@ -63,11 +56,14 @@ struct ProfileInsightsSections: View {
             }
           }
         }
+      } header: {
+        FoqosSectionHeader(sessionsSectionTitle)
       }
+      .foqosFormRows()
     }
 
     if showsSummary {
-      Section("Summary") {
+      Section {
         InsightsSummaryRow(
           icon: "clock.fill",
           label: "Total Focus Time",
@@ -87,7 +83,10 @@ struct ProfileInsightsSections: View {
           label: "Profile ID",
           value: String(profileId.uuidString.prefix(8)) + "..."
         )
+      } header: {
+        FoqosSectionHeader("Summary")
       }
+      .foqosFormRows()
     }
   }
 }

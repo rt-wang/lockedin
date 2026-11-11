@@ -116,24 +116,24 @@ struct MenuBarContentView: View {
         controller.refreshFromCloud()
         filterManager.refreshStatus()
       }
-      .help("Refresh Foqos state")
+      .help("Refresh LockedIn state")
 
       DiagnosticsExportButton(isMenuItem: true)
 
-      MenuActionItem(title: "Quit Foqos") {
+      MenuActionItem(title: "Quit LockedIn") {
         controller.quit()
       }
-      .help("Quit Foqos")
+      .help("Quit LockedIn")
     }
     .padding(.horizontal, -8)
   }
 
   private var updaterHelpText: String {
     if updaterController.isConfigured {
-      return "Check GitHub Releases for a newer version of Foqos"
+      return "Check for a newer version of LockedIn"
     }
 
-    return "The Sparkle appcast and signing key have not been configured yet"
+    return "Updates are not configured for this build yet"
   }
 
   private var statusTitle: String {
@@ -142,18 +142,18 @@ struct MenuBarContentView: View {
     }
 
     if controller.isBlocking {
-      return "\(controller.syncedRecord?.profileName ?? "Foqos") is active"
+      return "\(controller.syncedRecord?.profileName ?? "LockedIn") is active"
     }
 
     switch controller.syncedRecord?.state {
     case .active:
       return "Profile has no explicit website rules"
     case .breakActive:
-      return "Foqos break is active"
+      return "LockedIn break is active"
     case .paused:
-      return "Foqos is paused"
+      return "LockedIn is paused"
     default:
-      return "No active Foqos profile"
+      return "No active LockedIn profile"
     }
   }
 

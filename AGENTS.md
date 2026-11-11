@@ -1,6 +1,6 @@
-# Foqos Developer Guidelines
+# LockedIn Developer Guidelines
 
-This file provides guidelines for agentic coding assistants working on the Foqos iOS app codebase.
+This file provides guidelines for agentic coding assistants working on the LockedIn iOS app codebase (a fork of Foqos; targets and folders keep the Foqos names).
 
 ## Build & Test Commands
 

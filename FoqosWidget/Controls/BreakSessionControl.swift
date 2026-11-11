@@ -8,7 +8,7 @@ struct BreakSessionControl: ControlWidget {
       kind: "FoqosBreakSessionControl", provider: BreakSessionControlProvider()
     ) { state in
       ControlWidgetToggle(
-        "Foqos Break", isOn: state.isBreakActive,
+        "LockedIn Break", isOn: state.isBreakActive,
         action: BreakControlIntent(sessionID: state.session?.id ?? "")
       ) { isOnBreak in
         Label(
@@ -19,7 +19,7 @@ struct BreakSessionControl: ControlWidget {
       }
       .tint(.orange)
     }
-    .displayName("Foqos Break")
+    .displayName("LockedIn Break")
     .description("Start or end a break in your active session using its remaining break allowance.")
   }
 }

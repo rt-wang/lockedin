@@ -4,7 +4,7 @@ import SwiftUI
 import UIKit
 
 struct QRCodeView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let url: String
@@ -12,36 +12,44 @@ struct QRCodeView: View {
   @State private var qrCodeImage: UIImage? = nil
 
   var body: some View {
-    NavigationView {
-      VStack(spacing: 30) {
-        // Profile name heading
-        Text(profileName)
-          .font(.title)
-          .fontWeight(.bold)
-          .multilineTextAlignment(.center)
-          .padding(.top)
+    NavigationStack {
+      VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: 10) {
+          Text("Profile QR code")
+            .foqosText(.eyebrow)
+            .foregroundStyle(palette.mute)
 
-        // QR Code
-        if let qrCodeImage {
-          Image(uiImage: qrCodeImage)
-            .interpolation(.none)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 250, height: 250)
-        } else {
-          ProgressView()
-            .frame(width: 250, height: 250)
+          Text(profileName)
+            .foqosDisplay(size: 34)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityAddTraits(.isHeader)
+
+          Text("Scan this code without the app running to start or stop this profile.")
+            .font(FoqosFont.ui(.subheadline, size: 15, bold: false))
+            .foregroundStyle(palette.mute)
+            .fixedSize(horizontal: false, vertical: true)
         }
 
-        // Description text
-        Text("Scan this code without the app running to start/stop this profile")
-          .font(.body)
-          .multilineTextAlignment(.center)
-          .foregroundColor(.secondary)
-          .padding(.horizontal)
-          .fixedSize(horizontal: false, vertical: true)
+        FoqosHairline()
 
-        // Share button using ShareLink
+        Group {
+          if let qrCodeImage {
+            Image(uiImage: qrCodeImage)
+              .interpolation(.none)
+              .resizable()
+              .scaledToFit()
+              .frame(width: 240, height: 240)
+              .padding(12)
+              .background(Color.white)
+          } else {
+            ProgressView()
+              .frame(width: 264, height: 264)
+          }
+        }
+        .frame(maxWidth: .infinity)
+
+        Spacer(minLength: 0)
+
         if let qrCodeImage {
           ShareLink(
             item: Image(uiImage: qrCodeImage),
@@ -50,31 +58,39 @@ struct QRCodeView: View {
               image: Image(uiImage: qrCodeImage)
             )
           ) {
-            HStack {
-              Image(systemName: "square.and.arrow.up")
-              Text("Share QR code")
+            VStack(spacing: 0) {
+              FoqosHairline(isStrong: true)
+              HStack(alignment: .firstTextBaseline) {
+                Text("Share QR code")
+                  .foqosText(.cta)
+                Spacer()
+                Text("↗")
+                  .foqosText(.cta)
+                  .accessibilityHidden(true)
+              }
+              .padding(.top, 18)
+              .padding(.bottom, 4)
+              .frame(minHeight: 44)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(themeManager.themeColor)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .contentShape(Rectangle())
           }
-          .padding(.horizontal)
+          .buttonStyle(FoqosPressStyle())
         }
       }
-      .padding()
+      .padding(24)
       .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(palette.background, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Button {
             dismiss()
           } label: {
             Image(systemName: "xmark")
-              .foregroundColor(.primary)
           }
+          .accessibilityLabel("Close")
         }
       }
+      .foqosTheme(palette)
       .onAppear {
         generateQRCode(from: url)
       }

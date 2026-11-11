@@ -5,9 +5,9 @@ struct StartBreakIntent: AppIntent {
   @Dependency(key: "ModelContainer")
   private var modelContainer: ModelContainer
 
-  static var title: LocalizedStringResource = "Start Foqos Break"
+  static var title: LocalizedStringResource = "Start LockedIn Break"
   static var description = IntentDescription(
-    "Start a break from the active Foqos session using its remaining break allowance. Breaks must be enabled for the profile."
+    "Start a break from the active LockedIn session using its remaining break allowance. Breaks must be enabled for the profile."
   )
   static var openAppWhenRun: Bool = false
 

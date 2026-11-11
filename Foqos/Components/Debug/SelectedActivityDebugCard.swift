@@ -15,40 +15,40 @@ struct SelectedActivityDebugCard: View {
 
       // Applications Detail
       if !selection.applications.isEmpty {
-        Divider()
+        FoqosHairline()
         VStack(alignment: .leading, spacing: 4) {
           Text("Applications:")
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
           Text("\(selection.applications.count) app(s) selected")
             .font(.caption)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
       }
 
       // Categories Detail
       if !selection.categories.isEmpty {
-        Divider()
+        FoqosHairline()
         VStack(alignment: .leading, spacing: 4) {
           Text("Categories:")
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
           Text("\(selection.categories.count) category(ies) selected")
             .font(.caption)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
       }
 
       // Web Domains Detail
       if !selection.webDomains.isEmpty {
-        Divider()
+        FoqosHairline()
         VStack(alignment: .leading, spacing: 4) {
           Text("Web Domains:")
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundStyle(.secondary)
           Text("\(selection.webDomains.count) domain(s) selected")
             .font(.caption)
-            .foregroundColor(.primary)
+            .foregroundStyle(.primary)
         }
       }
     }

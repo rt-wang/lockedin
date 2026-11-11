@@ -1,6 +1,4 @@
-# Contributing to Foqos
-
-For setup help or troubleshooting, start with [SUPPORT.md](SUPPORT.md).
+# Contributing to LockedIn
 
 ## Before opening an issue or pull request
 

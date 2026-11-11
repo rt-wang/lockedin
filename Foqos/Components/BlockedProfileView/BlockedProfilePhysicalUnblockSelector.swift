@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct BlockedProfilePhysicalUnblockSelector: View {
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   @ScaledMetric(relativeTo: .body) private var columnHeaderMinHeight: CGFloat = 40
   @ScaledMetric(relativeTo: .caption2) private var columnDescriptionMinHeight: CGFloat = 50
@@ -56,9 +55,7 @@ struct BlockedProfilePhysicalUnblockSelector: View {
       }.padding(0)
 
       if let disabledText = disabledText, disabled {
-        Text(disabledText)
-          .foregroundStyle(.red)
-          .font(.caption)
+        ProfileFormCaption(disabledText, isWarning: true)
       }
     }
     .background(
@@ -117,19 +114,18 @@ struct BlockedProfilePhysicalUnblockSelector: View {
         } else {
           Image(systemName: systemImage)
             .font(.title2)
-            .foregroundColor(.gray)
+            .foregroundStyle(palette.mute)
         }
 
         HStack(spacing: 6) {
           Text(title)
-            .font(.subheadline)
-            .fontWeight(.medium)
-            .foregroundColor(.primary)
+            .foqosText(.mark)
+            .foregroundStyle(palette.foreground)
 
           if !items.isEmpty {
-            Image(systemName: "checkmark.circle.fill")
-              .foregroundColor(foqosAccent ?? themeManager.themeColor)
-              .font(.caption)
+            Image(systemName: "checkmark")
+              .foregroundStyle(palette.foreground)
+              .font(.caption2.weight(.bold))
           }
         }
       }
@@ -137,8 +133,8 @@ struct BlockedProfilePhysicalUnblockSelector: View {
 
       VStack(spacing: 8) {
         Text(description)
-          .font(.caption2)
-          .foregroundColor(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
           .multilineTextAlignment(.center)
           .fixedSize(horizontal: false, vertical: true)
       }
@@ -167,13 +163,13 @@ struct BlockedProfilePhysicalUnblockSelector: View {
     HStack(spacing: 10) {
       VStack(alignment: .leading, spacing: 2) {
         Text(item.name)
-          .font(.subheadline)
-          .foregroundStyle(.primary)
+          .foqosText(.body)
+          .foregroundStyle(palette.foreground)
           .lineLimit(1)
 
         Text(shortCodeValue(item.codeValue))
-          .font(.caption2)
-          .foregroundStyle(.secondary)
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
           .lineLimit(1)
       }
 
@@ -194,9 +190,11 @@ struct BlockedProfilePhysicalUnblockSelector: View {
           Label("Delete", systemImage: "trash")
         }
       } label: {
-        Image(systemName: "ellipsis.circle")
-          .font(.title3)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
+        Image(systemName: "ellipsis")
+          .font(.body.weight(.semibold))
+          .foregroundStyle(palette.foreground)
+          .frame(width: 32, height: 32)
+          .contentShape(Rectangle())
       }
       .disabled(disabled)
     }
@@ -210,7 +208,7 @@ struct BlockedProfilePhysicalUnblockSelector: View {
   }
 
   private var ruleColor: Color {
-    foqosAccent?.opacity(0.22) ?? Color.primary.opacity(0.2)
+    palette.line
   }
 
   @ViewBuilder
@@ -226,8 +224,8 @@ struct BlockedProfilePhysicalUnblockSelector: View {
         }
         .contentShape(Rectangle())
     }
-    .buttonStyle(.plain)
-    .foregroundStyle(disabled ? .secondary : .primary)
+    .buttonStyle(FoqosPressStyle())
+    .foregroundStyle(disabled ? palette.mute : palette.foreground)
     .disabled(disabled)
   }
 
@@ -305,9 +303,9 @@ struct BlockedProfilePhysicalUnblockSelector: View {
 #Preview {
   @Previewable @State var physicalUnblockItems: [PhysicalUnblockItem] = [
     PhysicalUnblockItem(name: "Tag 1", type: .nfc, codeValue: "04AABBCC11223344"),
-    PhysicalUnblockItem(name: "Tag 2", type: .nfc, codeValue: "https://foqos.app/profile/tag-2"),
+    PhysicalUnblockItem(name: "Tag 2", type: .nfc, codeValue: "https://shen.sh/profile/tag-2"),
     PhysicalUnblockItem(
-      name: "Office QR", type: .qrCode, codeValue: "https://foqos.app/profile/office"),
+      name: "Office QR", type: .qrCode, codeValue: "https://shen.sh/profile/office"),
   ]
 
   NavigationStack {
@@ -315,7 +313,8 @@ struct BlockedProfilePhysicalUnblockSelector: View {
       BlockedProfilePhysicalUnblockSelector(
         physicalUnblockItems: $physicalUnblockItems
       )
+      .foqosFormRows()
     }
+    .foqosForm(.cream)
   }
-  .environmentObject(ThemeManager())
 }

@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct CustomToggle: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
   @Environment(\.foqosPalette) private var palette
 
   let title: String
@@ -23,7 +21,7 @@ struct CustomToggle: View {
 
     var learnMore = AttributedString("Learn more")
     learnMore.link = learnMoreURL
-    learnMore.foregroundColor = (foqosAccent ?? themeManager.themeColor)
+    learnMore.foregroundColor = palette.foreground
     attributedDescription.append(learnMore)
 
     return attributedDescription
@@ -33,11 +31,11 @@ struct CustomToggle: View {
     VStack(alignment: .leading, spacing: 0) {
       Toggle(title, isOn: $isOn)
         .disabled(isDisabled)
-        .tint(foqosAccent ?? themeManager.themeColor)
+        .tint(palette.foreground)
 
       Text(attributedDescription)
-        .font(.caption)
-        .foregroundStyle(foqosAccent == nil ? Color.secondary : palette.mute)
+        .foqosText(.caption)
+        .foregroundStyle(palette.mute)
         .padding(.vertical, 4)
         .fixedSize(horizontal: false, vertical: true)
         .lineLimit(nil)
@@ -45,8 +43,8 @@ struct CustomToggle: View {
 
       if isDisabled && errorMessage != nil {
         Text(errorMessage!)
-          .font(.caption)
-          .foregroundColor(.red)
+          .foqosText(.caption)
+          .foregroundStyle(Color.red)
       }
     }
   }
@@ -75,4 +73,6 @@ struct CustomToggle: View {
     )
   }
   .padding()
+  .toggleStyle(FoqosLineToggleStyle())
+  .foqosTheme(.cream)
 }

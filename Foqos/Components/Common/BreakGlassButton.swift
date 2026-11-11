@@ -30,7 +30,6 @@ struct BreakGlassButton<Content: View>: View {
   @State private var overlayScale: CGFloat = 1.0
   @State private var overlayOpacity: Double = 1.0
   @State private var overlayRotation: Angle = .degrees(0)
-  @Environment(\.colorScheme) private var colorScheme: ColorScheme
 
   var body: some View {
     ZStack {
@@ -44,13 +43,12 @@ struct BreakGlassButton<Content: View>: View {
           GlassOverlay(
             size: geometry.size,
             cracks: tapLocations,
-            progress: Double(currentTapCount) / Double(max(1, tapsToShatter)),
-            isDark: colorScheme == .dark
+            progress: Double(currentTapCount) / Double(max(1, tapsToShatter))
           )
           .scaleEffect(overlayScale)
           .rotationEffect(overlayRotation)
           .opacity(overlayOpacity)
-          .contentShape(RoundedRectangle(cornerRadius: 16))
+          .contentShape(Rectangle())
           .onAppear {
             overlayScale = 1.0
             overlayOpacity = 1.0
@@ -81,7 +79,7 @@ struct BreakGlassButton<Content: View>: View {
           )
           .allowsHitTesting(true)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .clipped()
       }
     }
   }
@@ -113,65 +111,27 @@ struct BreakGlassButton<Content: View>: View {
 // MARK: - Overlay visuals
 
 private struct GlassOverlay: View {
+  @Environment(\.foqosPalette) private var palette
+
   var size: CGSize
   var cracks: [CGPoint]
   var progress: Double  // 0...1 based on taps
-  var isDark: Bool
-
-  private var borderColor: Color {
-    isDark ? Color.white.opacity(0.35) : Color.black.opacity(0.2)
-  }
-
-  private var specularScale: Double {
-    isDark ? 1.0 : 1.25
-  }
-
-  private var materialStyle: Material {
-    isDark ? .ultraThinMaterial : .thinMaterial
-  }
-
-  private var shadowColor: Color {
-    isDark ? Color.black.opacity(0.08) : Color.black.opacity(0.14)
-  }
-
-  private var borderLineWidth: CGFloat {
-    isDark ? 1 : 1.2
-  }
 
   var body: some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 16)
-        .fill(materialStyle)
+      Rectangle()
+        .fill(palette.background.opacity(0.9))
         .overlay(
-          // Soft border
-          RoundedRectangle(cornerRadius: 16)
-            .stroke(borderColor, lineWidth: borderLineWidth)
+          Rectangle()
+            .stroke(palette.line, lineWidth: 1)
         )
-        // Subtle inner highlight for light mode to increase edge definition
-        .overlay(
-          RoundedRectangle(cornerRadius: 16)
-            .stroke(Color.white.opacity(isDark ? 0.0 : 0.18), lineWidth: 0.6)
-            .blendMode(.plusLighter)
-        )
-        .shadow(color: shadowColor, radius: isDark ? 8 : 10, x: 0, y: isDark ? 4 : 6)
 
-      // Subtle specular highlight sweep tied to progress
-      RoundedRectangle(cornerRadius: 16)
-        .fill(
-          LinearGradient(
-            colors: [
-              Color.white.opacity(0.08 * (1.0 - progress) * specularScale),
-              Color.white.opacity(0.24 * (1.0 - progress) * specularScale),
-              Color.white.opacity(0.08 * (1.0 - progress) * specularScale),
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-          )
-        )
-        .blendMode(.plusLighter)
+      Text("Tap three times to break the glass")
+        .foqosText(.mark)
+        .foregroundStyle(palette.mute)
+        .opacity(1.0 - progress)
 
-      // Cracks
-      CrackCanvas(size: size, origins: cracks, isDark: isDark)
+      CrackCanvas(size: size, origins: cracks, color: palette.foreground)
         .allowsHitTesting(false)
         .opacity(min(1, progress * 1.2))
     }
@@ -181,7 +141,7 @@ private struct GlassOverlay: View {
 private struct CrackCanvas: View {
   var size: CGSize
   var origins: [CGPoint]
-  var isDark: Bool
+  var color: Color
 
   var body: some View {
     Canvas { context, canvasSize in
@@ -225,20 +185,10 @@ private struct CrackCanvas: View {
             path.addQuadCurve(to: p1, control: mid)
           }
 
-          // Crack color adapts to scheme: brighter in dark mode, slightly darker in light mode
-          let strokeColor: Color = isDark ? Color.white.opacity(0.9) : Color.black.opacity(0.6)
           context.stroke(
             path,
-            with: .color(strokeColor),
+            with: .color(color.opacity(0.75)),
             style: StrokeStyle(lineWidth: 0.8, lineCap: .round, lineJoin: .round)
-          )
-
-          // Subtle inner shadow to enhance depth
-          let shadowPath = path
-          context.stroke(
-            shadowPath,
-            with: .color(isDark ? Color.black.opacity(0.35) : Color.black.opacity(0.18)),
-            style: StrokeStyle(lineWidth: 0.4)
           )
         }
       }
@@ -276,48 +226,11 @@ private func triggerSuccessHaptic() {
 
 #Preview {
   VStack(spacing: 20) {
-    BreakGlassButton(
-      tapsToShatter: 3,
-      onUnlocked: {
-        print("Unlocked 1")
-      }
-    ) {
-      // Your own button/content
-      Button(action: { print("Primary action") }) {
-        HStack(spacing: 8) {
-          Image(systemName: "lock.open")
-          Text("Protected Action")
-        }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 20)
-        .background(
-          RoundedRectangle(cornerRadius: 16)
-            .fill(.thinMaterial)
-            .overlay(
-              RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.green.opacity(0.25), lineWidth: 1)
-            )
-        )
-      }
-      .buttonStyle(.plain)
-    }
-    .frame(height: 56)
-
-    BreakGlassButton(tapsToShatter: 3, onUnlocked: { print("Glass shattered: ready") }) {
-      Button("Begin Session") { print("Begin Session tapped") }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 20)
-        .background(
-          RoundedRectangle(cornerRadius: 16)
-            .fill(.thinMaterial)
-            .overlay(
-              RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.blue.opacity(0.25), lineWidth: 1)
-            )
-        )
+    BreakGlassButton(tapsToShatter: 3, onUnlocked: { print("Unlocked") }) {
+      FoqosLineButton(title: "Emergency unblock") { print("Primary action") }
     }
     .frame(height: 56)
   }
-  .padding()
-  .background(Color(.systemGroupedBackground))
+  .padding(24)
+  .foqosTheme(.cream)
 }

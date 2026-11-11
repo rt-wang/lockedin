@@ -71,9 +71,6 @@ struct HomePresentations: ViewModifier {
           presentationDetents: strategyManager.customStrategyViewPresentationDetents
         )
       }
-      .sheet(isPresented: $presentation.showDonationView) {
-        SupportView()
-      }
       .sheet(isPresented: $presentation.showSettingsView) {
         SettingsView()
       }

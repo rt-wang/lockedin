@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct StrictNFCWriteWarningView: View {
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let profileName: String
   let onCancel: () -> Void
@@ -9,54 +9,41 @@ struct StrictNFCWriteWarningView: View {
 
   var body: some View {
     ScrollView {
-      VStack(spacing: 24) {
-        Image("StopStrictSticker")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 150, height: 150)
-          .accessibilityHidden(true)
+      VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: 14) {
+          Text("NFC tag")
+            .foqosText(.eyebrow)
+            .foregroundStyle(palette.mute)
 
-        VStack(spacing: 12) {
-          Text("Before You Write")
-            .font(.title2)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.center)
+          Text("Before you write")
+            .foqosDisplay(size: 40)
+            .accessibilityAddTraits(.isHeader)
 
           strictModeWarning
-            .font(.body)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
+            .font(FoqosFont.ui(.subheadline, size: 15, bold: false))
+            .foregroundStyle(palette.foreground)
             .fixedSize(horizontal: false, vertical: true)
 
           Text(convenienceText)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
+            .foqosText(.caption)
+            .foregroundStyle(palette.mute)
             .fixedSize(horizontal: false, vertical: true)
         }
 
-        VStack(spacing: 12) {
+        VStack(spacing: 4) {
           ActionButton(
-            title: "Never mind",
-            backgroundColor: themeManager.themeColor,
-            iconName: "xmark"
+            title: "Never mind"
           ) {
             onCancel()
           }
 
-          Button(action: onContinue) {
-            Text("Continue")
-              .font(.headline)
-              .foregroundStyle(.primary)
-              .frame(maxWidth: .infinity)
-              .frame(height: 50)
-          }
-          .buttonStyle(.plain)
+          FoqosLineButton(title: "Continue anyway", isMuted: true, action: onContinue)
         }
       }
       .padding(24)
-      .frame(maxWidth: .infinity)
+      .frame(maxWidth: .infinity, alignment: .leading)
     }
+    .foqosTheme(.cream)
   }
 
   private var strictModeWarning: Text {
@@ -68,13 +55,13 @@ struct StrictNFCWriteWarningView: View {
       + Text("Do not write over that unlock tag")
       .fontWeight(.bold)
       + Text(
-        ". Rewriting it can change what Foqos reads later and may stop this profile from unlocking. You do not need to create another NFC tag for this profile."
+        ". Rewriting it can change what LockedIn reads later and may stop this profile from unlocking. You do not need to create another NFC tag for this profile."
       )
   }
 
   private var convenienceText: String {
     return
-      "This only creates a convenience shortcut: scan the tag, tap the iOS notification, and Foqos opens this profile for you."
+      "This only creates a convenience shortcut: scan the tag, tap the iOS notification, and LockedIn opens this profile for you."
   }
 }
 
@@ -84,5 +71,4 @@ struct StrictNFCWriteWarningView: View {
     onCancel: {},
     onContinue: {}
   )
-  .environmentObject(ThemeManager())
 }

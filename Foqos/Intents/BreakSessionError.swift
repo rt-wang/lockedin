@@ -10,7 +10,7 @@ enum BreakSessionError: LocalizedError, Equatable {
   var errorDescription: String? {
     switch self {
     case .noActiveSession:
-      return "Start a Foqos session before taking a break."
+      return "Start a LockedIn session before taking a break."
     case .breaksUnavailable(let profileName):
       return
         "A break is not available for \(profileName). Check its break settings and blocking strategy."

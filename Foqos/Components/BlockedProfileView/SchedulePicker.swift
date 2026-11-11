@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SchedulePicker: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   @Binding var schedule: BlockedProfileSchedule
   @Binding var isPresented: Bool
@@ -67,42 +67,25 @@ struct SchedulePicker: View {
     NavigationStack {
       Form {
         Section {
-          VStack(alignment: .leading, spacing: 12) {
-            HStack {
-              Spacer()
-              Image(systemName: "calendar.badge.clock")
-                .font(.largeTitle)
-                .foregroundStyle(.secondary)
-              Spacer()
-            }
-            .padding(.vertical, 12)
-
-            Text(
-              "Choose when this profile starts and ends. To end early, use the strategy you set up earlier. The schedule must be at least 1 hour long."
+          VStack(alignment: .leading, spacing: 14) {
+            ProfileSheetHeader(
+              eyebrow: "Schedule",
+              title: "When should it run?",
+              message:
+                "Choose when this profile starts and ends. To end early, use the strategy you set up earlier. The schedule must be at least 1 hour long."
             )
-            .font(.subheadline)
-            .foregroundStyle(.primary)
-            .multilineTextAlignment(.center)
 
             if let message = nextStartMessage {
-              HStack(spacing: 8) {
-                Image(systemName: "info.circle")
-                  .foregroundStyle(.secondary)
-                  .font(.subheadline)
-
-                Text(message)
-                  .font(.subheadline)
-                  .foregroundStyle(.secondary)
-              }
-              .frame(maxWidth: .infinity, alignment: .center)
-              .padding(.vertical, 4)
+              Text(message)
+                .foqosText(.mark)
+                .foregroundStyle(palette.foreground)
             }
           }
-          .padding(.horizontal, 8)
         }
+        .profileSheetHeaderRow()
 
         Section {
-          HStack(spacing: 12) {
+          HStack(spacing: 0) {
             ForEach(Weekday.allCases, id: \.rawValue) { day in
               let isSelected = selectedDays.contains(day)
               Button(action: {
@@ -119,100 +102,97 @@ struct SchedulePicker: View {
                 }
               }) {
                 Text(shortLabel(for: day))
-                  .font(.subheadline)
-                  .fontWeight(.semibold)
-                  .frame(width: 40, height: 40)
-                  .background(isSelected ? themeManager.themeColor : Color.clear)
-                  .foregroundStyle(isSelected ? Color.white : Color.primary)
-                  .overlay(
-                    Circle()
-                      .stroke(isSelected ? themeManager.themeColor : Color.secondary, lineWidth: 1)
-                  )
-                  .clipShape(Circle())
+                  .foqosText(.tab)
+                  .foregroundStyle(isSelected ? palette.foreground : palette.mute)
+                  .padding(.bottom, 6)
+                  .overlay(alignment: .bottom) {
+                    Rectangle()
+                      .fill(isSelected ? palette.foreground : Color.clear)
+                      .frame(height: 1)
+                  }
+                  .frame(maxWidth: .infinity, minHeight: 44)
+                  .contentShape(Rectangle())
                   .accessibilityLabel(day.name)
                   .accessibilityAddTraits(isSelected ? .isSelected : [])
               }
-              .buttonStyle(.plain)
+              .buttonStyle(FoqosPressStyle())
             }
           }
-          .frame(maxWidth: .infinity, alignment: .center)
         } header: {
-          Text("Days")
+          FoqosSectionHeader("Days")
         } footer: {
           if !selectedDays.isEmpty {
             Text("Schedules take 15 minutes to update")
-              .font(.caption)
-              .foregroundStyle(.secondary)
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
           }
         }
+        .foqosFormRows()
 
         Section {
           Button(action: toggleStartPicker) {
-            HStack {
-              Text("When to start")
-              Spacer()
-              Text(
-                formattedTimeString(hour: startDisplayHour, minute: startMinute, isPM: startIsPM)
-              )
-              .foregroundStyle(.secondary)
-            }
+            timeRow(
+              title: "When to start",
+              value: formattedTimeString(
+                hour: startDisplayHour, minute: startMinute, isPM: startIsPM)
+            )
           }
-          .buttonStyle(.plain)
+          .buttonStyle(FoqosPressStyle())
           .disabled(selectedDays.isEmpty)
 
           if showStartPicker {
             timePickers(hour: $startDisplayHour, minute: $startMinute, isPM: $startIsPM)
           }
         } header: {
-          Text("Start Time")
+          FoqosSectionHeader("Start time")
         }
+        .foqosFormRows()
 
         Section {
           Button(action: toggleEndPicker) {
-            HStack {
-              Text("When to end")
-              Spacer()
-              Text(formattedTimeString(hour: endDisplayHour, minute: endMinute, isPM: endIsPM))
-                .foregroundStyle(.secondary)
-            }
+            timeRow(
+              title: "When to end",
+              value: formattedTimeString(hour: endDisplayHour, minute: endMinute, isPM: endIsPM)
+            )
           }
-          .buttonStyle(.plain)
+          .buttonStyle(FoqosPressStyle())
           .disabled(selectedDays.isEmpty)
 
           if showEndPicker {
             timePickers(hour: $endDisplayHour, minute: $endMinute, isPM: $endIsPM)
           }
         } header: {
-          Text("End Time")
+          FoqosSectionHeader("End time")
         } footer: {
           if let validationMessage {
             Text(validationMessage)
-              .font(.caption)
-              .foregroundStyle(.orange)
+              .foqosText(.caption)
+              .foregroundStyle(palette.foreground)
           }
         }
+        .foqosFormRows()
 
         Section {
-          Button("Remove Schedule") {
+          Button {
             resetToDefault()
 
             applySelection()
             isPresented = false
+          } label: {
+            ProfileFormActionRow(title: "Remove schedule", isDestructive: true)
           }
-          .foregroundStyle(.red)
-          .frame(maxWidth: .infinity, alignment: .center)
+          .buttonStyle(FoqosPressStyle())
         } footer: {
-          VStack(alignment: .center, spacing: 4) {
-            Text(
-              "If you're looking for more granularity, you can use Shortcuts. \(Text("[Here is a quick video](https://youtube.com/shorts/1xZeO9lg5f8)").foregroundStyle(themeManager.themeColor))"
-            )
-            .font(.caption)
-            .foregroundStyle(.secondary)
-          }
+          Text("If you're looking for more granularity, you can use Shortcuts automations.")
+            .foqosText(.caption)
+            .foregroundStyle(palette.mute)
         }
+        .foqosFormRows()
       }
+      .foqosForm(.cream)
       .navigationTitle("Schedule")
       .navigationBarTitleDisplayMode(.inline)
+      .profileSheetChrome()
       .toolbar {
         ToolbarItem(placement: .topBarLeading) {
           Button(action: { isPresented = false }) {
@@ -236,6 +216,21 @@ struct SchedulePicker: View {
     }
   }
 
+  private func timeRow(title: String, value: String) -> some View {
+    HStack(alignment: .firstTextBaseline) {
+      Text(title)
+        .foqosText(.body)
+        .foregroundStyle(palette.foreground)
+      Spacer()
+      Text(value)
+        .foqosText(.cta)
+        .foregroundStyle(palette.foreground)
+        .monospacedDigit()
+    }
+    .frame(minHeight: 36)
+    .contentShape(Rectangle())
+  }
+
   @ViewBuilder
   private func timePickers(hour: Binding<Int>, minute: Binding<Int>, isPM: Binding<Bool>)
     -> some View
@@ -251,8 +246,8 @@ struct SchedulePicker: View {
       .frame(maxWidth: .infinity)
 
       Text(":")
-        .font(.headline)
-        .foregroundStyle(.secondary)
+        .foqosText(.cta)
+        .foregroundStyle(palette.mute)
 
       Picker("Minute", selection: minute) {
         ForEach(minutes, id: \.self) { m in
@@ -271,7 +266,7 @@ struct SchedulePicker: View {
       .pickerStyle(.wheel)
       .frame(maxWidth: .infinity)
     }
-    .font(.title3)
+    .font(FoqosFont.ui(.title3, size: 20, bold: false))
   }
 
   private func loadFromBinding() {

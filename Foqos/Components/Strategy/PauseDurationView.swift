@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct PauseDurationView: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
   @Environment(\.dismiss) private var dismiss
 
   let profileName: String
-  var title: String = "Pause Duration"
+  var title: String = "Pause duration"
   var description: String? = nil
   let actionTitle: String
   let onDurationSelected: (Int) -> Void
@@ -25,7 +25,7 @@ struct PauseDurationView: View {
 
   init(
     profileName: String,
-    title: String = "Pause Duration",
+    title: String = "Pause duration",
     description: String? = nil,
     initialDurationMinutes: Int = StrategyPauseTimerData.defaultPauseDurationInMinutes,
     actionTitle: String = "Start Blocking",
@@ -40,19 +40,13 @@ struct PauseDurationView: View {
   }
 
   var body: some View {
-    VStack(spacing: 32) {
-      // Header
-      VStack(alignment: .leading, spacing: 12) {
-        Text(title)
-          .font(.title2).bold()
-
-        Text(
-          description ?? "Select how long you want to allow access when pausing \(profileName)."
-        )
-        .font(.callout)
-        .foregroundColor(.secondary)
-      }
-      .frame(maxWidth: .infinity, alignment: .leading)
+    VStack(spacing: 28) {
+      StrategySheetHeader(
+        eyebrow: "Pause",
+        title: title,
+        message: description
+          ?? "Select how long you want to allow access when pausing \(profileName)."
+      )
       .padding(.top, 16)
 
       // Large time display
@@ -63,87 +57,58 @@ struct PauseDurationView: View {
 
       // Confirm button
       ActionButton(
-        title: actionTitle,
-        backgroundColor: themeManager.themeColor,
-        iconName: "checkmark.circle.fill"
+        title: actionTitle
       ) {
         handleConfirm()
       }
     }
     .padding(24)
+    .strategySheetTheme()
   }
 
   private var timeDisplay: some View {
-    VStack(spacing: 8) {
-      Text(formattedDuration)
-        .font(.system(size: 56, weight: .bold, design: .rounded))
-        .contentTransition(.numericText())
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: durationMinutes)
-
-      Text("access duration")
-        .font(.subheadline)
-        .foregroundColor(.secondary)
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 16)
+    StrategyValueDisplay(value: formattedDuration, caption: "Access duration")
+      .animation(.spring(response: 0.3, dampingFraction: 0.8), value: durationMinutes)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 8)
   }
 
   private var sliderControls: some View {
-    VStack(spacing: 16) {
-      // +/- buttons with slider
-      HStack(spacing: 16) {
-        // Decrement button
-        Button {
-          decrementDuration()
-        } label: {
-          Image(systemName: "minus.circle.fill")
-            .font(.system(size: 32))
-            .foregroundColor(durationMinutes > minMinutes ? themeManager.themeColor : .gray)
-        }
-        .disabled(durationMinutes <= minMinutes)
-        .scaleEffect(durationMinutes <= minMinutes ? 0.9 : 1.0)
-        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
+    HStack(alignment: .top, spacing: 8) {
+      StrategyStepButton(
+        symbol: "−",
+        accessibilityLabel: "Decrease duration",
+        isEnabled: durationMinutes > minMinutes,
+        action: decrementDuration
+      )
+      .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
 
-        // Slider
-        VStack(spacing: 8) {
-          Slider(
-            value: $durationMinutes,
-            in: minMinutes...maxMinutes,
-            step: 5,
-            onEditingChanged: { editing in
-              isSliding = editing
-              if !editing {
-                snapToNearestPreset()
-              }
+      VStack(spacing: 8) {
+        Slider(
+          value: $durationMinutes,
+          in: minMinutes...maxMinutes,
+          step: 5,
+          onEditingChanged: { editing in
+            isSliding = editing
+            if !editing {
+              snapToNearestPreset()
             }
-          )
-          .tint(themeManager.themeColor)
-          .sensoryFeedback(.selection, trigger: durationMinutes)
-
-          // Min/Max labels
-          HStack {
-            Text("5m")
-              .font(.caption2)
-              .foregroundColor(.secondary)
-            Spacer()
-            Text("1h")
-              .font(.caption2)
-              .foregroundColor(.secondary)
           }
-        }
+        )
+        .tint(palette.foreground)
+        .sensoryFeedback(.selection, trigger: durationMinutes)
 
-        // Increment button
-        Button {
-          incrementDuration()
-        } label: {
-          Image(systemName: "plus.circle.fill")
-            .font(.system(size: 32))
-            .foregroundColor(durationMinutes < maxMinutes ? themeManager.themeColor : .gray)
-        }
-        .disabled(durationMinutes >= maxMinutes)
-        .scaleEffect(durationMinutes >= maxMinutes ? 0.9 : 1.0)
-        .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
+        StrategyRangeLabels(lower: "5m", upper: "1h")
       }
+      .padding(.top, 6)
+
+      StrategyStepButton(
+        symbol: "+",
+        accessibilityLabel: "Increase duration",
+        isEnabled: durationMinutes < maxMinutes,
+        action: incrementDuration
+      )
+      .sensoryFeedback(.impact(flexibility: .soft, intensity: 0.5), trigger: durationMinutes)
     }
   }
 

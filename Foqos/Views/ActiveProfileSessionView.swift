@@ -365,6 +365,7 @@ private struct SoftUnblockActiveGrantsCard: View {
   private static let visibleGrantLimit = 3
 
   @Environment(\.softUnblockActiveGrantsSource) private var activeGrantsSource
+  @Environment(\.foqosPalette) private var palette
 
   let profileId: UUID
 
@@ -400,9 +401,8 @@ private struct SoftUnblockActiveGrantsCard: View {
 
           if overflowCount > 0 {
             Text("+\(overflowCount) more active")
-              .font(.caption)
-              .fontWeight(.medium)
-              .foregroundStyle(.secondary)
+              .foqosText(.mark)
+              .foregroundStyle(palette.mute)
               .frame(maxWidth: .infinity, alignment: .leading)
               .padding(.top, 4)
           }
@@ -415,6 +415,8 @@ private struct SoftUnblockActiveGrantsCard: View {
 }
 
 private struct SoftUnblockActiveGrantRow: View {
+  @Environment(\.foqosPalette) private var palette
+
   let grant: SoftUnblockActiveGrantDisplay
   let date: Date
 
@@ -441,8 +443,7 @@ private struct SoftUnblockActiveGrantRow: View {
   var body: some View {
     HStack(spacing: 10) {
       resourceLabel
-        .font(.subheadline)
-        .fontWeight(.medium)
+        .foqosText(.body)
         .lineLimit(1)
         .minimumScaleFactor(0.8)
 
@@ -450,7 +451,7 @@ private struct SoftUnblockActiveGrantRow: View {
 
       Text(countdownText)
         .font(.system(.footnote, design: .monospaced, weight: .semibold))
-        .foregroundStyle(.secondary)
+        .foregroundStyle(palette.mute)
         .contentTransition(.numericText(countsDown: true))
         .accessibilityLabel(accessibilityCountdownText)
     }
@@ -564,7 +565,6 @@ private struct ActiveSessionActionButton: View {
     onExpiredCountdownReset: {}
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }
 
 #Preview("Temporary Access · One App") {
@@ -601,7 +601,6 @@ private struct ActiveSessionActionButton: View {
     ])
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }
 
 #Preview("Temporary Access · Multiple") {
@@ -659,5 +658,4 @@ private struct ActiveSessionActionButton: View {
     ])
   )
   .environmentObject(StrategyManager())
-  .environmentObject(ThemeManager())
 }

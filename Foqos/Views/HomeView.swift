@@ -47,7 +47,6 @@ struct HomeView: View {
       profiles: profiles,
       sessions: recentCompletedSessions,
       alerts: alertsManager.alerts,
-      onSupportTapped: { presentation.showDonationView = true },
       onSettingsTapped: { presentation.showSettingsView = true },
       onAlertTapped: presentAlert,
       onGuidedCreationTapped: { presentation.showGuidedProfileCreationView = true },
@@ -176,12 +175,35 @@ struct HomeView: View {
     strategyManager.loadActiveSession(context: context)
     strategyManager.cleanUpGhostSchedules(context: context)
     refreshAlerts()
-    // Debug-only screenshot helpers (simctl launch … --open-settings / --open-support / --open-guided)
-    let args = ProcessInfo.processInfo.arguments
-    if args.contains("--open-settings") { presentation.showSettingsView = true }
-    if args.contains("--open-support") { presentation.showDonationView = true }
-    if args.contains("--open-guided") { presentation.showGuidedProfileCreationView = true }
+    #if DEBUG
+      openScreenshotTarget()
+    #endif
   }
+
+  #if DEBUG
+    // Screenshot helpers: `simctl launch <device> <bundle-id> --seed-demo-profile --open-edit`
+    private func openScreenshotTarget() {
+      let args = ProcessInfo.processInfo.arguments
+      if args.contains("--seed-demo-profile"), profiles.isEmpty {
+        let profile = BlockedProfiles(
+          name: "Deep Work",
+          blockingStrategyId: ManualBlockingStrategy.id,
+          domains: ["news.example.com", "video.example.com"]
+        )
+        context.insert(profile)
+        try? context.save()
+      }
+      let firstProfile = try? context.fetch(FetchDescriptor<BlockedProfiles>()).first
+
+      if args.contains("--open-settings") { presentation.showSettingsView = true }
+      if args.contains("--open-guided") { presentation.showGuidedProfileCreationView = true }
+      if args.contains("--open-new-profile") { presentation.showNewProfileView = true }
+      if args.contains("--open-profiles") { presentation.isProfileListPresent = true }
+      if args.contains("--open-start-picker") { presentation.showStartProfilePicker = true }
+      if args.contains("--open-edit") { presentation.profileToEdit = firstProfile }
+      if args.contains("--open-insights") { presentation.profileToShowStats = firstProfile }
+    }
+  #endif
 
   private func refreshAlerts() {
     alertsManager.refreshAlerts(
@@ -234,11 +256,9 @@ struct HomeView: View {
 #Preview {
   HomeView()
     .environmentObject(RequestAuthorizer())
-    .environmentObject(TipManager())
     .environmentObject(AlertsManager())
     .environmentObject(NavigationManager())
     .environmentObject(StrategyManager())
     .environmentObject(RatingManager())
-    .environmentObject(ThemeManager())
     .defaultAppStorage(UserDefaults(suiteName: "preview")!)
 }

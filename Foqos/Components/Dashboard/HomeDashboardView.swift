@@ -7,7 +7,6 @@ struct HomeDashboardView: View {
   let profiles: [BlockedProfiles]
   let sessions: [BlockedProfileSession]
   let alerts: [HomeAlert]
-  let onSupportTapped: () -> Void
   let onSettingsTapped: () -> Void
   let onAlertTapped: (HomeAlert) -> Void
   let onGuidedCreationTapped: () -> Void
@@ -41,11 +40,8 @@ struct HomeDashboardView: View {
   private func dashboardContent(showsProfileInsights: Bool) -> some View {
     ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 0) {
-        HomeHeaderView(
-          onSupportTapped: onSupportTapped,
-          onSettingsTapped: onSettingsTapped
-        )
-        .padding(.bottom, 22)
+        HomeHeaderView(onSettingsTapped: onSettingsTapped)
+          .padding(.bottom, 22)
 
         hero(isCompact: showsProfileInsights)
 
@@ -111,7 +107,7 @@ struct HomeDashboardView: View {
 
   private func hero(isCompact: Bool) -> some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text("Foqos")
+      Text("LockedIn")
         .foqosText(.eyebrow)
         .padding(.bottom, 14)
 
@@ -168,11 +164,12 @@ struct HomeDashboardView: View {
         ProfileInsightsContent(profile: selectedProfile)
           .id(selectedProfile.id)
       } else {
-        ContentUnavailableView(
-          "No Profiles",
-          systemImage: "chart.line.uptrend.xyaxis",
-          description: Text("Create a profile to see its focus insights here.")
+        EmptyView(
+          iconName: "chart.line.uptrend.xyaxis",
+          headingText: "No profiles yet",
+          detailText: "Create a profile to see its focus insights here."
         )
+        .foqosTheme(.cream)
       }
     }
   }
@@ -226,7 +223,6 @@ private struct HomeDashboardPreview: View {
       profiles: hasProfiles ? [profile] : [],
       sessions: hasProfiles ? [session] : [],
       alerts: [],
-      onSupportTapped: {},
       onSettingsTapped: {},
       onAlertTapped: { _ in },
       onGuidedCreationTapped: {},
@@ -242,7 +238,6 @@ private struct HomeDashboardPreview: View {
     )
     .modelContainer(container)
     .environmentObject(StrategyManager())
-    .environmentObject(ThemeManager())
     .defaultAppStorage(UserDefaults(suiteName: "home-dashboard-preview")!)
   }
 }

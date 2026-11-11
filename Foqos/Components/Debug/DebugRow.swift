@@ -1,22 +1,24 @@
 import SwiftUI
 
 struct DebugRow: View {
+  @Environment(\.foqosPalette) private var palette
+
   let label: String
   let value: String
 
   var body: some View {
-    HStack(alignment: .top) {
-      Text(label + ":")
-        .font(.caption)
-        .foregroundColor(.secondary)
-        .frame(width: 160, alignment: .leading)
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
+      Text(label)
+        .foqosText(.caption)
+        .foregroundStyle(palette.foreground)
+        .frame(width: 150, alignment: .leading)
 
       Text(value)
         .font(.caption.monospaced())
-        .foregroundColor(.primary)
+        .foregroundStyle(palette.mute)
         .textSelection(.enabled)
 
-      Spacer()
+      Spacer(minLength: 0)
     }
   }
 }
@@ -24,6 +26,7 @@ struct DebugRow: View {
 #Preview {
   DebugRow(label: "Session ID", value: "ABC123-DEF456")
     .padding()
+    .foqosTheme(.cream)
 }
 
 #Preview("Long Value") {

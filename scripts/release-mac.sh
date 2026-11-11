@@ -15,15 +15,20 @@ readonly EXPORT_OPTIONS="$REPO_ROOT/Config/MacReleaseExportOptions.plist"
 readonly APPCAST_FILE="$REPO_ROOT/appcast-macos.xml"
 readonly INFO_PLIST="$REPO_ROOT/FoqosMac/Info.plist"
 readonly DMG_BACKGROUND="$REPO_ROOT/Config/DMG/background.png"
-readonly TEAM_ID="YR54789JNV"
-readonly DEVELOPER_ID_NAME="Developer ID Application: Ali Waseem ($TEAM_ID)"
+readonly TEAM_ID="67K94N9B2N"
+# TODO(LockedIn): no Developer ID Application certificate exists on this Mac yet. Once one is
+# created for team 67K94N9B2N, confirm its exact name with `security find-identity -v -p codesigning`.
+readonly DEVELOPER_ID_NAME="${DEVELOPER_ID_NAME:-Developer ID Application: 若天 王 ($TEAM_ID)}"
 readonly RELEASE_BRANCH="main"
 
 VERSION="${VERSION:-}"
 BUILD_NUMBER="${BUILD_NUMBER:-}"
-NOTARY_PROFILE="${NOTARY_PROFILE:-foqos-notary}"
-SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-ambitionsoftware}"
-GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-awaseem/foqos}"
+# TODO(LockedIn): create these locally: `xcrun notarytool store-credentials lockedin-notary` and
+# Sparkle `generate_keys --account lockedin`.
+NOTARY_PROFILE="${NOTARY_PROFILE:-lockedin-notary}"
+SPARKLE_KEY_ACCOUNT="${SPARKLE_KEY_ACCOUNT:-lockedin}"
+# TODO(LockedIn): no default; pass the repository that hosts LockedIn releases and its appcast.
+GITHUB_REPOSITORY="${GITHUB_REPOSITORY:?Set GITHUB_REPOSITORY (owner/repo) for LockedIn releases}"
 RELEASE_NOTES_FILE="${RELEASE_NOTES_FILE:-}"
 
 fail() {
@@ -203,7 +208,7 @@ xcodebuild \
 [[ "$(plutil -extract CFBundleVersion raw "$APP_PATH/Contents/Info.plist")" == "$BUILD_NUMBER" ]] ||
   fail "Exported app build number does not match $BUILD_NUMBER."
 
-filter_info="$APP_PATH/Contents/Library/SystemExtensions/dev.ambitionsoftware.foqos.mac.filter.systemextension/Contents/Info.plist"
+filter_info="$APP_PATH/Contents/Library/SystemExtensions/sh.shen.lockedin.mac.filter.systemextension/Contents/Info.plist"
 [[ "$(plutil -extract CFBundleShortVersionString raw "$filter_info")" == "$VERSION" ]] ||
   fail "System extension marketing version does not match $VERSION."
 [[ "$(plutil -extract CFBundleVersion raw "$filter_info")" == "$BUILD_NUMBER" ]] ||

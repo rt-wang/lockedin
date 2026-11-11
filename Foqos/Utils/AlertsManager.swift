@@ -21,7 +21,7 @@ class AlertsManager: ObservableObject {
           title: "Screen Time access needed",
           message: "Blocking is paused until access is restored.",
           detailMessage:
-            "Foqos needs Screen Time access to block apps and websites. Grant access again to restore blocking.",
+            "LockedIn needs Screen Time access to block apps and websites. Grant access again to restore blocking.",
           primaryActionTitle: "Allow Screen Time Access",
           iconName: "exclamationmark.shield.fill"
         ))
@@ -37,7 +37,7 @@ class AlertsManager: ObservableObject {
             title: "Schedule needs repair",
             message: "\(profile.name)'s schedule is not running.",
             detailMessage:
-              "\(profile.name)'s schedule is saved, but iOS is no longer monitoring it. This usually can happen when you combine foqos with other blocking apps, it is recommended to turn those apps off.",
+              "\(profile.name)'s schedule is saved, but iOS is no longer monitoring it. This can happen when you use LockedIn alongside other blocking apps. Turning those apps off is recommended.",
             primaryActionTitle: "Fix Schedule",
             iconName: "calendar.badge.exclamationmark"
           )

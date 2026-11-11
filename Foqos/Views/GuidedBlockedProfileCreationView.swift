@@ -83,7 +83,7 @@ private enum GuidedProfileStep: Int, CaseIterable, Identifiable {
       return "Select the apps or categories this profile should restrict or allow."
     case .domains:
       return
-        "Add specific domains, choose how they're blocked in Safari, and optionally sync them with Foqos for Mac."
+        "Add specific domains, choose how they're blocked in Safari, and optionally sync them with LockedIn for Mac."
     case .strictUnlocks:
       return
         "Some strategies let any NFC tag, QR code, or barcode unlock profiles. "
@@ -110,7 +110,7 @@ private enum GuidedProfileStep: Int, CaseIterable, Identifiable {
 struct GuidedBlockedProfileCreationView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @EnvironmentObject private var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let onBackFromFirst: (() -> Void)?
 
@@ -546,7 +546,7 @@ private struct GuidedProfileReviewContent: View {
     }
 
     if draft.disableBackgroundStops {
-      enabled.append("Foqos required to stop")
+      enabled.append("LockedIn required to stop")
     }
 
     if !draft.enableEmergencyUnblock {

@@ -10,7 +10,7 @@ import ManagedSettings
 import OSLog
 
 private let log = Logger(
-  subsystem: "com.foqos.monitor",
+  subsystem: "sh.shen.lockedin.monitor",
   category: "DeviceActivity"
 )
 

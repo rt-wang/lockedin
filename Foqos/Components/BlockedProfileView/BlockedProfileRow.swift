@@ -30,5 +30,5 @@ struct ProfileRow: View {
 
   return ProfileRow(profile: previewProfile)
     .padding()
-    .environmentObject(ThemeManager.shared)
+    .foqosTheme(.cream)
 }

@@ -14,9 +14,9 @@ struct ProfileControlWidget: Widget {
           ProfileWidgetBackground()
         }
     }
-    .configurationDisplayName("Foqos Profile")
+    .configurationDisplayName("LockedIn Profile")
     .description(
-      "Your focus, at a glance. Weekly charts, a monthly activity grid, and your profile in your theme."
+      "Your focus, at a glance. Weekly charts, and a monthly activity grid for your profile."
     )
     .supportedFamilies([
       .systemSmall, .systemMedium, .accessoryCircular, .accessoryRectangular, .accessoryInline,

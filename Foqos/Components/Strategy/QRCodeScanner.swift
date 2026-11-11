@@ -81,6 +81,8 @@ private final class QRScannerCamera: ObservableObject {
 }
 
 struct LabeledCodeScannerView: View {
+  @Environment(\.foqosPalette) private var palette
+
   let heading: String
   let subtitle: String
   let simulatedData: String?
@@ -105,14 +107,9 @@ struct LabeledCodeScannerView: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
-      Text(heading)
-        .font(.title2)
-        .bold()
-      Text(subtitle)
-        .font(.subheadline)
-        .foregroundColor(.gray)
-        .padding(.bottom)
+    VStack(alignment: .leading, spacing: 0) {
+      StrategySheetHeader(eyebrow: "Scan", title: heading, message: subtitle)
+        .padding(.bottom, 16)
 
       if isShowingScanner {
         ZStack(alignment: .bottom) {
@@ -139,54 +136,61 @@ struct LabeledCodeScannerView: View {
             completion: handleScanResult
           )
           .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .cornerRadius(12)
+          .overlay {
+            Rectangle().stroke(palette.line, lineWidth: 1)
+          }
 
           scannerControls
         }
         .padding(.vertical, 10)
       } else if let scanError = scanError {
         if case ScanError.permissionDenied = scanError {
-          VStack(spacing: 16) {
-            Image(systemName: "camera.fill")
-              .font(.system(size: 30))
+          VStack(alignment: .leading, spacing: 12) {
+            FoqosHairline()
 
-            Text("Camera Access Required")
-              .font(.headline)
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+              Image(systemName: "camera.fill")
+                .font(.footnote)
+                .accessibilityHidden(true)
+              Text("Camera access required")
+                .foqosText(.cta)
+            }
+            .padding(.top, 8)
 
-            Text("To scan QR codes, you need to grant camera access to Foqos.")
-              .font(.subheadline)
-              .multilineTextAlignment(.center)
-              .foregroundColor(.secondary)
-              .padding(.horizontal)
+            Text("To scan QR codes, you need to grant camera access to LockedIn.")
+              .foqosText(.caption)
+              .foregroundStyle(palette.mute)
+              .fixedSize(horizontal: false, vertical: true)
 
             ActionButton(
-              title: "Open Settings",
-              backgroundColor: .red,
-              iconName: "gearshape.fill"
+              title: "Open Settings"
             ) {
               if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                 UIApplication.shared.open(settingsURL)
               }
             }
-            .padding(.horizontal, 24)
+            .padding(.top, 12)
           }
-          .frame(maxWidth: .infinity)
-          .padding(.vertical, 30)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.vertical, 16)
         } else {
           Text("Error: \(errorMessage ?? "Unknown error")")
-            .foregroundColor(.red)
-            .padding()
+            .foqosText(.caption)
+            .foregroundStyle(.red)
+            .padding(.vertical)
         }
       } else {
 
-        Text("Scanner Paused or Not Available")
-          .foregroundColor(.secondary)
-          .padding()
+        Text("Scanner paused or not available")
+          .foqosText(.caption)
+          .foregroundStyle(palette.mute)
+          .padding(.vertical)
       }
 
       Spacer()
     }
-    .padding()
+    .padding(24)
+    .strategySheetTheme()
     .onAppear {
       isShowingScanner = true
       errorMessage = nil
@@ -207,10 +211,10 @@ struct LabeledCodeScannerView: View {
           camera.cycleZoomFactor()
         } label: {
           Text(camera.formattedZoomFactor(camera.zoomFactor))
-            .font(.caption.bold().monospacedDigit())
+            .foqosText(.mark)
+            .monospacedDigit()
             .frame(width: 48, height: 48)
-            .background(Color.black.opacity(0.65))
-            .clipShape(Circle())
+            .background(FoqosColors.forest.opacity(0.75))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Camera zoom")
@@ -224,15 +228,14 @@ struct LabeledCodeScannerView: View {
         isTorchOn.toggle()
       }) {
         Image(systemName: isTorchOn ? "flashlight.on.fill" : "flashlight.slash")
-          .font(.system(size: 22))
+          .font(.system(size: 20))
           .frame(width: 48, height: 48)
-          .background(Color.black.opacity(0.65))
-          .clipShape(Circle())
+          .background(FoqosColors.forest.opacity(0.75))
       }
       .buttonStyle(.plain)
       .accessibilityLabel(isTorchOn ? "Turn flashlight off" : "Turn flashlight on")
     }
-    .foregroundStyle(.white)
+    .foregroundStyle(FoqosColors.cream)
     .frame(maxWidth: .infinity)
     .padding(16)
   }

@@ -210,6 +210,5 @@ private struct StartProfilePickerRow: View {
     activeSessionProfileId: nil,
     onGoTapped: { _ in }
   )
-  .environmentObject(ThemeManager.shared)
   .foqosTheme(.cream)
 }

@@ -2,8 +2,7 @@ import FamilyControls
 import SwiftUI
 
 struct BlockedProfileAppSelector: View {
-  @EnvironmentObject var themeManager: ThemeManager
-  @Environment(\.foqosAccent) private var foqosAccent
+  @Environment(\.foqosPalette) private var palette
 
   var selection: FamilyActivitySelection
   var buttonAction: () -> Void
@@ -36,38 +35,25 @@ struct BlockedProfileAppSelector: View {
   var body: some View {
 
     Button(action: buttonAction) {
-      HStack {
-        Text(buttonText)
-          .foregroundStyle(foqosAccent ?? themeManager.themeColor)
-        Spacer()
-        Image(systemName: "chevron.right")
-          .foregroundStyle(.gray)
-      }
+      ProfileFormActionRow(title: buttonText)
     }
+    .buttonStyle(FoqosPressStyle())
     .disabled(disabled)
 
     if let disabledText = disabledText, disabled {
-      Text(disabledText)
-        .foregroundStyle(.red)
-        .padding(.top, 4)
-        .font(.caption)
+      ProfileFormCaption(disabledText, isWarning: true)
     } else if catAndAppCount == 0 {
-      Text("No apps selected")
-        .foregroundStyle(.gray)
+      ProfileFormCaption("No apps selected")
     } else {
-      VStack(alignment: .leading, spacing: 4) {
-        Text("\(countDisplayText) selected")
-          .font(.footnote)
-          .foregroundStyle(.gray)
+      VStack(alignment: .leading, spacing: 6) {
+        ProfileFormCaption("\(countDisplayText) selected")
 
         if shouldShowWarning {
           Text("Selected categories expand to individual apps. Apple's 50 app limit applies.")
-            .font(.caption)
-            .foregroundColor(.orange)
-            .padding(.top, 4)
+            .foqosText(.caption)
+            .foregroundStyle(palette.foreground)
         }
       }
-      .padding(.top, 4)
     }
 
   }
@@ -88,4 +74,5 @@ struct BlockedProfileAppSelector: View {
     disabled: true,
     disabledText: "Disable the current session to edit apps for blocking"
   )
+  .foqosTheme(.cream)
 }

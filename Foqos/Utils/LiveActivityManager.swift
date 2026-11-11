@@ -8,7 +8,7 @@ class LiveActivityManager: ObservableObject {
   @Published var currentActivity: Activity<FoqosWidgetAttributes>?
 
   // Use AppStorage for persisting the activity ID across app launches
-  @AppStorage("com.foqos.currentActivityId") private var storedActivityId: String = ""
+  @AppStorage("sh.shen.lockedin.currentActivityId") private var storedActivityId: String = ""
 
   static let shared = LiveActivityManager()
 
@@ -196,7 +196,6 @@ class LiveActivityManager: ObservableObject {
       isPauseActive: session.isPauseActive,
       pauseStartTime: session.pauseStartTime,
       pauseEndTime: session.pauseEndTime,
-      themeColorName: ThemeManager.shared.selectedColorName,
       appIconName: UIApplication.shared.alternateIconName
     )
   }

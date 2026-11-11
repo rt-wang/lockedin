@@ -2,7 +2,7 @@ import AppIntents
 import SwiftData
 
 struct BreakControlIntent: SetValueIntent, LiveActivityIntent {
-  static var title: LocalizedStringResource = "Set Foqos Break State"
+  static var title: LocalizedStringResource = "Set LockedIn Break State"
   static var isDiscoverable = false
 
   @Parameter(title: "Session ID") var sessionID: String

@@ -1,7 +1,8 @@
 import SwiftUI
 
+/// One strategy in the picker: icon, serif name, selection mark, trailing arrow. Sits on a hairline.
 struct StrategyPickerCard: View {
-  @EnvironmentObject var themeManager: ThemeManager
+  @Environment(\.foqosPalette) private var palette
 
   let strategy: BlockingStrategy
   let isSelected: Bool
@@ -9,45 +10,52 @@ struct StrategyPickerCard: View {
 
   var body: some View {
     Button(action: onTap) {
-      VStack(spacing: 8) {
-        ZStack(alignment: .topTrailing) {
+      VStack(spacing: 0) {
+        FoqosHairline()
+
+        HStack(alignment: .center, spacing: 14) {
           BlockingStrategyIconImage(strategy: strategy)
-            .font(.system(size: 28))
-            .foregroundStyle(strategy.color)
-            .frame(width: 54, height: 54)
+            .font(.system(size: 20))
+            .foregroundStyle(palette.foreground)
+            .frame(width: 36, height: 36)
 
-          if isSelected {
-            Image(systemName: "checkmark.circle.fill")
-              .font(.system(size: 17))
-              .foregroundStyle(themeManager.themeColor)
-              .background(Circle().fill(Color(.systemBackground)))
-              .offset(x: 4, y: -4)
+          VStack(alignment: .leading, spacing: 4) {
+            Text(strategy.name)
+              .foqosDisplay(size: 22)
+              .foregroundStyle(palette.foreground)
+              .lineLimit(2)
+              .minimumScaleFactor(0.82)
+
+            if isSelected {
+              Text("Selected")
+                .foqosText(.mark)
+                .foregroundStyle(palette.mute)
+            }
           }
-        }
-        .frame(width: 60, height: 60)
 
-        Text(strategy.name)
-          .font(.subheadline.weight(.semibold))
-          .foregroundStyle(.primary)
-          .multilineTextAlignment(.center)
-          .lineLimit(2)
-          .minimumScaleFactor(0.82)
-          .frame(height: 38, alignment: .top)
+          Spacer(minLength: 12)
+
+          Text("→")
+            .foqosText(.cta)
+            .foregroundStyle(palette.foreground)
+            .accessibilityHidden(true)
+        }
+        .padding(.vertical, 14)
       }
-      .frame(width: 108, height: 118)
-      .padding(10)
-      .background(Color(.secondarySystemGroupedBackground))
-      .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-      .overlay {
-        RoundedRectangle(cornerRadius: 14, style: .continuous)
-          .strokeBorder(
-            isSelected ? themeManager.themeColor : Color(.separator).opacity(0.45),
-            lineWidth: isSelected ? 2 : 1
-          )
-      }
+      .contentShape(Rectangle())
     }
-    .buttonStyle(.plain)
+    .buttonStyle(FoqosPressStyle())
     .accessibilityLabel(strategy.name)
+    .accessibilityAddTraits(isSelected ? .isSelected : [])
     .accessibilityHint("Shows details for this blocking strategy")
   }
+}
+
+#Preview {
+  VStack(spacing: 0) {
+    StrategyPickerCard(strategy: NFCBlockingStrategy(), isSelected: true, onTap: {})
+    StrategyPickerCard(strategy: QRCodeBlockingStrategy(), isSelected: false, onTap: {})
+  }
+  .padding(24)
+  .foqosTheme(.cream)
 }

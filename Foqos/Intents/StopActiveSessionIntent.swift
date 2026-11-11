@@ -10,9 +10,9 @@ struct StopActiveSessionIntent: AppIntent {
     return modelContainer.mainContext
   }
 
-  static var title: LocalizedStringResource = "Stop Active Foqos Session"
+  static var title: LocalizedStringResource = "Stop Active LockedIn Session"
   static var description = IntentDescription(
-    "Attempts to stop any currently active Foqos session."
+    "Attempts to stop any currently active LockedIn session."
   )
 
   static var openAppWhenRun: Bool = false
@@ -28,7 +28,7 @@ struct StopActiveSessionIntent: AppIntent {
     guard let blockedProfile = strategyManager.activeSession?.blockedProfile,
       strategyManager.isBlocking
     else {
-      return .result(value: true, dialog: "No active Foqos session to stop")
+      return .result(value: true, dialog: "No active LockedIn session to stop")
     }
 
     let profileName = blockedProfile.name

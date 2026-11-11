@@ -344,7 +344,7 @@ class StrategyManager: ObservableObject {
     try context.save()
     let isNowActive = getActiveSession(context: context)?.blockedProfile.id == profileID
     guard isNowActive == isActive else {
-      throw FoqosControlError.actionFailed("Foqos could not update the profile. Try again.")
+      throw FoqosControlError.actionFailed("LockedIn could not update the profile. Try again.")
     }
   }
 

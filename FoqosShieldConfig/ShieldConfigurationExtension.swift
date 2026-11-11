@@ -47,8 +47,7 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
   private func createCustomShieldConfiguration(for type: BlockedContentType, title: String)
     -> ShieldConfiguration
   {
-    // Get user's selected theme color
-    let brandColor = UIColor(ThemeManager.shared.themeColor)
+    let brandColor = UIColor(BrandColors.forest)
 
     // Get random fun message
     let randomMessage = getFunBlockMessage(for: type, title: title)
@@ -119,7 +118,7 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     return ShieldConfiguration(
       backgroundBlurStyle: .dark,
-      backgroundColor: UIColor(ThemeManager.shared.themeColor),
+      backgroundColor: UIColor(BrandColors.forest),
       icon: makeEmojiIcon(randomMessage.emoji, size: 96),
       title: ShieldConfiguration.Label(
         text: randomMessage.title,
@@ -154,7 +153,7 @@ class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     return ShieldConfiguration(
       backgroundBlurStyle: .dark,
-      backgroundColor: UIColor(ThemeManager.shared.themeColor),
+      backgroundColor: UIColor(BrandColors.forest),
       icon: makeEmojiIcon("🔒", size: 96),
       title: ShieldConfiguration.Label(
         text: "No opens left",

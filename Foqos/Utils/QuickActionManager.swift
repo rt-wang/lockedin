@@ -10,7 +10,7 @@ final class QuickActionManager: ObservableObject {
 
   static let shared = QuickActionManager()
 
-  static let startProfileActionType = "com.foqos.quickaction.startProfile"
+  static let startProfileActionType = "sh.shen.lockedin.quickaction.startProfile"
   static let profileIdUserInfoKey = "profileId"
 
   // iOS shows at most four quick actions in total

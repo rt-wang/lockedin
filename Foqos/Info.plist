@@ -4,7 +4,20 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>com.foqos.backgroundprocessing</string>
+		<string>sh.shen.lockedin.backgroundprocessing</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>lockedin</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleIconName</key>
 	<string>AppIcon</string>
